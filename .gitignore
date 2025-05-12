@@ -1,0 +1,8 @@
+# TODO: this shoudl be in global gitignore. already in a dotfiles branch
+**/.claude/settings.local.json
+
+# Ignore test data directory
+test_data/
+
+# Ignore generated manual test files
+manual_test_*.md

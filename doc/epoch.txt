@@ -1,0 +1,93 @@
+*epoch.txt*  a lightweight time tracking plugin for neovim
+
+================================================================================
+EPOCH                                                                    *epoch*
+
+a simple time tracking plugin for neovim. epoch helps you track your time on
+projects with minimal overhead, storing data in lua files and providing basic
+reporting.
+
+================================================================================
+COMMANDS                                                       *epoch-commands*
+
+                                                              *:EpochEdit*
+:EpochEdit       toggle today's timesheet window. opens a modifiable floating
+                 window containing today's timesheet as a lua table. if no
+                 timesheet exists, starts the interval creation workflow.
+
+                                                              *:EpochInterval*
+:EpochInterval   add a new time interval. prompts for client, project, and
+                 task in sequence. automatically closes any open interval
+                 and appends the new interval to today's timesheet.
+
+                                                              *:EpochReport*
+:EpochReport     toggle a weekly report window. shows time totals by day
+                 and by client for the current week.
+
+                                                              *:EpochList*
+:EpochList       show all timesheets in quickfix list. each entry shows
+                 the date and daily total. use quickfix navigation to
+                 jump between timesheet files.
+
+                                                              *:EpochClear*
+:EpochClear      delete all timesheet files with confirmation.
+
+================================================================================
+USAGE                                                             *epoch-usage*
+
+basic workflow:
+1. `:EpochInterval` - start tracking (prompted for client/project/task)
+2. `:EpochInterval` - switch tasks (auto-closes previous interval)
+3. `:EpochEdit` - open timesheet for manual editing
+4. `:EpochReport` - review weekly totals
+5. `:EpochList` - view all timesheets in quickfix list
+
+floating windows close with `q` or `<Esc>`. timesheet windows auto-save on
+close or manually with `:w`.
+
+================================================================================
+DATA MODEL                                                        *epoch-data*
+
+timesheets are lua tables stored as `YYYY-MM-DD.lua` files:
+
+```lua
+{
+  date = "2025-01-15",
+  intervals = {
+    {
+      client = "acme-corp",
+      project = "website-redesign",
+      task = "frontend-planning",
+      start = "9:00 AM",
+      stop = "10:30 AM",
+      notes = {}
+    }
+  },
+  daily_total = "01:30"
+}
+```
+
+required fields:
+- date: YYYY-MM-DD format
+- intervals: array of interval tables
+- client, project, task: non-empty strings
+- start: 12-hour time format ("9:00 AM")
+- stop: 12-hour time or empty string (currently running)
+- notes: array of strings
+
+daily_total calculated from completed intervals only.
+
+================================================================================
+STORAGE                                                         *epoch-storage*
+
+files stored in `stdpath('data')/epoch/`:
+- linux: `~/.local/share/nvim/epoch/`
+- macos: `~/Library/Application Support/nvim/epoch/`
+- windows: `%LOCALAPPDATA%\nvim-data\epoch\`
+
+new intervals append to existing timesheets. existing data is preserved.
+
+================================================================================
+LICENSE                                                       *epoch-license*
+
+MIT License

@@ -1,0 +1,39 @@
+name: setup
+description: setup lua, luarocks, neovim, and dependencies
+runs:
+  using: composite
+  steps:
+    - name: cache neovim
+      uses: actions/cache@v4
+      with:
+        path: /opt/nvim-linux-x86_64
+        key: neovim-0.11.2-${{ runner.os }}
+    
+    - name: cache apt packages
+      uses: actions/cache@v4
+      with:
+        path: /var/cache/apt
+        key: apt-${{ runner.os }}-lua-luarocks
+    
+    - name: install lua and luarocks
+      shell: bash
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y lua5.1 lua5.1-dev luarocks
+    
+    - name: install neovim
+      shell: bash
+      run: |
+        if [ ! -d "/opt/nvim-linux-x86_64" ]; then
+          curl -LO https://github.com/neovim/neovim/releases/download/v0.11.2/nvim-linux-x86_64.tar.gz
+          sudo tar -C /opt -xzf nvim-linux-x86_64.tar.gz
+        fi
+        sudo ln -sf /opt/nvim-linux-x86_64/bin/nvim /usr/local/bin/nvim
+    
+    - name: install plenary.nvim
+      shell: bash
+      run: |
+        mkdir -p ~/.local/share/nvim/site/pack/test/start
+        if [ ! -d ~/.local/share/nvim/site/pack/test/start/plenary.nvim ]; then
+          git clone https://github.com/nvim-lua/plenary.nvim ~/.local/share/nvim/site/pack/test/start/plenary.nvim
+        fi

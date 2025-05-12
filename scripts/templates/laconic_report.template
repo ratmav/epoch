@@ -1,0 +1,31 @@
+🎯 EPOCH LACONIC CHECK
+=======================
+
+📊 STATISTICS
+=============
+Total files analyzed: $total_files
+Files under 100 lines: $files_under_100 ($files_under_100_percent%)
+Files 100-150 lines: $files_100_150 ($files_100_150_percent%)
+Files over 150 lines: $files_over_150 ($files_over_150_percent%)
+
+Total functions analyzed: $total_functions
+Functions under 15 lines: $functions_under_15 ($functions_under_15_percent%)
+Functions over 15 lines: $functions_over_15 ($functions_over_15_percent%)
+
+@if(has_long_files)<{{🔴 LONG FILES
+===============
+@map{ item=long_files_list, _separator="
+" }:{{$item.status $item.file - $item.lines lines ($item.compliance)}}
+}}>
+
+@if(has_long_functions)<{{🔴 LONG FUNCTIONS
+==================
+@map{ item=long_functions_list, _separator="
+" }:{{🔴 $item.file:$item.line_number - $item.function_name() - $item.lines lines}}
+}}>
+
+🎯 LACONIC SUMMARY
+==================
+File length compliance: $file_status
+Function length compliance: $function_status
+Overall compliance: $overall_status
