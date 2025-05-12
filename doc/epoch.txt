@@ -1,0 +1,55 @@
+*epoch.txt*  a lightweight time tracking plugin for neovim
+
+================================================================================
+EPOCH                                                                    *epoch*
+
+a simple time tracking plugin for neovim. epoch helps you track your time on
+projects with minimal overhead, storing data in YAML files and providing basic
+reporting.
+
+================================================================================
+COMMANDS                                                       *epoch-commands*
+
+                                                              *:EpochEdit*
+:EpochEdit       toggle today's timesheet window. if the window is not visible,
+                 it will be opened. if it's already open, it will be closed.
+
+                                                              *:EpochInterval*
+:EpochInterval   add a new time interval. you will be prompted for:
+                 - client name
+                 - project name
+                 - description
+
+                                                              *:EpochReport*
+:EpochReport     toggle a weekly time report showing your time totals by day.
+
+                                                              *:EpochClear*
+:EpochClear      delete all timesheet files with confirmation.
+
+================================================================================
+USAGE                                                             *epoch-usage*
+
+epoch allows you to track time with minimal disruption to your workflow.
+
+basic workflow:
+1. use `:EpochEdit` to open your daily timesheet
+2. use `:EpochInterval` to add time entries
+3. use `:EpochReport` to see your weekly report
+
+the floating windows can be closed with `q` or `<Esc>`.
+timesheet windows are editable, so you can directly modify the YAML file.
+changes to the timesheet are automatically saved when you close the window.
+you can also press `w` to save changes without closing the window.
+
+================================================================================
+DATA STORAGE                                                   *epoch-storage*
+
+epoch stores your timesheets as YAML files in:
+- `stdpath('data') .. '/epoch/'` (typically `~/.local/share/nvim/epoch/`)
+
+each day has its own YAML file named with the format `YYYY-MM-DD.yaml`.
+
+================================================================================
+LICENSE                                                       *epoch-license*
+
+MIT License
