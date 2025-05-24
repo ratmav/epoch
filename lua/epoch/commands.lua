@@ -3,7 +3,7 @@
 
 local commands = {}
 local ui = require('epoch.ui')
-local timeops = require('epoch.timeops')
+local storage = require('epoch.storage')
 
 -- register all commands
 function commands.register()
@@ -14,17 +14,18 @@ function commands.register()
 
   -- add new time interval
   vim.api.nvim_create_user_command('EpochInterval', function()
-    timeops.add_interval()
+    ui.add_interval()
   end, {})
 
   -- toggle weekly time report
   vim.api.nvim_create_user_command('EpochReport', function()
-    ui.toggle_report()
+    require('epoch.report').toggle_report()
   end, {})
 
   -- clear all timesheets
   vim.api.nvim_create_user_command('EpochClear', function()
-    timeops.clear_timesheets()
+    local count = storage.delete_all_timesheets()
+    vim.notify(string.format("epoch: deleted %d timesheet files", count), vim.log.levels.INFO)
   end, {})
 end
 

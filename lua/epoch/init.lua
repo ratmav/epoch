@@ -4,7 +4,7 @@
 local epoch = {}
 
 local ui = require('epoch.ui')
-local timeops = require('epoch.timeops')
+local storage = require('epoch.storage')
 local config = require('epoch.config')
 local commands = require('epoch.commands')
 
@@ -27,17 +27,17 @@ end
 
 -- add time interval
 function epoch.add_interval()
-  timeops.add_interval()
+  ui.add_interval()
 end
 
 -- toggle weekly report
 function epoch.show_report()
-  ui.toggle_report()
+  require('epoch.report').toggle_report()
 end
 
 -- clear all timesheets
 function epoch.clear_timesheets()
-  timeops.clear_timesheets()
+  storage.delete_all_timesheets()
 end
 
 return epoch

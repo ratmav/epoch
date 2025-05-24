@@ -1,340 +1,191 @@
 -- epoch/ui.lua
--- user interface for epoch time tracking
+-- ui functionality for epoch time tracking
 
 local ui = {}
-
-local config = require('epoch.config')
-local timeops = require('epoch.timeops')
+local time_utils = require('epoch.time_utils')
+local validation = require('epoch.validation')
 local storage = require('epoch.storage')
 
+-- Track window and buffer state
 local timesheet_buffer = nil
 local timesheet_window = nil
 
--- setup highlight groups based on current colorscheme
+-- Set up highlight groups based on current colorscheme
 local function setup_highlights()
-  -- get colors from the current colorscheme
+  -- Get colors from the current colorscheme
   local normal_bg = vim.api.nvim_get_hl(0, { name = "Normal" }).bg
   local normal_fg = vim.api.nvim_get_hl(0, { name = "Normal" }).fg
   
-  -- define highlight groups
+  -- Define highlight groups
   local highlights = {
-    -- normal in the epoch window - use normal text/bg colors
+    -- Normal in the epoch window - use normal text/bg colors
     EpochNormal = { default = true, bg = normal_bg, fg = normal_fg },
     
-    -- border highlight - match normal background
+    -- Border highlight - match normal background to avoid the black border
     EpochBorder = { default = true, bg = normal_bg, fg = normal_fg },
     
-    -- title highlight - bold for emphasis
+    -- Title highlight - bold for emphasis
     EpochTitle = { default = true, bg = normal_bg, fg = normal_fg, bold = true },
   }
   
-  -- setup highlight groups
+  -- Set up highlight groups
   for k, v in pairs(highlights) do
     vim.api.nvim_set_hl(0, k, v)
   end
 end
 
--- initial highlight setup
-setup_highlights()
-
--- check if any window is currently open (either timesheet or report)
+-- Check if any window is currently open
 local function is_window_open()
   return timesheet_window ~= nil and vim.api.nvim_win_is_valid(timesheet_window)
 end
 
--- close any open window and clean up its buffer
-local function close_window()
-
-  -- Check if the buffer is modified and needs validation
-  if timesheet_buffer ~= nil and
-     vim.api.nvim_buf_is_valid(timesheet_buffer) and
-     vim.api.nvim_buf_get_option(timesheet_buffer, 'modified') then
-
-    -- Get the buffer content
-    local lines = vim.api.nvim_buf_get_lines(timesheet_buffer, 0, -1, false)
-    local lua_content = table.concat(lines, "\n")
-    local timesheet_path = vim.api.nvim_buf_get_name(timesheet_buffer)
-
-    -- Validate: Parse Lua content
-    local chunk, parse_err = load(lua_content, "timesheet", "t")
-    if not chunk then
-      vim.notify("epoch: cannot save timesheet - lua syntax error: " .. tostring(parse_err), vim.log.levels.ERROR)
-      -- Don't close the window - return early
-      return
-    end
-
-    -- Execute the chunk to get the timesheet table
-    local success, timesheet = pcall(chunk)
-    if not success then
-      vim.notify("epoch: cannot save timesheet - execution error: " .. tostring(timesheet), vim.log.levels.ERROR)
-      return
-    end
-
-    -- Check if timesheet is a table
-    if type(timesheet) ~= "table" then
-      vim.notify("epoch: cannot save timesheet - invalid timesheet format (not a table)", vim.log.levels.ERROR)
-      return
-    end
-
-    -- Validate timesheet structure
-    local valid, msg = storage.validate_timesheet(timesheet)
-    if not valid then
-      vim.notify("epoch: validation error - " .. msg, vim.log.levels.ERROR)
-      return
-    end
-
-    -- Check for overlapping intervals
-    local overlap, overlap_msg = storage.check_overlapping_intervals(timesheet.intervals, timesheet.date)
-    if overlap then
-      vim.notify("epoch: validation error - " .. overlap_msg, vim.log.levels.ERROR)
-      return
-    end
-
-    -- If we got here, the timesheet is valid - save it
-    vim.fn.writefile(lines, timesheet_path)
-    vim.notify("epoch: timesheet saved", vim.log.levels.INFO)
+-- Parse buffer content to extract timesheet data
+local function parse_buffer_content()
+  if not timesheet_buffer or not vim.api.nvim_buf_is_valid(timesheet_buffer) then
+    return nil, "buffer is not valid"
   end
+  
+  -- Get buffer content
+  local lines = vim.api.nvim_buf_get_lines(timesheet_buffer, 0, -1, false)
+  local content = table.concat(lines, "\n")
+  
+  -- Use protected call to load and execute the Lua content
+  local chunk, err = loadstring(content, "timesheet")
+  if not chunk then
+    return nil, "lua syntax error: " .. tostring(err)
+  end
+  
+  local ok, timesheet = pcall(chunk)
+  if not ok then
+    return nil, "execution error: " .. tostring(timesheet)
+  end
+  
+  if type(timesheet) ~= "table" then
+    return nil, "invalid timesheet format (not a table)"
+  end
+  
+  return timesheet, nil
+end
 
-  -- Now close the window and clean up the buffer
+-- Validate and save timesheet content
+local function validate_and_save_timesheet()
+  -- Parse buffer content
+  local timesheet, parse_err = parse_buffer_content()
+  if not timesheet then
+    vim.notify("epoch: cannot save timesheet - " .. parse_err, vim.log.levels.ERROR)
+    return false
+  end
+  
+  -- Validate timesheet structure
+  local valid, validation_err = validation.validate_timesheet(timesheet)
+  if not valid then
+    vim.notify("epoch: validation error - " .. validation_err, vim.log.levels.ERROR)
+    return false
+  end
+  
+  -- Get the path for saving
+  local path = vim.api.nvim_buf_get_name(timesheet_buffer)
+  
+  -- Save to file
+  local success, save_err = storage.save_timesheet(timesheet)
+  if not success then
+    vim.notify("epoch: failed to save - " .. tostring(save_err), vim.log.levels.ERROR)
+    return false
+  end
+  
+  -- Mark buffer as not modified
+  vim.api.nvim_buf_set_option(timesheet_buffer, 'modified', false)
+  vim.notify("epoch: timesheet saved", vim.log.levels.INFO)
+  return true
+end
+
+-- Close window and clean up
+local function close_window()
+  -- If window is open, close it
   if is_window_open() then
     vim.api.nvim_win_close(timesheet_window, true)
     timesheet_window = nil
   end
-
+  
+  -- Clean up buffer
   if timesheet_buffer ~= nil and vim.api.nvim_buf_is_valid(timesheet_buffer) then
     vim.api.nvim_buf_delete(timesheet_buffer, { force = true })
     timesheet_buffer = nil
   end
 end
 
--- Convert any Lua table to lines for display
-local function format_table_for_display(data)
-  -- Use the get_lua_table function from storage
-  local lua_content = storage.get_lua_table(data)
-  local lines = {}
-  
-  for line in lua_content:gmatch("([^\r\n]+)") do
-    table.insert(lines, line)
-  end
-  
-  return lines
-end
-
--- Format a timesheet for display
-local function format_timesheet(timesheet)
-  return format_table_for_display(timesheet)
-end
-
--- open the timesheet window
-function ui.open_timesheet()
-
-  -- get the timesheet path for today
+-- Open timesheet window
+local function open_timesheet()
+  -- Get the timesheet path for today
   local timesheet_path = storage.get_timesheet_path()
-
-  -- create the timesheet file if it doesn't exist
+  
+  -- Create or load the timesheet file
   if vim.fn.filereadable(timesheet_path) == 0 then
-    -- Create a default timesheet structure
+    -- Create a default timesheet
     local timesheet = storage.create_default_timesheet()
     storage.save_timesheet(timesheet)
-  else
-    -- Re-save the file to ensure consistent formatting
-    local timesheet = storage.load_timesheet()
-    storage.save_timesheet(timesheet)
   end
-
-  -- create a new buffer for the file
-  timesheet_buffer = vim.api.nvim_create_buf(false, false)  -- not listed, normal (not scratch)
+  
+  -- Create a new buffer for the file
+  timesheet_buffer = vim.api.nvim_create_buf(false, false)
   vim.api.nvim_buf_set_option(timesheet_buffer, 'bufhidden', 'hide')
-
-  -- set the buffer name and load file content directly
+  
+  -- Set the buffer name and load file content
   vim.api.nvim_buf_set_name(timesheet_buffer, timesheet_path)
-
-  -- read the file content directly
   local content = vim.fn.readfile(timesheet_path)
   vim.api.nvim_buf_set_lines(timesheet_buffer, 0, -1, false, content)
-
-  -- set buffer options
+  
+  -- Set buffer options
   vim.api.nvim_buf_set_option(timesheet_buffer, 'filetype', 'lua')
   vim.api.nvim_buf_set_option(timesheet_buffer, 'swapfile', false)
   vim.api.nvim_buf_set_option(timesheet_buffer, 'modifiable', true)
-
-  -- Add an autocmd for the 'w' save command to validate
+  
+  -- Add autocmd for save
   vim.api.nvim_create_autocmd({"BufWriteCmd"}, {
     buffer = timesheet_buffer,
     callback = function()
-      local lines = vim.api.nvim_buf_get_lines(timesheet_buffer, 0, -1, false)
-      local content = table.concat(lines, "\n")
-      local path = vim.api.nvim_buf_get_name(timesheet_buffer)
-
-      -- Validate the timesheet content (similar to close_window validation)
-      local chunk, err = load(content, "timesheet", "t")
-      if not chunk then
-        vim.notify("epoch: cannot save timesheet - lua syntax error: " .. tostring(err), vim.log.levels.ERROR)
-        return
-      end
-
-      local success, timesheet = pcall(chunk)
-      if not success then
-        vim.notify("epoch: cannot save timesheet - execution error: " .. tostring(timesheet), vim.log.levels.ERROR)
-        return
-      end
-
-      if type(timesheet) ~= "table" then
-        vim.notify("epoch: cannot save timesheet - invalid timesheet format (not a table)", vim.log.levels.ERROR)
-        return
-      end
-
-      local valid, msg = storage.validate_timesheet(timesheet)
-      if not valid then
-        vim.notify("epoch: validation error - " .. msg, vim.log.levels.ERROR)
-        return
-      end
-
-      local overlap, overlap_msg = storage.check_overlapping_intervals(timesheet.intervals, timesheet.date)
-      if overlap then
-        vim.notify("epoch: validation error - " .. overlap_msg, vim.log.levels.ERROR)
-        return
-      end
-
-      -- If all validations pass, save the file
-      vim.fn.writefile(lines, path)
-      vim.api.nvim_buf_set_option(timesheet_buffer, 'modified', false)
-      vim.notify("epoch: timesheet saved", vim.log.levels.INFO)
+      validate_and_save_timesheet()
     end
   })
-
-  -- calculate window dimensions based on percentage of Neovim window size
-  -- Use half the width of what trap does, as timesheet files are long but narrow
-  local width = math.floor(vim.o.columns * 0.4)
-  local height = math.floor(vim.o.lines * 0.8)
-  local row = math.floor((vim.o.lines - height) / 2)
-  local col = math.floor((vim.o.columns - width) / 2)
-
-  -- Create a direct floating window with fixed size
-  local win_opts = {
+  
+  -- Calculate window dimensions (40% width, 70% height)
+  local width = math.floor(vim.o.columns * 0.4) 
+  local height = math.floor(vim.o.lines * 0.7)
+  
+  -- Create floating window using direct Neovim API for full control
+  timesheet_window = vim.api.nvim_open_win(timesheet_buffer, true, {
     relative = 'editor',
+    row = math.floor((vim.o.lines - height) / 2),
+    col = math.floor((vim.o.columns - width) / 2),
     width = width,
     height = height,
-    row = row,
-    col = col,
     style = 'minimal',
     border = 'rounded',
-    title = "epoch - timesheet",
-    title_pos = "center",
-  }
+    title = 'epoch - timesheet',
+    title_pos = 'center',
+  })
   
-  timesheet_window = vim.api.nvim_open_win(timesheet_buffer, true, win_opts)
-  
-  -- Set window options for proper display
+  -- Set additional window options
   vim.api.nvim_win_set_option(timesheet_window, 'wrap', false)
-  vim.api.nvim_win_set_option(timesheet_window, 'scrolloff', 2)
-  vim.api.nvim_win_set_option(timesheet_window, 'sidescrolloff', 5)
-  vim.api.nvim_win_set_option(timesheet_window, 'cursorline', true)
-  vim.api.nvim_win_set_option(timesheet_window, 'winhighlight', 'Normal:EpochNormal,FloatBorder:EpochBorder,FloatTitle:EpochTitle')
-
-  -- set window-local keymaps
+  vim.api.nvim_win_set_option(timesheet_window, 'winfixheight', true)
+  vim.api.nvim_win_set_option(timesheet_window, 'winfixwidth', true)
+  
+  -- Apply custom highlights
+  vim.api.nvim_win_set_option(timesheet_window, 'winhl', 'Normal:EpochNormal,FloatBorder:EpochBorder')
+  
+  -- Set window-local keymaps
   local opts = { noremap = true, silent = true }
-  vim.api.nvim_buf_set_keymap(timesheet_buffer, 'n', 'q', ':lua require("epoch").edit()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(timesheet_buffer, 'n', '<Esc>', ':lua require("epoch").edit()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(timesheet_buffer, 'n', 'q', ':lua require("epoch.ui").toggle_timesheet()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(timesheet_buffer, 'n', '<Esc>', ':lua require("epoch.ui").toggle_timesheet()<CR>', opts)
   vim.api.nvim_buf_set_keymap(timesheet_buffer, 'n', 'w', ':w<CR>', opts)
 end
 
--- toggle the timesheet window
-function ui.toggle_timesheet()
-
-  -- First check if a window is already open
-  if is_window_open() then
-    -- If so, try to close it (with validation)
-    close_window()
-  else
-    -- Check the path and open the timesheet
-    local path = storage.get_timesheet_path()
-    local file_exists = vim.fn.filereadable(path) == 1
-
-    -- If the timesheet doesn't exist, prompt to create first interval
-    if not file_exists then
-      require('epoch.timeops').add_interval()
-    else
-      ui.open_timesheet()
-    end
-  end
-end
-
--- Format the weekly report for display
-local function format_weekly_report(report)
-  return format_table_for_display(report)
-end
-
--- toggle the weekly report window
-function ui.toggle_report()
-  if is_window_open() then
-    close_window()
-  else
-    show_report()
-  end
-end
-
--- show the weekly report
-local function show_report()
-  -- create a non-file buffer for the report
-  timesheet_buffer = vim.api.nvim_create_buf(false, true)
-  vim.api.nvim_buf_set_option(timesheet_buffer, 'bufhidden', 'wipe')
-
-  -- get weekly report
-  local report = timeops.get_weekly_report()
-
-  -- format report data
-  local lines = format_weekly_report(report)
-
-  -- update buffer content
-  vim.api.nvim_buf_set_lines(timesheet_buffer, 0, -1, false, lines)
-
-  -- keep the report readonly since it's a summary
-  vim.api.nvim_buf_set_option(timesheet_buffer, 'modifiable', false)
-  vim.api.nvim_buf_set_option(timesheet_buffer, 'filetype', 'lua')
-  vim.api.nvim_buf_set_option(timesheet_buffer, 'readonly', true)
-
-  -- calculate window dimensions based on percentage of Neovim window size
-  -- Use half the width of what trap does, as timesheet files are long but narrow
-  local width = math.floor(vim.o.columns * 0.4)
-  local height = math.floor(vim.o.lines * 0.8)
-  local row = math.floor((vim.o.lines - height) / 2)
-  local col = math.floor((vim.o.columns - width) / 2)
-
-  -- Create a direct floating window with fixed size
-  local win_opts = {
-    relative = 'editor',
-    width = width,
-    height = height,
-    row = row,
-    col = col,
-    style = 'minimal',
-    border = 'rounded',
-    title = "epoch - weekly report",
-    title_pos = "center",
-  }
-  
-  timesheet_window = vim.api.nvim_open_win(timesheet_buffer, true, win_opts)
-  
-  -- Set window options for proper display
-  vim.api.nvim_win_set_option(timesheet_window, 'wrap', false)
-  vim.api.nvim_win_set_option(timesheet_window, 'scrolloff', 2)
-  vim.api.nvim_win_set_option(timesheet_window, 'sidescrolloff', 5)
-  vim.api.nvim_win_set_option(timesheet_window, 'cursorline', true)
-  vim.api.nvim_win_set_option(timesheet_window, 'winhighlight', 'Normal:EpochNormal,FloatBorder:EpochBorder,FloatTitle:EpochTitle')
-
-  -- set window-local keymaps
-  local opts = { noremap = true, silent = true }
-  vim.api.nvim_buf_set_keymap(timesheet_buffer, 'n', 'q', ':lua require("epoch").show_report()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(timesheet_buffer, 'n', '<Esc>', ':lua require("epoch").show_report()<CR>', opts)
-end
-
--- setup function that gets called on initialization
+-- Set up the UI module
 function ui.setup()
-  -- reset highlights to match current theme
+  -- Set up highlights
   setup_highlights()
   
-  -- set up autocmd to refresh highlights when colorscheme changes
+  -- Listen for colorscheme changes to update highlights
   vim.api.nvim_create_autocmd("ColorScheme", {
     pattern = "*",
     callback = function()
@@ -342,6 +193,147 @@ function ui.setup()
     end,
     group = vim.api.nvim_create_augroup("EpochHighlightRefresh", { clear = true }),
   })
+  
+  -- Handle QuitPre to ensure buffer is saved before Neovim quits
+  vim.api.nvim_create_autocmd("QuitPre", {
+    callback = function()
+      if timesheet_buffer and vim.api.nvim_buf_is_valid(timesheet_buffer) and vim.api.nvim_buf_get_option(timesheet_buffer, 'modified') then
+        -- Save the timesheet
+        validate_and_save_timesheet()
+      end
+    end,
+    group = vim.api.nvim_create_augroup("EpochQuitHandler", { clear = true }),
+  })
+end
+
+-- Toggle timesheet window
+function ui.toggle_timesheet()
+  -- If window is open, validate and save before closing
+  if is_window_open() then
+    -- If buffer is modified, validate and save
+    if vim.api.nvim_buf_get_option(timesheet_buffer, 'modified') then
+      if validate_and_save_timesheet() then
+        close_window()
+      end
+      -- If validation fails, keep window open
+    else
+      -- Not modified, just close
+      close_window()
+    end
+  else
+    -- Window not open, check if timesheet exists
+    local path = storage.get_timesheet_path()
+    
+    -- If no timesheet exists, prompt to create one
+    if vim.fn.filereadable(path) == 0 then
+      ui.add_interval()
+    else
+      -- Otherwise just open the existing one
+      open_timesheet()
+    end
+  end
+end
+
+-- Add a new interval
+function ui.add_interval()
+  -- Prompt for client and project
+  vim.ui.input({ prompt = "client: " }, function(client)
+    if not client or client == "" then return end
+    
+    vim.ui.input({ prompt = "project: " }, function(project)
+      if not project or project == "" then return end
+      
+      vim.ui.input({ prompt = "task: " }, function(task)
+        if not task or task == "" then return end
+        
+        -- Get current time
+        local current_time = os.time()
+        local current_formatted = time_utils.format_time(current_time)
+        
+        -- Load or create timesheet
+        local timesheet = storage.load_timesheet()
+        
+        -- Check for previous unclosed interval
+        if #timesheet.intervals > 0 then
+          local last_interval = timesheet.intervals[#timesheet.intervals]
+          
+          -- Close it if needed
+          if not last_interval.stop or last_interval.stop == "" then
+            -- Ensure there's at least a 1-minute difference between intervals
+            local last_start_time = time_utils.parse_time(last_interval.start)
+            local current_time_obj = os.time()
+            
+            -- If less than 1 minute has passed, set the end time to 1 minute after start
+            if current_time_obj - last_start_time < 60 then
+              local adjusted_end_time = last_start_time + 60
+              last_interval.stop = time_utils.format_time(adjusted_end_time)
+            else
+              -- Normal case: use current time
+              last_interval.stop = current_formatted
+            end
+            
+            -- Notify about closing the previous interval
+            vim.notify("epoch: closed previous interval at " .. last_interval.stop, vim.log.levels.INFO)
+          end
+        end
+        
+        -- Determine the start time for the new interval
+        local start_time = current_time
+        
+        -- If we have a previous interval that was just closed
+        if #timesheet.intervals > 0 then
+          local last_interval = timesheet.intervals[#timesheet.intervals]
+          
+          -- If the last interval was just closed, ensure new interval starts after it ends
+          if last_interval.stop and last_interval.stop ~= "" then
+            local last_stop_time = time_utils.parse_time(last_interval.stop)
+            
+            -- If current time is before or equal to the last stop time, add a minute
+            if current_time <= last_stop_time then
+              start_time = last_stop_time + 60
+            end
+          end
+        end
+        
+        -- Create new interval with adjusted start time
+        local interval = {
+          client = client,
+          project = project,
+          task = task,
+          start = time_utils.format_time(start_time),
+          stop = ""
+        }
+        
+        -- Add to timesheet
+        table.insert(timesheet.intervals, interval)
+        
+        -- Update daily total if needed (approximate)
+        local closed_minutes = 0
+        for _, intvl in ipairs(timesheet.intervals) do
+          if intvl.stop and intvl.stop ~= "" then
+            -- Add estimated time for this interval
+            closed_minutes = closed_minutes + 90 -- Rough estimate
+          end
+        end
+        timesheet.daily_total = time_utils.format_duration(closed_minutes)
+        
+        -- Save the timesheet
+        storage.save_timesheet(timesheet)
+        
+        -- Notify user
+        vim.cmd("redraw!")  -- Clear the screen
+        vim.notify("epoch: time tracking started for " .. client .. "/" .. project .. "/" .. task, vim.log.levels.INFO)
+        
+        -- If the window is open, refresh it
+        if is_window_open() then
+          -- Update buffer with new content
+          local content = storage.serialize_timesheet(timesheet)
+          vim.api.nvim_buf_set_lines(timesheet_buffer, 0, -1, false, vim.split(content, '\n'))
+          vim.api.nvim_buf_set_option(timesheet_buffer, 'modified', false)
+        end
+      end)
+    end)
+  end)
 end
 
 return ui

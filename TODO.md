@@ -1,10 +1,28 @@
 # TODO
 
-## Refactoring
+## Notes on Dependencies
 
-The project has serveral files that are large and very comlicated. This is breaking our simple coding standards. We will align the project with these standards first, then implement remaining features, like `:EpochReport`, and test.
+- plenary.nvim is required for:
+  - Testing framework (used by minimal_init.lua for test execution)
 
-* you prefer a functional programming style
+## Next Immediate Task 🚨
+- Improve `:EpochReport` functionality
+  - Fix formatting of the Overall By Week report
+  - Order weekly sections chronologically with the latest/current week at the top
+  - Add test coverage for report functionality
+
+## Upcoming 📋
+- Add optional 'notes' field to intervals
+  - Implement as a list of strings (array)
+  - Used for capturing unstructured data to identify useful patterns
+- Final code review for adherence to length guidelines
+  - Review all files to ensure they meet the < 150 lines guideline
+  - Review all functions to ensure they meet the < 15 lines guideline
+- Update documentation for new implementation
+
+## Original Coding Standards
+
+* Functional programming style preferred
     * under 3 lines of code mean a function may be overkill
         * investigate list comprehensions and lambdas.
     * under 5 lines is a good sign.

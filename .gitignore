@@ -1,3 +1,5 @@
-# Ignore YAML files
-*.yaml
+# TODO: this shoudl be in global gitignore. already in a dotfiles branch
 **/.claude/settings.local.json
+
+# Ignore test data directory
+test_data/
