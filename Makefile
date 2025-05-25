@@ -24,7 +24,7 @@ test:
 data:
 	$(NVIM_FLAGS) nvim --headless \
 		-c "lua package.path='$(PWD)/lua/?.lua;'..package.path" \
-		-c "lua dofile('$(PWD)/create_test_data.lua')" \
+		-c "lua dofile('$(PWD)/tests/scripts/create_test_data.lua')" \
 		-c "quit"
 
 # Clean generated files and timesheet data
