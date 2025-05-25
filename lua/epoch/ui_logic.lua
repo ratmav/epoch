@@ -4,6 +4,7 @@
 local ui_logic = {}
 local time_utils = require('epoch.time_utils')
 local validation = require('epoch.validation')
+local storage = require('epoch.storage')
 
 -- Validate and prepare timesheet content
 -- Returns: timesheet, nil on success OR nil, error_message on failure
@@ -128,6 +129,74 @@ function ui_logic.update_daily_total(timesheet)
   local updated = vim.deepcopy(timesheet)
   updated.daily_total = ui_logic.calculate_daily_total(updated)
   return updated
+end
+
+-- Handle interval timing conflicts and adjustments
+-- Returns: adjusted_start_time, adjusted_stop_time_for_previous
+function ui_logic.resolve_interval_timing(timesheet, current_time)
+  if not timesheet.intervals or #timesheet.intervals == 0 then
+    return current_time, nil
+  end
+  
+  local last_interval = timesheet.intervals[#timesheet.intervals]
+  local adjusted_current = current_time
+  local adjusted_previous_stop = nil
+  
+  -- If last interval is unclosed, we need to close it
+  if not last_interval.stop or last_interval.stop == "" then
+    local last_start_time = time_utils.parse_time(last_interval.start)
+    
+    -- Ensure at least 1 minute difference
+    if current_time - last_start_time < 60 then
+      adjusted_previous_stop = time_utils.format_time(last_start_time + 60)
+      adjusted_current = last_start_time + 120 -- Start new interval 1 minute after previous ends
+    else
+      adjusted_previous_stop = time_utils.format_time(current_time)
+      adjusted_current = current_time + 60 -- Start new interval 1 minute after current time
+    end
+  else
+    -- Previous interval is closed, check if we need to adjust start time
+    local last_stop_time = time_utils.parse_time(last_interval.stop)
+    if current_time <= last_stop_time then
+      adjusted_current = last_stop_time + 60
+    end
+  end
+  
+  return adjusted_current, adjusted_previous_stop
+end
+
+-- Complete workflow for adding an interval with all business logic
+-- Returns: success, error_message, updated_timesheet
+function ui_logic.add_interval_workflow(client, project, task, timesheet)
+  if not client or client == "" then
+    return false, "client is required", nil
+  end
+  if not project or project == "" then
+    return false, "project is required", nil
+  end
+  if not task or task == "" then
+    return false, "task is required", nil
+  end
+  
+  local current_time = os.time()
+  local updated_timesheet = vim.deepcopy(timesheet)
+  
+  -- Handle timing conflicts and close previous interval if needed
+  local adjusted_start, previous_stop = ui_logic.resolve_interval_timing(updated_timesheet, current_time)
+  
+  -- Close previous interval if needed
+  if previous_stop then
+    ui_logic.close_current_interval(updated_timesheet, previous_stop)
+  end
+  
+  -- Create new interval
+  local interval = ui_logic.create_interval(client, project, task, adjusted_start)
+  table.insert(updated_timesheet.intervals, interval)
+  
+  -- Update daily total
+  updated_timesheet = ui_logic.update_daily_total(updated_timesheet)
+  
+  return true, nil, updated_timesheet
 end
 
 return ui_logic
