@@ -3,18 +3,47 @@
 ## Notes on Dependencies
 
 
-## Next Immediate Task 🚨
+## Current Refactoring Progress ✅
 
-- Laconic refactoring
-  - Move more business logic from ui.lua to ui_logic.lua
-  - Ensure ui.lua focuses only on presentation and UI interactions
-  - Review all files to ensure they meet the < 150 lines guideline
-  - Review all functions to ensure they meet the < 15 lines guideline
-  - review all code against the coding standards listed below.
-- Update documentation for new implementation
-  - plenary.nvim is required for:
-    - Testing framework (used by minimal_init.lua for test execution)
-- github action to lint, check formatting, and test new pull requests.
+**Completed:**
+- ✅ Move business logic from ui.lua to ui_logic.lua (-119 lines, 45% reduction)
+- ✅ Break down storage.lua into modular structure (-184 lines, 74% reduction)  
+- ✅ Break down validation.lua with functional programming improvements (-187 lines, 81% reduction)
+- ✅ Create generic window management system (eliminates code duplication)
+- ✅ Implement clean toggle behavior for :EpochEdit and :EpochReport
+- ✅ All tests passing (47/47) with preserved external API
+
+**Total Progress: 490 lines eliminated, massive architectural improvements**
+
+## Next Immediate Tasks 🚨
+
+**High Priority:**
+- ✅ Break down ui/window.lua (226→87 lines, -61% reduction)
+- ✅ Break down ui_logic.lua (201 lines → modular ui/ structure with domain organization)
+- Break down report/generator.lua (195 lines → target <150 lines)
+
+**Medium Priority:**
+- Apply init.lua pattern consistently across codebase for public API modules
+  - storage.lua → storage/init.lua (if within line limits)
+  - report.lua → report/init.lua (already has report/ subdirectory)
+  - Other modules as appropriate for clean public interfaces
+- Review refactored modular code for improved testability
+  - Write additional functional tests for newly isolated modules
+  - Test individual modules that are now independently testable
+  - Focus on testing edge cases that were harder to test in monolithic modules
+  - Verify test coverage is comprehensive across the modular architecture
+- Review all functions to ensure they meet the <15 lines guideline
+- Apply coding standards throughout codebase
+
+**Post-Refactoring Validation:**
+- Complete manual test plan execution (MANUAL_TEST_PLAN.md)
+  - Test all 24 test cases across 11 test groups
+  - Verify clean toggle behavior and user experience
+  - Ensure no regressions after architectural changes
+
+**Final Steps:**
+- Update documentation for new modular architecture
+- GitHub action to lint, check formatting, and test new pull requests
 
 ## Refactoring Guidelines
 

@@ -1,8 +1,9 @@
--- epoch/ui.lua
--- ui functionality for epoch time tracking
+-- epoch/ui/init.lua
+-- UI functionality for epoch time tracking
 
 local ui = {}
-local ui_logic = require('epoch.ui_logic')
+local timesheet_ops = require('epoch.ui.timesheet')
+local workflow = require('epoch.ui.workflow')
 local storage = require('epoch.storage')
 local window = require('epoch.ui.window')
 
@@ -13,7 +14,7 @@ local function parse_buffer_content()
     return nil, "buffer is not valid"
   end
   
-  return ui_logic.validate_timesheet_content(content)
+  return timesheet_ops.validate_content(content)
 end
 
 -- Validate and save timesheet content
@@ -109,9 +110,9 @@ function ui.add_interval(callback)
       vim.ui.input({ prompt = "task: " }, function(task)
         if not task or task == "" then return end
         
-        -- Load current timesheet and use ui_logic for business logic
+        -- Load current timesheet and use workflow for business logic
         local timesheet = storage.load_timesheet()
-        local success, err, updated_timesheet = ui_logic.add_interval_workflow(client, project, task, timesheet)
+        local success, err, updated_timesheet = workflow.add_interval(client, project, task, timesheet)
         
         if not success then
           vim.notify("epoch: " .. err, vim.log.levels.ERROR)

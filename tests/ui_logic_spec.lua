@@ -1,9 +1,11 @@
 -- ui_logic_spec.lua
--- Test the UI logic module (core logic extracted from UI module)
+-- Test the UI modules (timesheet, interval, workflow)
 
-describe("ui_logic", function()
+describe("ui modules", function()
   -- Load modules
-  local ui_logic = require('epoch.ui_logic')
+  local timesheet_ops = require('epoch.ui.timesheet')
+  local interval_ops = require('epoch.ui.interval')
+  local workflow = require('epoch.ui.workflow')
   local validation = require('epoch.validation')
   local time_utils = require('epoch.time_utils')
 
@@ -12,10 +14,10 @@ describe("ui_logic", function()
   local timesheet_fixtures = require('tests.fixtures.timesheet_fixtures')
   local interval_fixtures = require('tests.fixtures.interval_fixtures')
 
-  describe("validate_timesheet_content", function()
+  describe("timesheet validation", function()
     it("should validate correctly formatted timesheet content", function()
       local content = ui_fixtures.buffer_content.valid_timesheet
-      local timesheet, err = ui_logic.validate_timesheet_content(content)
+      local timesheet, err = timesheet_ops.validate_content(content)
 
       assert.is_nil(err)
       assert.is_table(timesheet)
@@ -25,7 +27,7 @@ describe("ui_logic", function()
 
     it("should reject malformed Lua syntax", function()
       local content = ui_fixtures.buffer_content.invalid_syntax
-      local timesheet, err = ui_logic.validate_timesheet_content(content)
+      local timesheet, err = timesheet_ops.validate_content(content)
 
       assert.is_nil(timesheet)
       assert.matches("lua syntax error", err)
@@ -33,7 +35,7 @@ describe("ui_logic", function()
 
     it("should reject content that isn't a table", function()
       local content = [[return "not a table"]]
-      local timesheet, err = ui_logic.validate_timesheet_content(content)
+      local timesheet, err = timesheet_ops.validate_content(content)
 
       assert.is_nil(timesheet)
       assert.equals("invalid timesheet format (not a table)", err)
@@ -41,7 +43,7 @@ describe("ui_logic", function()
 
     it("should reject invalid timesheet structure", function()
       local content = ui_fixtures.buffer_content.missing_field
-      local timesheet, err = ui_logic.validate_timesheet_content(content)
+      local timesheet, err = timesheet_ops.validate_content(content)
 
       assert.is_nil(timesheet)
       assert.is_string(err)
@@ -50,14 +52,14 @@ describe("ui_logic", function()
     end)
   end)
 
-  describe("create_interval", function()
+  describe("interval operations", function()
     it("should create a valid interval with current time", function()
       -- Mock os.time to return a fixed value
       local original_time = os.time
       local fixed_time = 1620000000 -- Some fixed timestamp
       os.time = function() return fixed_time end
 
-      local interval = ui_logic.create_interval("acme-corp", "website-redesign", "frontend-planning")
+      local interval = interval_ops.create("acme-corp", "website-redesign", "frontend-planning")
 
       -- Restore original time function
       os.time = original_time
@@ -72,7 +74,7 @@ describe("ui_logic", function()
     it("should use provided time when specified", function()
       local custom_time = 1620100000 -- Different timestamp
 
-      local interval = ui_logic.create_interval("acme-corp", "website-redesign", "frontend-planning", custom_time)
+      local interval = interval_ops.create("acme-corp", "website-redesign", "frontend-planning", custom_time)
 
       assert.equals("acme-corp", interval.client)
       assert.equals("website-redesign", interval.project)
@@ -83,12 +85,11 @@ describe("ui_logic", function()
     end)
     
     it("should initialize with empty notes array", function()
-      local interval = ui_logic.create_interval("acme-corp", "website-redesign", "frontend-planning")
+      local interval = interval_ops.create("acme-corp", "website-redesign", "frontend-planning")
       
       assert.is_table(interval.notes)
       assert.equals(0, #interval.notes)
     end)
-  end)
 
   describe("close_current_interval", function()
     it("should close an open interval", function()
@@ -98,7 +99,7 @@ describe("ui_logic", function()
       })
 
       -- Close the interval
-      local result = ui_logic.close_current_interval(timesheet, "11:00 AM")
+      local result = interval_ops.close_current(timesheet, "11:00 AM")
 
       assert.is_true(result)
       assert.equals("11:00 AM", timesheet.intervals[1].stop)
@@ -119,7 +120,7 @@ describe("ui_logic", function()
       })
 
       -- Close the interval
-      local result = ui_logic.close_current_interval(timesheet, "11:00 AM")
+      local result = interval_ops.close_current(timesheet, "11:00 AM")
 
       assert.is_true(result)
       assert.equals("11:00 AM", timesheet.intervals[1].stop)
@@ -137,7 +138,7 @@ describe("ui_logic", function()
       local original_stop = timesheet.intervals[1].stop
 
       -- Try to close it again
-      local result = ui_logic.close_current_interval(timesheet, "12:00 PM")
+      local result = interval_ops.close_current(timesheet, "12:00 PM")
 
       assert.is_false(result)
       assert.equals(original_stop, timesheet.intervals[1].stop)
@@ -148,7 +149,7 @@ describe("ui_logic", function()
       local timesheet = timesheet_fixtures.valid.empty
 
       -- Try to close nonexistent interval
-      local result = ui_logic.close_current_interval(timesheet)
+      local result = interval_ops.close_current(timesheet)
 
       assert.is_false(result)
     end)
@@ -163,7 +164,7 @@ describe("ui_logic", function()
       local interval = interval_fixtures.base.frontend
 
       -- Add it to the timesheet
-      local updated = ui_logic.add_interval_to_timesheet(timesheet, interval)
+      local updated = interval_ops.add_to_timesheet(timesheet, interval)
 
       assert.equals(1, #updated.intervals)
       assert.same(interval, updated.intervals[1])
@@ -182,17 +183,17 @@ describe("ui_logic", function()
       local stop_time = "10:30 AM"
 
       -- Mock close_current_interval to use our fixed stop time
-      local original_close = ui_logic.close_current_interval
-      ui_logic.close_current_interval = function(ts)
+      local original_close = interval_ops.close_current
+      interval_ops.close_current = function(ts)
         ts.intervals[1].stop = stop_time
         return true
       end
 
       -- Add interval to timesheet
-      local updated = ui_logic.add_interval_to_timesheet(timesheet, new_interval)
+      local updated = interval_ops.add_to_timesheet(timesheet, new_interval)
 
       -- Restore original function
-      ui_logic.close_current_interval = original_close
+      interval_ops.close_current = original_close
 
       assert.equals(2, #updated.intervals)
 
@@ -212,7 +213,7 @@ describe("ui_logic", function()
       -- Calculate without relying on fixture's pre-calculated total
       timesheet.daily_total = "00:00" -- Reset to ensure we're calculating fresh
 
-      local total = ui_logic.calculate_daily_total(timesheet)
+      local total = interval_ops.calculate_daily_total(timesheet)
 
       -- The exact value depends on the intervals in the fixture
       -- but it should be a properly formatted time string
@@ -224,7 +225,7 @@ describe("ui_logic", function()
       -- Use empty timesheet from fixture
       local timesheet = timesheet_fixtures.valid.empty
 
-      local total = ui_logic.calculate_daily_total(timesheet)
+      local total = interval_ops.calculate_daily_total(timesheet)
 
       assert.equals("00:00", total)
     end)
@@ -233,7 +234,7 @@ describe("ui_logic", function()
       -- Use our fixture with only unclosed intervals
       local timesheet = timesheet_fixtures.valid.with_unclosed_intervals
 
-      local total = ui_logic.calculate_daily_total(timesheet)
+      local total = interval_ops.calculate_daily_total(timesheet)
 
       -- Unclosed intervals should not contribute to the total time
       assert.equals("00:00", total)
@@ -246,7 +247,7 @@ describe("ui_logic", function()
       local timesheet = vim.deepcopy(timesheet_fixtures.valid.with_intervals)
       timesheet.daily_total = "00:00" -- Reset to ensure we're updating
 
-      local updated = ui_logic.update_daily_total(timesheet)
+      local updated = timesheet_ops.update_daily_total(timesheet, interval_ops.calculate_daily_total)
 
       -- Original should be unchanged
       assert.equals("00:00", timesheet.daily_total)
@@ -255,5 +256,7 @@ describe("ui_logic", function()
       assert.not_equals("00:00", updated.daily_total)
       assert.matches("^%d%d:%d%d$", updated.daily_total)
     end)
+  end)
+
   end)
 end)
