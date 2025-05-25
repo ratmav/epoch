@@ -14,6 +14,7 @@
 - Update documentation for new implementation
   - plenary.nvim is required for:
     - Testing framework (used by minimal_init.lua for test execution)
+- github action to lint, check formatting, and test new pull requests.
 
 
 ## Original Coding Standards
