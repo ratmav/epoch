@@ -232,9 +232,9 @@ function report.generate_report()
     })
   end
   
-  -- Sort weeks chronologically
+  -- Sort weeks chronologically, most recent first (latest/current week at the top)
   table.sort(weeks, function(a, b)
-    return a.week < b.week
+    return a.week > b.week
   end)
   
   -- Convert all_summary to array and sort by client/project/task
@@ -439,29 +439,43 @@ function report.format_report(report_data)
     table.insert(lines, "## Overall By Week")
     table.insert(lines, "")
     
+    -- Calculate max width needed for week labels
+    local max_week_label_len = 4  -- "Week"
+    for _, week in ipairs(report_data.weeks) do
+      local week_num = week.week:match("^%d+%-(%d+)$") or ""
+      max_week_label_len = math.max(max_week_label_len, #(week.date_range.first or ""))
+    end
+    
+    -- Ensure min width of 19 for "YYYY-MM-DD to YYYY-MM-DD" format
+    max_week_label_len = math.max(max_week_label_len + 4, 19)  -- +4 for "Week " prefix
+    
     -- Create a table for weekly totals
-    table.insert(lines, "Week            Hours")
-    table.insert(lines, "--------------- ------")
+    local header = string.format("%-" .. max_week_label_len .. "s  %s", "Week", "Hours")
+    table.insert(lines, header)
+    
+    local separator = string.rep("-", max_week_label_len) .. "  ------"
+    table.insert(lines, separator)
     
     local total_all_weeks = 0
     
+    -- The weeks are already sorted (latest first) in generate_report()
     for _, week in ipairs(report_data.weeks) do
       local week_label
       if week.date_range then
-        week_label = string.format("%s to %s", week.date_range.first, week.date_range.last)
+        week_label = string.format("Week %s", week.date_range.first)
       else
-        week_label = week.week
+        week_label = string.format("Week %s", week.week)
       end
       
       local formatted_time = time_utils.format_duration(week.total_minutes)
-      table.insert(lines, string.format("%-15s %s", week_label, formatted_time))
+      table.insert(lines, string.format("%-" .. max_week_label_len .. "s  %s", week_label, formatted_time))
       
       total_all_weeks = total_all_weeks + week.total_minutes
     end
     
     -- Add total across all weeks
-    table.insert(lines, "--------------- ------")
-    table.insert(lines, string.format("%-15s %s", "TOTAL", time_utils.format_duration(total_all_weeks)))
+    table.insert(lines, separator)
+    table.insert(lines, string.format("%-" .. max_week_label_len .. "s  %s", "TOTAL", time_utils.format_duration(total_all_weeks)))
     
     table.insert(lines, "")
     table.insert(lines, "")

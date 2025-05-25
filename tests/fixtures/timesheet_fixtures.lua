@@ -34,7 +34,8 @@ local valid_timesheets = {
         project = "test-project",
         task = "test-task",
         start = "09:00 AM",
-        stop = ""  -- Explicitly empty stop time
+        stop = "",  -- Explicitly empty stop time
+        notes = {}  -- Empty notes array
       }
     },
     daily_total = "00:00"

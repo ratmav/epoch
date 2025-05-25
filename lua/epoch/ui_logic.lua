@@ -34,7 +34,7 @@ end
 
 -- Create a new interval to track time
 -- Returns: interval object
-function ui_logic.create_interval(client, project, task, start_time)
+function ui_logic.create_interval(client, project, task, start_time, notes)
   start_time = start_time or os.time()
   local formatted_time = time_utils.format_time(start_time)
   
@@ -43,7 +43,8 @@ function ui_logic.create_interval(client, project, task, start_time)
     project = project,
     task = task,
     start = formatted_time,
-    stop = ""
+    stop = "",
+    notes = {}  -- Notes field is always an array of strings
   }
 end
 
@@ -62,6 +63,12 @@ function ui_logic.close_current_interval(timesheet, stop_time)
     -- Close it with the provided or current time
     local formatted_time = stop_time or time_utils.format_time(os.time())
     last_interval.stop = formatted_time
+    
+    -- Ensure notes field exists
+    if last_interval.notes == nil then
+      last_interval.notes = {}
+    end
+    
     return true
   end
   

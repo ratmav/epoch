@@ -79,6 +79,14 @@ describe("ui_logic", function()
       assert.equals("frontend-planning", interval.task)
       assert.not_equals("", interval.start)
       assert.equals("", interval.stop)
+      assert.same({}, interval.notes)
+    end)
+    
+    it("should initialize with empty notes array", function()
+      local interval = ui_logic.create_interval("acme-corp", "website-redesign", "frontend-planning")
+      
+      assert.is_table(interval.notes)
+      assert.equals(0, #interval.notes)
     end)
   end)
 
@@ -94,6 +102,29 @@ describe("ui_logic", function()
 
       assert.is_true(result)
       assert.equals("11:00 AM", timesheet.intervals[1].stop)
+      assert.is_table(timesheet.intervals[1].notes)
+    end)
+    
+    it("should ensure notes field exists when closing interval", function()
+      -- Create a timesheet with an open interval that has no notes field
+      local interval_without_notes = {
+        client = "acme-corp",
+        project = "website-redesign",
+        task = "frontend-planning",
+        start = "09:00 AM",
+        stop = ""
+      }
+      local timesheet = timesheet_fixtures.create("2025-05-12", {
+        interval_without_notes
+      })
+
+      -- Close the interval
+      local result = ui_logic.close_current_interval(timesheet, "11:00 AM")
+
+      assert.is_true(result)
+      assert.equals("11:00 AM", timesheet.intervals[1].stop)
+      assert.is_table(timesheet.intervals[1].notes)
+      assert.equals(0, #timesheet.intervals[1].notes)
     end)
 
     it("should not modify already closed intervals", function()

@@ -22,10 +22,23 @@ function commands.register()
     require('epoch.report').toggle_report()
   end, {})
 
-  -- clear all timesheets
+  -- clear all timesheets with confirmation
   vim.api.nvim_create_user_command('EpochClear', function()
-    local count = storage.delete_all_timesheets()
-    vim.notify(string.format("epoch: deleted %d timesheet files", count), vim.log.levels.INFO)
+    -- Ask for confirmation
+    vim.ui.input({
+      prompt = "Are you sure you want to delete ALL timesheet files? (y/N): "
+    }, function(input)
+      -- Clear the command line
+      vim.cmd("redraw!")
+
+      -- Only proceed if the user explicitly confirms with 'y' or 'Y'
+      if input and (input == "y" or input == "Y") then
+        local count = storage.delete_all_timesheets()
+        vim.notify(string.format("epoch: deleted %d timesheet files", count), vim.log.levels.INFO)
+      else
+        vim.notify("epoch: operation cancelled", vim.log.levels.INFO)
+      end
+    end)
   end, {})
 end
 

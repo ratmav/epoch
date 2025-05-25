@@ -2,23 +2,19 @@
 
 ## Notes on Dependencies
 
-- plenary.nvim is required for:
-  - Testing framework (used by minimal_init.lua for test execution)
 
 ## Next Immediate Task 🚨
-- Improve `:EpochReport` functionality
-  - Fix formatting of the Overall By Week report
-  - Order weekly sections chronologically with the latest/current week at the top
-  - Add test coverage for report functionality
 
-## Upcoming 📋
-- Add optional 'notes' field to intervals
-  - Implement as a list of strings (array)
-  - Used for capturing unstructured data to identify useful patterns
-- Final code review for adherence to length guidelines
+- Laconic refactoring
+  - Move more business logic from ui.lua to ui_logic.lua
+  - Ensure ui.lua focuses only on presentation and UI interactions
   - Review all files to ensure they meet the < 150 lines guideline
   - Review all functions to ensure they meet the < 15 lines guideline
+  - review all code against the coding standards listed below.
 - Update documentation for new implementation
+  - plenary.nvim is required for:
+    - Testing framework (used by minimal_init.lua for test execution)
+
 
 ## Original Coding Standards
 

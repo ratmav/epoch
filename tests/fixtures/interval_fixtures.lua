@@ -12,6 +12,7 @@ local base_intervals = {
     task = "frontend-planning",
     start = "09:00 AM",
     stop = "10:30 AM",
+    notes = {}
   },
   
   backend = {
@@ -20,6 +21,7 @@ local base_intervals = {
     task = "backend-planning",
     start = "10:45 AM",
     stop = "12:15 PM",
+    notes = {}
   },
   
   personal = {
@@ -28,6 +30,16 @@ local base_intervals = {
     task = "email",
     start = "08:30 AM",
     stop = "09:15 AM",
+    notes = {}
+  },
+  
+  with_notes = {
+    client = "acme-corp",
+    project = "website-redesign",
+    task = "documentation",
+    start = "01:00 PM",
+    stop = "03:00 PM",
+    notes = {"Added API documentation", "Reviewed with team"}
   }
 }
 
@@ -44,11 +56,23 @@ missing_project.project = nil
 local missing_task = derive_interval(base_intervals.frontend, {})
 missing_task.task = nil
 
+local missing_notes = derive_interval(base_intervals.frontend, {})
+missing_notes.notes = nil
+
+-- Create invalid interval with non-array notes
+local invalid_notes_type = derive_interval(base_intervals.frontend, {})
+invalid_notes_type.notes = "This should be an array, not a string"
+
+-- Create invalid interval with non-string notes entries
+local invalid_notes_entries = derive_interval(base_intervals.frontend, {})
+invalid_notes_entries.notes = {1, 2, 3} -- Numbers instead of strings
+
 return {
   -- Sample intervals
   valid = {
     base_intervals.frontend,
     base_intervals.backend,
+    base_intervals.with_notes,
   },
   
   invalid = {
@@ -56,6 +80,11 @@ return {
     missing_client = missing_client,
     missing_project = missing_project,
     missing_task = missing_task,
+    missing_notes = missing_notes,
+    
+    -- Invalid notes
+    invalid_notes_type = invalid_notes_type,
+    invalid_notes_entries = invalid_notes_entries,
     
     -- Invalid time format
     invalid_time = derive_interval(base_intervals.frontend, {start = "9:00"}),
@@ -97,6 +126,7 @@ return {
       task = "blog-post",
       start = "07:00 PM",
       stop = "08:30 PM",
+      notes = {}
     }
   },
   

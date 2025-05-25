@@ -12,6 +12,11 @@ function storage.set_data_dir(path)
   data_dir = path
 end
 
+-- Set the data directory specifically for tests
+function storage._set_data_dir_for_tests(path)
+  data_dir = path
+end
+
 -- Get the current data directory
 function storage.get_data_dir()
   return data_dir
@@ -47,7 +52,7 @@ function storage.create_default_timesheet(date)
 end
 
 -- Define key order for intervals to ensure consistent serialization
-local interval_key_order = {"client", "project", "task", "start", "stop"}
+local interval_key_order = {"client", "project", "task", "start", "stop", "notes"}
 
 -- Check if table is a list (array) with sequential numeric indices
 local function is_array(tbl)

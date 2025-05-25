@@ -32,6 +32,7 @@ ui_fixtures.buffer_content = {
       ["task"] = "frontend-planning",
       ["start"] = "09:00 AM",
       ["stop"] = "10:30 AM",
+      ["notes"] = {},
     },
     {
       ["client"] = "acme-corp",
@@ -39,6 +40,7 @@ ui_fixtures.buffer_content = {
       ["task"] = "backend-planning",
       ["start"] = "10:45 AM",
       ["stop"] = "12:15 PM",
+      ["notes"] = {},
     },
   },
   ["daily_total"] = "03:00",
@@ -54,6 +56,7 @@ ui_fixtures.buffer_content = {
       ["task"] = "frontend-planning",
       ["start"] = "9:00", -- Missing AM/PM
       ["stop"] = "10:30 AM",
+      ["notes"] = {},
     },
   },
   ["daily_total"] = "01:30",
@@ -84,6 +87,7 @@ ui_fixtures.buffer_content = {
       ["task"] = "frontend-planning",
       ["start"] = "09:00 AM",
       ["stop"] = "10:30 AM",
+      ["notes"] = {},
     },
     {
       ["client"] = "acme-corp",
@@ -91,6 +95,7 @@ ui_fixtures.buffer_content = {
       ["task"] = "backend-planning",
       ["start"] = "10:00 AM", -- Overlaps with previous interval
       ["stop"] = "11:00 AM",
+      ["notes"] = {},
     },
   },
   ["daily_total"] = "02:30",
@@ -106,6 +111,7 @@ ui_fixtures.buffer_content = {
       ["task"] = "frontend-planning",
       ["start"] = "09:00 AM",
       ["stop"] = "10:30 AM",
+      ["notes"] = {},
     }, -- Missing closing brace
   ["daily_total"] = "01:30",
 }]],

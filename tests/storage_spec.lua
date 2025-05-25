@@ -106,6 +106,24 @@ describe("storage", function()
       assert.truthy(lua_string:match('task'))
       assert.truthy(lua_string:match('start'))
       assert.truthy(lua_string:match('stop'))
+      assert.truthy(lua_string:match('notes'))
+    end)
+    
+    it("properly serializes intervals with notes", function()
+      -- Create a timesheet with an interval that has notes
+      local timesheet = timesheet_fixtures.create("2025-05-12", {
+        interval_fixtures.base.with_notes
+      })
+      
+      -- Save and reload
+      storage.save_timesheet(timesheet)
+      local loaded = storage.load_timesheet(timesheet.date)
+      
+      -- Verify notes are preserved
+      assert.is_table(loaded.intervals[1].notes)
+      assert.equals(2, #loaded.intervals[1].notes)
+      assert.equals("Added API documentation", loaded.intervals[1].notes[1])
+      assert.equals("Reviewed with team", loaded.intervals[1].notes[2])
     end)
   end)
   

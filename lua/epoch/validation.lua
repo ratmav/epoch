@@ -37,6 +37,22 @@ function validation.validate_interval(interval)
     return false, string.format("stop time '%s' must be in format 'HH:MM AM/PM'", interval.stop)
   end
 
+  -- notes are required and must be an array of strings
+  if interval.notes == nil then
+    return false, "notes field is required (should be an empty array or array of strings)"
+  end
+  
+  if type(interval.notes) ~= "table" then
+    return false, "notes must be an array of strings"
+  end
+  
+  -- check that each entry is a string
+  for i, note in ipairs(interval.notes) do
+    if type(note) ~= "string" then
+      return false, string.format("note at position %d must be a string", i)
+    end
+  end
+
   return true
 end
 
@@ -95,6 +111,12 @@ function validation.get_interval_context(interval)
   if interval.task and interval.task ~= "" then
     if context ~= "" then context = context .. ", " end
     context = context .. "task '" .. interval.task .. "'"
+  end
+  
+  -- Add note count if present
+  if interval.notes and type(interval.notes) == "table" and #interval.notes > 0 then
+    if context ~= "" then context = context .. ", " end
+    context = context .. #interval.notes .. " notes"
   end
   
   return context

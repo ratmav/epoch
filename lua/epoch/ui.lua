@@ -224,9 +224,10 @@ function ui.toggle_timesheet()
     -- Window not open, check if timesheet exists
     local path = storage.get_timesheet_path()
     
-    -- If no timesheet exists, prompt to create one
+    -- If no timesheet exists, prompt to create one and then open the editor
     if vim.fn.filereadable(path) == 0 then
-      ui.add_interval()
+      -- Create an initial interval
+      ui.add_interval_and_edit()
     else
       -- Otherwise just open the existing one
       open_timesheet()
@@ -234,8 +235,17 @@ function ui.toggle_timesheet()
   end
 end
 
+-- Add a new interval and then open the timesheet window
+function ui.add_interval_and_edit()
+  -- Call add_interval first
+  ui.add_interval(function()
+    -- Then unconditionally open the timesheet window
+    open_timesheet()
+  end)
+end
+
 -- Add a new interval
-function ui.add_interval()
+function ui.add_interval(callback)
   -- Prompt for client and project
   vim.ui.input({ prompt = "client: " }, function(client)
     if not client or client == "" then return end
@@ -301,7 +311,8 @@ function ui.add_interval()
           project = project,
           task = task,
           start = time_utils.format_time(start_time),
-          stop = ""
+          stop = "",
+          notes = {}  -- Initialize with empty notes array
         }
         
         -- Add to timesheet
@@ -330,6 +341,11 @@ function ui.add_interval()
           local content = storage.serialize_timesheet(timesheet)
           vim.api.nvim_buf_set_lines(timesheet_buffer, 0, -1, false, vim.split(content, '\n'))
           vim.api.nvim_buf_set_option(timesheet_buffer, 'modified', false)
+        end
+        
+        -- Execute callback if provided
+        if callback and type(callback) == "function" then
+          callback()
         end
       end)
     end)
