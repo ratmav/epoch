@@ -4,55 +4,65 @@
 local fields = {}
 local time_utils = require('epoch.time_utils')
 
--- Validate interval structure and required fields
-function fields.validate_interval(interval)
-  if type(interval) ~= "table" then
-    return false, "interval must be a table"
-  end
-
-  -- Check for required fields
+-- Validate required fields in interval
+local function validate_required_fields(interval)
   if interval.client == nil or interval.client == "" then
     return false, "client cannot be empty"
   end
-
   if interval.project == nil or interval.project == "" then
     return false, "project cannot be empty"
   end
-
   if interval.task == nil or interval.task == "" then
     return false, "task cannot be empty"
   end
+  return true
+end
 
-  -- Validate start time format (must use 12-hour format with AM/PM)
+-- Validate time format fields in interval
+local function validate_time_fields(interval)
   if not interval.start then
     return false, "start time is missing"
   end
-
   if not time_utils.is_valid_time_format(interval.start) then
     return false, string.format("start time '%s' must be in format 'HH:MM AM/PM'", interval.start)
   end
-
-  -- If stop time is provided, validate its format
   if interval.stop and interval.stop ~= "" and not time_utils.is_valid_time_format(interval.stop) then
     return false, string.format("stop time '%s' must be in format 'HH:MM AM/PM'", interval.stop)
   end
+  return true
+end
 
-  -- Notes are required and must be an array of strings
+-- Validate notes field in interval
+local function validate_notes_field(interval)
   if interval.notes == nil then
     return false, "notes field is required (should be an empty array or array of strings)"
   end
-  
   if type(interval.notes) ~= "table" then
     return false, "notes must be an array of strings"
   end
-  
-  -- Check that each entry is a string
   for i, note in ipairs(interval.notes) do
     if type(note) ~= "string" then
       return false, string.format("note at position %d must be a string", i)
     end
   end
+  return true
+end
 
+-- Validate interval structure and required fields
+function fields.validate_interval(interval)
+  if type(interval) ~= "table" then
+    return false, "interval must be a table"
+  end
+  
+  local ok, err = validate_required_fields(interval)
+  if not ok then return false, err end
+  
+  ok, err = validate_time_fields(interval)
+  if not ok then return false, err end
+  
+  ok, err = validate_notes_field(interval)
+  if not ok then return false, err end
+  
   return true
 end
 

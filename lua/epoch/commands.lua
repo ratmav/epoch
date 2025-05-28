@@ -4,6 +4,7 @@
 local commands = {}
 local ui = require('epoch.ui')
 local storage = require('epoch.storage')
+local confirmations = require('epoch.ui.confirmations')
 
 -- register all commands
 function commands.register()
@@ -24,21 +25,13 @@ function commands.register()
 
   -- clear all timesheets with confirmation
   vim.api.nvim_create_user_command('EpochClear', function()
-    -- Ask for confirmation
-    vim.ui.input({
-      prompt = "Are you sure you want to delete ALL timesheet files? (y/N): "
-    }, function(input)
-      -- Clear the command line
-      vim.cmd("redraw!")
-
-      -- Only proceed if the user explicitly confirms with 'y' or 'Y'
-      if input and (input == "y" or input == "Y") then
+    confirmations.confirm_action(
+      "Are you sure you want to delete ALL timesheet files? (y/N): ",
+      function()
         local count = storage.delete_all_timesheets()
         vim.notify(string.format("epoch: deleted %d timesheet files", count), vim.log.levels.INFO)
-      else
-        vim.notify("epoch: operation cancelled", vim.log.levels.INFO)
       end
-    end)
+    )
   end, {})
 end
 

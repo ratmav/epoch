@@ -1,41 +1,47 @@
 # TODO
 
-## Notes on Dependencies
+## 1. Refactoring for function length
+
+**CRITICAL VIOLATIONS (>40 lines) - IMMEDIATE ACTION REQUIRED:**
+- ✅ Break down storage/serializer.lua:serialize_table (68 lines → 6 functions <15 lines each)
+- ✅ Break down validation/fields.lua:validate_interval (50 lines → 4 functions <15 lines each)
+- ✅ Break down report/formatter/table.lua:format_summary_table (50 lines → 6 functions <15 lines each)
+- Break down report/formatter.lua:format_report (44 lines → <15 lines each)
+- Break down report/generator.lua:generate_report (44 lines → <15 lines each)
+- Break down ui/input.lua:prompt_for_interval (40 lines → <15 lines each)
+
+**MODERATE VIOLATIONS (25-39 lines) - HIGH PRIORITY:**
+- Break down time_utils.lua:time_to_seconds (37 lines → <15 lines each)
+- Break down report/week_utils.lua:get_week_date_range (35 lines → <15 lines each)
+- Break down validation/overlap.lua:check_overlapping_intervals (34 lines → <15 lines each)
+- Break down time_utils.lua:parse_time (33 lines → <15 lines each)
+- Break down ui/window/lifecycle.lua:create_window (31 lines → <15 lines each)
+- Break down ui/interval.lua:resolve_timing (31 lines → <15 lines each)
+
+**MINOR VIOLATIONS (15-24 lines) - MEDIUM PRIORITY:**
+- Break down validation/fields.lua:validate_timesheet (29 lines → <15 lines each)
+- Break down validation/fields.lua:get_interval_context (29 lines → <15 lines each)
+- Break down ui/interval.lua:calculate_daily_total (28 lines → <15 lines each)
+- Break down ui/window/lifecycle.lua:close_window (27 lines → <15 lines each)
+- Break down ui/init.lua:open_timesheet (26 lines → <15 lines each)
+- Break down report/generator/processor/week.lua:process_week_data (26 lines → <15 lines each)
+- Break down storage/file_ops.lua:get_all_timesheet_files (23 lines → <15 lines each)
 
 
-## Current Refactoring Progress ✅
+## 2. Review for File length and SRP
+- confirm all files are still in 100-150 line length range.
+- confirm all files still observe the single responsiblity principle
+- if too many lines in file, or srp is violated, raise the issue and we'll refactor
+- we want to observe the file length, function length, and srp rules.
 
-**Completed:**
-- ✅ Move business logic from ui.lua to ui_logic.lua (-119 lines, 45% reduction)
-- ✅ Break down storage.lua into modular structure (-184 lines, 74% reduction)  
-- ✅ Break down validation.lua with functional programming improvements (-187 lines, 81% reduction)
-- ✅ Create generic window management system (eliminates code duplication)
-- ✅ Implement clean toggle behavior for :EpochEdit and :EpochReport
-- ✅ All tests passing (47/47) with preserved external API
-
-**Total Progress: 490 lines eliminated, massive architectural improvements**
-
-## Next Immediate Tasks 🚨
-
-**High Priority:**
-- ✅ Break down ui/window.lua (226→87 lines, -61% reduction)
-- ✅ Break down ui_logic.lua (201 lines → modular ui/ structure with domain organization)
-- Break down report/generator.lua (195 lines → target <150 lines)
-
-**Medium Priority:**
-- Apply init.lua pattern consistently across codebase for public API modules
-  - storage.lua → storage/init.lua (if within line limits)
-  - report.lua → report/init.lua (already has report/ subdirectory)
-  - Other modules as appropriate for clean public interfaces
-- Review refactored modular code for improved testability
+## 3. Review refactored modular code for improved testability
   - Write additional functional tests for newly isolated modules
   - Test individual modules that are now independently testable
   - Focus on testing edge cases that were harder to test in monolithic modules
   - Verify test coverage is comprehensive across the modular architecture
-- Review all functions to ensure they meet the <15 lines guideline
 - Apply coding standards throughout codebase
 
-**Post-Refactoring Validation:**
+## Post-Refactoring
 - Complete manual test plan execution (MANUAL_TEST_PLAN.md)
   - Test all 24 test cases across 11 test groups
   - Verify clean toggle behavior and user experience

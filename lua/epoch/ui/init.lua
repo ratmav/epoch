@@ -2,40 +2,11 @@
 -- UI functionality for epoch time tracking
 
 local ui = {}
-local timesheet_ops = require('epoch.ui.timesheet')
-local workflow = require('epoch.ui.workflow')
 local storage = require('epoch.storage')
 local window = require('epoch.ui.window')
+local timesheet = require('epoch.ui.timesheet')
+local input = require('epoch.ui.input')
 
--- Parse buffer content to extract timesheet data
-local function parse_buffer_content()
-  local content = window.get_content("timesheet")
-  if not content then
-    return nil, "buffer is not valid"
-  end
-  
-  return timesheet_ops.validate_content(content)
-end
-
--- Validate and save timesheet content
-local function validate_and_save_timesheet()
-  -- Parse and validate buffer content
-  local timesheet, err = parse_buffer_content()
-  if not timesheet then
-    vim.notify("epoch: cannot save timesheet - " .. err, vim.log.levels.ERROR)
-    return false
-  end
-  
-  -- Save to file
-  local success, save_err = storage.save_timesheet(timesheet)
-  if not success then
-    vim.notify("epoch: failed to save - " .. tostring(save_err), vim.log.levels.ERROR)
-    return false
-  end
-  
-  vim.notify("epoch: timesheet saved", vim.log.levels.INFO)
-  return true
-end
 
 -- Open timesheet window
 local function open_timesheet()
@@ -61,7 +32,7 @@ local function open_timesheet()
     modifiable = true,
     buffer_name = timesheet_path,
     content = content,
-    on_save = validate_and_save_timesheet
+    on_save = timesheet.validate_and_save_from_buffer
   })
 end
 
@@ -100,45 +71,7 @@ end
 
 -- Add a new interval
 function ui.add_interval(callback)
-  -- Prompt for client, project, and task
-  vim.ui.input({ prompt = "client: " }, function(client)
-    if not client or client == "" then return end
-    
-    vim.ui.input({ prompt = "project: " }, function(project)
-      if not project or project == "" then return end
-      
-      vim.ui.input({ prompt = "task: " }, function(task)
-        if not task or task == "" then return end
-        
-        -- Load current timesheet and use workflow for business logic
-        local timesheet = storage.load_timesheet()
-        local success, err, updated_timesheet = workflow.add_interval(client, project, task, timesheet)
-        
-        if not success then
-          vim.notify("epoch: " .. err, vim.log.levels.ERROR)
-          return
-        end
-        
-        -- Save the updated timesheet
-        storage.save_timesheet(updated_timesheet)
-        
-        -- Notify user
-        vim.cmd("redraw!")
-        vim.notify("epoch: time tracking started for " .. client .. "/" .. project .. "/" .. task, vim.log.levels.INFO)
-        
-        -- Refresh window if open
-        if window.is_open("timesheet") then
-          local content = storage.serialize_timesheet(updated_timesheet)
-          window.set_content("timesheet", content)
-        end
-        
-        -- Execute callback if provided
-        if callback and type(callback) == "function" then
-          callback()
-        end
-      end)
-    end)
-  end)
+  input.prompt_for_interval(callback)
 end
 
 return ui
