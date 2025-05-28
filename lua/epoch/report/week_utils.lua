@@ -21,41 +21,57 @@ function week_utils.get_week_number(date_str)
   return os.date("%Y-%U", date)
 end
 
--- Get week date range from week number string (YYYY-WW)
-function week_utils.get_week_date_range(week_str)
+-- Parse week string format (YYYY-WW)
+local function parse_week_string(week_str)
   local year, week = week_str:match("(%d+)-(%d+)")
   if not year or not week then
     return nil
   end
-  
-  -- Create a timestamp for the first day of the year
-  local year_start = os.time({
-    year = tonumber(year),
+  return tonumber(year), tonumber(week)
+end
+
+-- Calculate timestamp for January 1st of given year
+local function calculate_year_start(year)
+  return os.time({
+    year = year,
     month = 1,
     day = 1,
     hour = 0,
     min = 0,
     sec = 0
   })
-  
-  -- Get the weekday of January 1st (0 = Sunday, 1 = Monday, etc.)
+end
+
+-- Calculate week start timestamp with weekday adjustments
+local function calculate_week_start(year_start, week_num)
   local jan1_wday = tonumber(os.date("%w", year_start))
+  local week_start = year_start + (week_num * 7 * 86400)
   
-  -- Calculate the timestamp for the first day of the given week
-  local week_start = year_start + (tonumber(week) * 7 * 86400)
-  
-  -- Adjust for the weekday of January 1st
   if jan1_wday > 0 then
     week_start = week_start - (jan1_wday * 86400)
   end
   
-  -- Calculate the end of the week (Saturday)
+  return week_start
+end
+
+-- Create date range object from week start timestamp
+local function create_date_range(week_start)
   local week_end = week_start + (6 * 86400)
-  
   return {
     first = os.date("%Y-%m-%d", week_start),
     last = os.date("%Y-%m-%d", week_end)
   }
+end
+
+-- Get week date range from week number string (YYYY-WW)
+function week_utils.get_week_date_range(week_str)
+  local year, week_num = parse_week_string(week_str)
+  if not year then return nil end
+  
+  local year_start = calculate_year_start(year)
+  local week_start = calculate_week_start(year_start, week_num)
+  
+  return create_date_range(week_start)
 end
 
 -- Calculate minutes between two time strings on the same day

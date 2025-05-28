@@ -40,40 +40,50 @@ local function sort_intervals_by_start(intervals)
   return sorted
 end
 
--- Check for overlapping time intervals using adjacent pairs
-function overlap.check_overlapping_intervals(intervals, date)
-  -- Skip check if there are less than 2 intervals
-  if not intervals or #intervals < 2 then
-    return false
+-- Validate that we have enough intervals to check for overlaps
+local function validate_interval_count(intervals)
+  return intervals and #intervals >= 2
+end
+
+-- Format error message for overlapping intervals
+local function format_overlap_error(current, next_interval)
+  if current.stop and current.stop ~= "" then
+    return string.format(
+      "intervals overlap: '%s/%s/%s' ends at %s but '%s/%s/%s' starts at %s",
+      current.client, current.project, current.task, current.stop,
+      next_interval.client, next_interval.project, next_interval.task, next_interval.start
+    )
+  else
+    return string.format(
+      "intervals overlap: '%s/%s/%s' has no end time but '%s/%s/%s' starts at %s",
+      current.client, current.project, current.task,
+      next_interval.client, next_interval.project, next_interval.task, next_interval.start
+    )
   end
+end
 
-  -- Sort intervals by start time
-  local sorted_intervals = sort_intervals_by_start(intervals)
-
-  -- Check adjacent pairs for overlaps
+-- Check adjacent pairs of intervals for overlaps
+local function check_adjacent_pairs(sorted_intervals)
   for i = 1, #sorted_intervals - 1 do
     local current = sorted_intervals[i]
     local next_interval = sorted_intervals[i + 1]
     
     if intervals_overlap(current, next_interval) then
-      -- Format error message to match original format
-      if current.stop and current.stop ~= "" then
-        return true, string.format(
-          "intervals overlap: '%s/%s/%s' ends at %s but '%s/%s/%s' starts at %s",
-          current.client, current.project, current.task, current.stop,
-          next_interval.client, next_interval.project, next_interval.task, next_interval.start
-        )
-      else
-        return true, string.format(
-          "intervals overlap: '%s/%s/%s' has no end time but '%s/%s/%s' starts at %s",
-          current.client, current.project, current.task,
-          next_interval.client, next_interval.project, next_interval.task, next_interval.start
-        )
-      end
+      local error_msg = format_overlap_error(current, next_interval)
+      return true, error_msg
     end
   end
-  
   return false
+end
+
+-- Check for overlapping time intervals using adjacent pairs
+function overlap.check_overlapping_intervals(intervals, date)
+  if not validate_interval_count(intervals) then
+    return false
+  end
+
+  local sorted_intervals = sort_intervals_by_start(intervals)
+  return check_adjacent_pairs(sorted_intervals)
 end
 
 return overlap

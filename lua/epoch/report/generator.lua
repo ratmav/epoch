@@ -11,27 +11,22 @@ function generator.get_all_timesheet_dates()
   return data_loader.get_all_timesheet_dates()
 end
 
--- Generate a complete report for all timesheets
-function generator.generate_report()
-  local all_dates = data_loader.get_all_timesheet_dates()
-  local timesheets = data_loader.load_timesheets(all_dates)
-  
-  -- Return empty report if no timesheets found
-  if #timesheets == 0 then
-    return {
-      timesheets = {},
-      summary = {},
-      total_minutes = 0,
-      dates = all_dates,
-      date_range = #all_dates > 0 and {first = all_dates[1], last = all_dates[#all_dates]} or nil,
-      weeks = {}
-    }
-  end
-  
-  -- Group timesheets by week and process
+-- Create empty report structure when no timesheets exist
+local function create_empty_report(all_dates)
+  return {
+    timesheets = {},
+    summary = {},
+    total_minutes = 0,
+    dates = all_dates,
+    date_range = #all_dates > 0 and {first = all_dates[1], last = all_dates[#all_dates]} or nil,
+    weeks = {}
+  }
+end
+
+-- Process timesheets by week and sort chronologically
+local function process_and_sort_weeks(timesheets, all_summary)
   local timesheets_by_week = week_processor.group_timesheets_by_week(timesheets)
   local weeks = {}
-  local all_summary = {}
   
   for week_num, week_data in pairs(timesheets_by_week) do
     local week_result = week_processor.process_week_data(week_num, week_data, all_summary)
@@ -43,7 +38,11 @@ function generator.generate_report()
     return a.week > b.week
   end)
   
-  -- Calculate totals and convert summary
+  return weeks
+end
+
+-- Build final report structure with all data
+local function build_final_report(timesheets, all_dates, weeks, all_summary)
   local total_minutes = summary_utils.calculate_total_minutes(all_summary)
   local summary_array = summary_utils.sort_summary(all_summary)
   
@@ -55,6 +54,21 @@ function generator.generate_report()
     date_range = #all_dates > 0 and {first = all_dates[1], last = all_dates[#all_dates]} or nil,
     weeks = weeks
   }
+end
+
+-- Generate a complete report for all timesheets
+function generator.generate_report()
+  local all_dates = data_loader.get_all_timesheet_dates()
+  local timesheets = data_loader.load_timesheets(all_dates)
+  
+  if #timesheets == 0 then
+    return create_empty_report(all_dates)
+  end
+  
+  local all_summary = {}
+  local weeks = process_and_sort_weeks(timesheets, all_summary)
+  
+  return build_final_report(timesheets, all_dates, weeks, all_summary)
 end
 
 return generator

@@ -8,21 +8,21 @@ local timesheet = require('epoch.ui.timesheet')
 local input = require('epoch.ui.input')
 
 
--- Open timesheet window
-local function open_timesheet()
-  -- Get the timesheet path for today
-  local timesheet_path = storage.get_timesheet_path()
-  
-  -- Create or load the timesheet file
+-- Ensure timesheet file exists, create if needed
+local function ensure_timesheet_exists(timesheet_path)
   if vim.fn.filereadable(timesheet_path) == 0 then
     local timesheet = storage.create_default_timesheet()
     storage.save_timesheet(timesheet)
   end
-  
-  -- Read file content
-  local content = table.concat(vim.fn.readfile(timesheet_path), '\n')
-  
-  -- Create window using generic window module
+end
+
+-- Load timesheet content from file
+local function load_timesheet_content(timesheet_path)
+  return table.concat(vim.fn.readfile(timesheet_path), '\n')
+end
+
+-- Create timesheet window with configuration
+local function create_timesheet_window(content, timesheet_path)
   window.create({
     id = "timesheet",
     title = "epoch - timesheet",
@@ -34,6 +34,14 @@ local function open_timesheet()
     content = content,
     on_save = timesheet.validate_and_save_from_buffer
   })
+end
+
+-- Open timesheet window
+local function open_timesheet()
+  local timesheet_path = storage.get_timesheet_path()
+  ensure_timesheet_exists(timesheet_path)
+  local content = load_timesheet_content(timesheet_path)
+  create_timesheet_window(content, timesheet_path)
 end
 
 -- Set up the UI module

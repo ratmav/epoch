@@ -1,38 +1,16 @@
 # TODO
 
-## 1. Refactoring for function length
+## 1. Refactoring for laconic compliance
 
-**CRITICAL VIOLATIONS (>40 lines) - IMMEDIATE ACTION REQUIRED:**
-- ✅ Break down storage/serializer.lua:serialize_table (68 lines → 6 functions <15 lines each)
-- ✅ Break down validation/fields.lua:validate_interval (50 lines → 4 functions <15 lines each)
-- ✅ Break down report/formatter/table.lua:format_summary_table (50 lines → 6 functions <15 lines each)
-- Break down report/formatter.lua:format_report (44 lines → <15 lines each)
-- Break down report/generator.lua:generate_report (44 lines → <15 lines each)
-- Break down ui/input.lua:prompt_for_interval (40 lines → <15 lines each)
+- run `make check` to detect laconic violations
+- for each violation
+    - refactor the violation
+    - run `make test` to detect regresssions
+        - for each regression
+            - fix regression
 
-**MODERATE VIOLATIONS (25-39 lines) - HIGH PRIORITY:**
-- Break down time_utils.lua:time_to_seconds (37 lines → <15 lines each)
-- Break down report/week_utils.lua:get_week_date_range (35 lines → <15 lines each)
-- Break down validation/overlap.lua:check_overlapping_intervals (34 lines → <15 lines each)
-- Break down time_utils.lua:parse_time (33 lines → <15 lines each)
-- Break down ui/window/lifecycle.lua:create_window (31 lines → <15 lines each)
-- Break down ui/interval.lua:resolve_timing (31 lines → <15 lines each)
-
-**MINOR VIOLATIONS (15-24 lines) - MEDIUM PRIORITY:**
-- Break down validation/fields.lua:validate_timesheet (29 lines → <15 lines each)
-- Break down validation/fields.lua:get_interval_context (29 lines → <15 lines each)
-- Break down ui/interval.lua:calculate_daily_total (28 lines → <15 lines each)
-- Break down ui/window/lifecycle.lua:close_window (27 lines → <15 lines each)
-- Break down ui/init.lua:open_timesheet (26 lines → <15 lines each)
-- Break down report/generator/processor/week.lua:process_week_data (26 lines → <15 lines each)
-- Break down storage/file_ops.lua:get_all_timesheet_files (23 lines → <15 lines each)
-
-
-## 2. Review for File length and SRP
-- confirm all files are still in 100-150 line length range.
+## 2. Review for SRP violations
 - confirm all files still observe the single responsiblity principle
-- if too many lines in file, or srp is violated, raise the issue and we'll refactor
-- we want to observe the file length, function length, and srp rules.
 
 ## 3. Review refactored modular code for improved testability
   - Write additional functional tests for newly isolated modules

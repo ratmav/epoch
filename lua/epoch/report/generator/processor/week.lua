@@ -30,21 +30,24 @@ function week.group_timesheets_by_week(timesheets)
   return timesheets_by_week
 end
 
--- Process week data and create week summary
-function week.process_week_data(week_num, week_data, all_summary)
-  local week_summary = {}
-  local daily_totals = {}
-  
-  -- Sort the timesheet dates in chronological order
+-- Initialize week processing and sort dates
+local function initialize_week_processing(week_data)
   table.sort(week_data.dates)
-  
-  -- Process each timesheet in this week
+  return {}, {} -- week_summary, daily_totals
+end
+
+-- Process all timesheets in the week
+local function process_week_timesheets(week_data, week_summary, all_summary)
+  local daily_totals = {}
   for _, timesheet in ipairs(week_data.timesheets) do
     local day_total = day_processor.process_timesheet_intervals(timesheet, week_summary, all_summary)
     daily_totals[timesheet.date] = day_total
   end
-  
-  -- Calculate week total and convert to sorted array
+  return daily_totals
+end
+
+-- Build final week result object
+local function build_week_result(week_num, week_data, week_summary, daily_totals)
   local week_total_minutes = summary_utils.calculate_total_minutes(week_summary)
   local week_summary_array = summary_utils.sort_summary(week_summary)
   
@@ -56,6 +59,13 @@ function week.process_week_data(week_num, week_data, all_summary)
     date_range = week_data.date_range,
     daily_totals = daily_totals
   }
+end
+
+-- Process week data and create week summary
+function week.process_week_data(week_num, week_data, all_summary)
+  local week_summary, _ = initialize_week_processing(week_data)
+  local daily_totals = process_week_timesheets(week_data, week_summary, all_summary)
+  return build_week_result(week_num, week_data, week_summary, daily_totals)
 end
 
 return week

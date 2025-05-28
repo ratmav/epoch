@@ -66,22 +66,29 @@ function fields.validate_interval(interval)
   return true
 end
 
--- Validate timesheet structure
-function fields.validate_timesheet(timesheet)
+-- Validate timesheet is a table
+local function validate_timesheet_type(timesheet)
   if type(timesheet) ~= "table" then
     return false, "timesheet must be a table"
   end
+  return true
+end
 
-  -- Check for required fields
+-- Validate required timesheet fields
+local function validate_timesheet_fields(timesheet)
   if not timesheet.date then
     return false, "missing date field"
   end
-
+  
   if type(timesheet.intervals) ~= "table" then
     return false, "intervals must be a table"
   end
+  
+  return true
+end
 
-  -- Validate each interval
+-- Validate all intervals in timesheet with context
+local function validate_all_intervals(timesheet)
   for i, interval in ipairs(timesheet.intervals) do
     local valid, err = fields.validate_interval(interval)
     if not valid then
@@ -93,16 +100,27 @@ function fields.validate_timesheet(timesheet)
       return false, "invalid interval at index " .. i .. context_str .. ": " .. err
     end
   end
-
   return true
 end
 
--- Get human-readable context for an interval
-function fields.get_interval_context(interval)
-  if not interval then
-    return "unknown interval"
-  end
+-- Validate timesheet structure
+function fields.validate_timesheet(timesheet)
+  local ok, err = validate_timesheet_type(timesheet)
+  if not ok then return false, err end
   
+  ok, err = validate_timesheet_fields(timesheet)
+  if not ok then return false, err end
+  
+  return validate_all_intervals(timesheet)
+end
+
+-- Validate interval input for context generation
+local function validate_interval_input(interval)
+  return interval ~= nil
+end
+
+-- Collect non-nil interval fields into parts array
+local function collect_interval_parts(interval)
   local parts = {}
   
   if interval.client then
@@ -121,11 +139,25 @@ function fields.get_interval_context(interval)
     table.insert(parts, interval.start)
   end
   
+  return parts
+end
+
+-- Format context parts into final string
+local function format_context_parts(parts)
   if #parts == 0 then
     return "unknown interval"
   end
-  
   return table.concat(parts, "/")
+end
+
+-- Get human-readable context for an interval
+function fields.get_interval_context(interval)
+  if not validate_interval_input(interval) then
+    return "unknown interval"
+  end
+  
+  local parts = collect_interval_parts(interval)
+  return format_context_parts(parts)
 end
 
 return fields
