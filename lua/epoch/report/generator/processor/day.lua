@@ -26,21 +26,26 @@ local function update_summary(summary, interval, minutes)
   summary[key].minutes = summary[key].minutes + minutes
 end
 
+-- Check if interval is complete
+local function is_complete_interval(interval)
+  return interval.client and interval.project and interval.task and interval.start
+end
+
+-- Process single interval and update summaries
+local function process_interval(interval, date, week_summary, all_summary)
+  local minutes = week_utils.calculate_interval_minutes(interval, date)
+  update_summary(week_summary, interval, minutes)
+  update_summary(all_summary, interval, minutes)
+  return minutes
+end
+
 -- Process intervals from a single timesheet
 function day.process_timesheet_intervals(timesheet, week_summary, all_summary)
   local day_total = 0
   
   for _, interval in ipairs(timesheet.intervals) do
-    -- Skip incomplete intervals
-    if interval.client and interval.project and interval.task and interval.start then
-      local minutes = week_utils.calculate_interval_minutes(interval, timesheet.date)
-      
-      -- Update day total
-      day_total = day_total + minutes
-      
-      -- Update both summaries
-      update_summary(week_summary, interval, minutes)
-      update_summary(all_summary, interval, minutes)
+    if is_complete_interval(interval) then
+      day_total = day_total + process_interval(interval, timesheet.date, week_summary, all_summary)
     end
   end
   

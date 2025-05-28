@@ -74,21 +74,34 @@ function week_utils.get_week_date_range(week_str)
   return create_date_range(week_start)
 end
 
--- Calculate minutes between two time strings on the same day
-function week_utils.calculate_interval_minutes(interval, date)
-  -- Skip unclosed intervals
-  if not interval.stop or interval.stop == "" then
-    return 0
-  end
-  
+-- Validate interval has both start and stop times
+local function is_complete_interval(interval)
+  return interval.stop and interval.stop ~= ""
+end
+
+-- Get time values for interval calculation
+local function get_interval_times(interval, date)
   local start_time = time_utils.time_to_seconds(interval.start, date)
   local stop_time = time_utils.time_to_seconds(interval.stop, date)
   
   if not start_time or not stop_time then
+    return nil, nil
+  end
+  
+  return start_time, stop_time
+end
+
+-- Calculate minutes between two time strings on the same day
+function week_utils.calculate_interval_minutes(interval, date)
+  if not is_complete_interval(interval) then
     return 0
   end
   
-  -- Calculate minutes
+  local start_time, stop_time = get_interval_times(interval, date)
+  if not start_time then
+    return 0
+  end
+  
   local diff_seconds = stop_time - start_time
   return math.max(0, math.floor(diff_seconds / 60))
 end

@@ -42,6 +42,14 @@ function buffer.get_content(buf)
 end
 
 -- Update buffer content
+-- Set buffer content with modifiable handling
+local function set_buffer_content(buf, lines, was_modifiable)
+  vim.api.nvim_buf_set_option(buf, 'modifiable', true)
+  vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+  vim.api.nvim_buf_set_option(buf, 'modifiable', was_modifiable)
+  vim.api.nvim_buf_set_option(buf, 'modified', false)
+end
+
 function buffer.update_content(buf, content)
   if not vim.api.nvim_buf_is_valid(buf) then
     return false
@@ -50,12 +58,7 @@ function buffer.update_content(buf, content)
   local lines = vim.split(content, '\n')
   local was_modifiable = vim.api.nvim_buf_get_option(buf, 'modifiable')
   
-  -- Temporarily make buffer modifiable
-  vim.api.nvim_buf_set_option(buf, 'modifiable', true)
-  vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
-  vim.api.nvim_buf_set_option(buf, 'modifiable', was_modifiable)
-  vim.api.nvim_buf_set_option(buf, 'modified', false)
-  
+  set_buffer_content(buf, lines, was_modifiable)
   return true
 end
 

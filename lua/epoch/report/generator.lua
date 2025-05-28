@@ -23,22 +23,29 @@ local function create_empty_report(all_dates)
   }
 end
 
--- Process timesheets by week and sort chronologically
-local function process_and_sort_weeks(timesheets, all_summary)
-  local timesheets_by_week = week_processor.group_timesheets_by_week(timesheets)
+-- Process all weeks
+local function process_weeks(timesheets_by_week, all_summary)
   local weeks = {}
-  
   for week_num, week_data in pairs(timesheets_by_week) do
     local week_result = week_processor.process_week_data(week_num, week_data, all_summary)
     table.insert(weeks, week_result)
   end
-  
-  -- Sort weeks chronologically, most recent first
+  return weeks
+end
+
+-- Sort weeks chronologically
+local function sort_weeks_chronologically(weeks)
   table.sort(weeks, function(a, b)
     return a.week > b.week
   end)
-  
   return weeks
+end
+
+-- Process timesheets by week and sort chronologically
+local function process_and_sort_weeks(timesheets, all_summary)
+  local timesheets_by_week = week_processor.group_timesheets_by_week(timesheets)
+  local weeks = process_weeks(timesheets_by_week, all_summary)
+  return sort_weeks_chronologically(weeks)
 end
 
 -- Build final report structure with all data

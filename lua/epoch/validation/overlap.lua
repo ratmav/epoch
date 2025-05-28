@@ -5,38 +5,33 @@ local overlap = {}
 local time_utils = require('epoch.validation.time_utils')
 local fields = require('epoch.validation.fields')
 
+-- Get stop time value for interval (handles unclosed intervals)
+local function get_stop_time_value(interval)
+  if interval.stop and interval.stop ~= "" then
+    return time_utils.time_value(interval.stop)
+  else
+    return 24 * 60  -- Unclosed interval extends to end of day
+  end
+end
+
 -- Check if two adjacent intervals overlap
 local function intervals_overlap(current, next_interval)
   if not current.start or not next_interval.start then
     return false
   end
   
-  -- Get stop time for current interval
-  local current_stop_value
-  if current.stop and current.stop ~= "" then
-    current_stop_value = time_utils.time_value(current.stop)
-  else
-    -- Unclosed interval extends to end of day
-    current_stop_value = 24 * 60
-  end
-  
+  local current_stop_value = get_stop_time_value(current)
   local next_start_value = time_utils.time_value(next_interval.start)
   
-  -- Overlap if next starts before current ends
   return next_start_value < current_stop_value
 end
 
--- Sort intervals by start time
+-- Sort intervals by start time  
 local function sort_intervals_by_start(intervals)
-  local sorted = {}
-  for _, interval in ipairs(intervals) do
-    table.insert(sorted, interval)
-  end
-  
+  local sorted = vim.deepcopy(intervals)
   table.sort(sorted, function(a, b)
     return time_utils.time_value(a.start) < time_utils.time_value(b.start)
   end)
-  
   return sorted
 end
 
@@ -45,20 +40,22 @@ local function validate_interval_count(intervals)
   return intervals and #intervals >= 2
 end
 
+-- Get interval description string
+local function get_interval_description(interval)
+  return string.format("%s/%s/%s", interval.client, interval.project, interval.task)
+end
+
 -- Format error message for overlapping intervals
 local function format_overlap_error(current, next_interval)
+  local current_desc = get_interval_description(current)
+  local next_desc = get_interval_description(next_interval)
+  
   if current.stop and current.stop ~= "" then
-    return string.format(
-      "intervals overlap: '%s/%s/%s' ends at %s but '%s/%s/%s' starts at %s",
-      current.client, current.project, current.task, current.stop,
-      next_interval.client, next_interval.project, next_interval.task, next_interval.start
-    )
+    return string.format("intervals overlap: '%s' ends at %s but '%s' starts at %s", 
+                        current_desc, current.stop, next_desc, next_interval.start)
   else
-    return string.format(
-      "intervals overlap: '%s/%s/%s' has no end time but '%s/%s/%s' starts at %s",
-      current.client, current.project, current.task,
-      next_interval.client, next_interval.project, next_interval.task, next_interval.start
-    )
+    return string.format("intervals overlap: '%s' has no end time but '%s' starts at %s",
+                        current_desc, next_desc, next_interval.start)
   end
 end
 

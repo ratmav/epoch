@@ -27,6 +27,7 @@ local function count_lines(filepath)
     return count
 end
 
+-- More reliable function extraction using careful parsing
 local function extract_functions(filepath)
     local functions = {}
     local file = io.open(filepath, 'r')
@@ -34,62 +35,110 @@ local function extract_functions(filepath)
         return functions
     end
     
-    local content = file:read('*all')
+    local lines = {}
+    for line in file:lines() do
+        table.insert(lines, line)
+    end
     file:close()
     
-    -- Find function definitions and count their lines
-    local line_num = 0
-    local in_function = nil
-    local function_start = 0
-    local brace_count = 0
-    
-    for line in content:gmatch("[^\n]*") do
-        line_num = line_num + 1
+    local i = 1
+    while i <= #lines do
+        local line = lines[i]
         
-        -- Check for function definition
-        local func_name = line:match("function%s+([%w_.]+)%s*%(")
+        -- Skip comments and empty lines
+        local trimmed = line:match("^%s*(.-)%s*$")
+        if not (trimmed:match("^%-%-") or trimmed == "") then
+        
+        -- Check for function definition patterns
+        local func_name = nil
+        local is_function_line = false
+        
+        -- Pattern 1: function module.name(...)
+        func_name = line:match("^%s*function%s+([%w_.]+)%s*%(")
+        if func_name then
+            is_function_line = true
+        end
+        
+        -- Pattern 2: local function name(...)
         if not func_name then
-            func_name = line:match("local%s+function%s+([%w_]+)%s*%(")
+            func_name = line:match("^%s*local%s+function%s+([%w_]+)%s*%(")
+            if func_name then
+                is_function_line = true
+            end
         end
+        
+        -- Pattern 3: name = function(...)
         if not func_name then
-            func_name = line:match("([%w_.]+)%s*=%s*function%s*%(")
+            func_name = line:match("^%s*([%w_.]+)%s*=%s*function%s*%(")
+            if func_name then
+                is_function_line = true
+            end
         end
         
-        if func_name and not in_function then
-            in_function = func_name
-            function_start = line_num
-            brace_count = 0
-        end
-        
-        if in_function then
-            -- Count braces/blocks to find function end
-            -- This is a simplified approach - counts 'end' keywords
-            local ends = 0
-            local starts = 0
+        if is_function_line and func_name then
+            local function_start = i
+            local depth = 1  -- We're inside the function now
+            local j = i + 1
             
-            for _ in line:gmatch("function") do starts = starts + 1 end
-            for _ in line:gmatch("if") do starts = starts + 1 end
-            for _ in line:gmatch("for") do starts = starts + 1 end
-            for _ in line:gmatch("while") do starts = starts + 1 end
-            for _ in line:gmatch("repeat") do starts = starts + 1 end
-            for _ in line:gmatch("do") do starts = starts + 1 end
+            -- Find the matching 'end' for this function
+            while j <= #lines and depth > 0 do
+                local current_line = lines[j]
+                local trimmed_current = current_line:match("^%s*(.-)%s*$")
+                
+                -- Skip comments
+                if not trimmed_current:match("^%-%-") then
+                    -- Count block-starting keywords
+                    for word in trimmed_current:gmatch("%f[%w_]function%f[%W]") do
+                        depth = depth + 1
+                    end
+                    for word in trimmed_current:gmatch("%f[%w_]if%f[%W]") do
+                        depth = depth + 1
+                    end
+                    for word in trimmed_current:gmatch("%f[%w_]for%f[%W]") do
+                        depth = depth + 1
+                    end
+                    for word in trimmed_current:gmatch("%f[%w_]while%f[%W]") do
+                        depth = depth + 1
+                    end
+                    for word in trimmed_current:gmatch("%f[%w_]repeat%f[%W]") do
+                        depth = depth + 1
+                    end
+                    for word in trimmed_current:gmatch("%f[%w_]do%f[%W]") do
+                        -- Only count 'do' if it's not part of a function parameter list
+                        if not trimmed_current:match("function.*do") then
+                            depth = depth + 1
+                        end
+                    end
+                    
+                    -- Count block-ending keywords
+                    for word in trimmed_current:gmatch("%f[%w_]end%f[%W]") do
+                        depth = depth - 1
+                    end
+                    for word in trimmed_current:gmatch("%f[%w_]until%f[%W]") do
+                        depth = depth - 1
+                    end
+                end
+                
+                j = j + 1
+            end
             
-            for _ in line:gmatch("end") do ends = ends + 1 end
-            for _ in line:gmatch("until") do ends = ends + 1 end
-            
-            brace_count = brace_count + starts - ends
-            
-            -- Function ends when brace count returns to 0 (but not on the function line itself)
-            if brace_count <= 0 and line_num > function_start then
-                local func_lines = line_num - function_start + 1
+            -- If we found the end, record the function
+            if depth == 0 then
+                local func_lines = j - function_start
                 table.insert(functions, {
-                    name = in_function,
+                    name = func_name,
                     lines = func_lines,
                     start_line = function_start
                 })
-                in_function = nil
+                i = j - 1  -- Continue from after this function
+            else
+                -- Couldn't find matching end, skip this
+                i = i + 1
             end
         end
+        
+        end -- end of if not comment/empty
+        i = i + 1
     end
     
     return functions

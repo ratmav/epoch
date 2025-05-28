@@ -101,12 +101,8 @@ local function add_overall_summaries(lines, report_data)
 end
 
 -- Format the complete report as a string for display
-function formatter.format_report(report_data)
-  -- Handle empty data case
-  if not report_data.weeks or #report_data.weeks == 0 then
-    return format_empty_report(report_data)
-  end
-  
+-- Build report content lines
+local function build_report_lines(report_data)
   local lines = {}
   add_period_header(lines, report_data)
   add_week_sections(lines, report_data.weeks)
@@ -115,6 +111,15 @@ function formatter.format_report(report_data)
     add_overall_summaries(lines, report_data)
   end
   
+  return lines
+end
+
+function formatter.format_report(report_data)
+  if not report_data.weeks or #report_data.weeks == 0 then
+    return format_empty_report(report_data)
+  end
+  
+  local lines = build_report_lines(report_data)
   return table.concat(lines, "\n")
 end
 

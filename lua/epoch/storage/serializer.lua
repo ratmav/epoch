@@ -93,19 +93,22 @@ local function is_interval(tbl)
 end
 
 -- Serialize a Lua table with ordered keys
+-- Serialize table content based on type
+local function serialize_table_content(tbl, spaces, indent)
+  if is_array(tbl) then
+    return serialize_array_elements(tbl, spaces, "{\n", indent)
+  elseif is_interval(tbl) then
+    return serialize_interval_keys(tbl, spaces, "{\n", indent)
+  else
+    return serialize_regular_keys(tbl, spaces, "{\n", indent)
+  end
+end
+
 serialize_table = function(tbl, indent)
   indent = indent or 0
   local spaces = string.rep("  ", indent)
-  local result = "{\n"
   
-  if is_array(tbl) then
-    result = serialize_array_elements(tbl, spaces, result, indent)
-  elseif is_interval(tbl) then
-    result = serialize_interval_keys(tbl, spaces, result, indent)
-  else
-    result = serialize_regular_keys(tbl, spaces, result, indent)
-  end
-  
+  local result = serialize_table_content(tbl, spaces, indent)
   result = result .. spaces .. "}"
   return result
 end

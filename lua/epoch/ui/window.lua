@@ -9,25 +9,22 @@ local highlights = require("epoch.ui.window.highlights")
 local window = {}
 
 -- Create a floating window with specified configuration
-function window.create(config)
-  local window_id = config.id or "default"
-  
-  -- Close existing window if open
+-- Prepare window creation by closing existing if needed
+local function prepare_window_creation(window_id)
   if state.is_open(window_id) then
     lifecycle.close_window(window_id)
   end
-  
-  -- Create and configure buffer
+end
+
+-- Create and setup buffer
+local function create_and_setup_buffer(config)
   local buffer = buffer_ops.create(config)
   buffer_ops.set_content(buffer, config.content, config.modifiable)
-  
-  -- Create floating window
-  local win = lifecycle.create_window(buffer, config)
-  
-  -- Setup keymaps
-  buffer_ops.setup_keymaps(buffer, window_id, config.keymaps)
-  
-  -- Track window state
+  return buffer
+end
+
+-- Track and return window result
+local function track_and_return_window(window_id, win, buffer, config)
   state.track(window_id, {
     window = win,
     buffer = buffer,
@@ -39,6 +36,18 @@ function window.create(config)
     buffer = buffer,
     close = function() lifecycle.close_window(window_id) end
   }
+end
+
+function window.create(config)
+  local window_id = config.id or "default"
+  
+  prepare_window_creation(window_id)
+  local buffer = create_and_setup_buffer(config)
+  local win = lifecycle.create_window(buffer, config)
+  
+  buffer_ops.setup_keymaps(buffer, window_id, config.keymaps)
+  
+  return track_and_return_window(window_id, win, buffer, config)
 end
 
 -- Close a specific window

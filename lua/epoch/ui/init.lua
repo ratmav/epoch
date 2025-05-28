@@ -51,20 +51,22 @@ function ui.setup()
 end
 
 -- Toggle timesheet window
+-- Handle timesheet opening logic
+local function handle_timesheet_open()
+  local path = storage.get_timesheet_path()
+  
+  if vim.fn.filereadable(path) == 0 then
+    ui.add_interval_and_edit()
+  else
+    open_timesheet()
+  end
+end
+
 function ui.toggle_timesheet()
-  -- If window is open, close it (window module handles save on close)
   if window.is_open("timesheet") then
     window.close("timesheet")
   else
-    -- Window not open, check if timesheet exists
-    local path = storage.get_timesheet_path()
-    
-    -- If no timesheet exists, prompt to create one and then open the editor
-    if vim.fn.filereadable(path) == 0 then
-      ui.add_interval_and_edit()
-    else
-      open_timesheet()
-    end
+    handle_timesheet_open()
   end
 end
 

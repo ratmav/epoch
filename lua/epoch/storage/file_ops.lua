@@ -28,28 +28,33 @@ function file_ops.save_timesheet(timesheet)
 end
 
 -- Load a timesheet from disk
-function file_ops.load_timesheet(date)
-  date = date or paths.get_today()
-  local file_path = paths.get_timesheet_path(date)
-  
-  -- Check if file exists
-  if vim.fn.filereadable(file_path) == 0 then
-    -- Return default timesheet if file doesn't exist
-    return {
-      date = date,
-      intervals = {},
-      daily_total = "00:00"
-    }
-  end
-  
-  -- Load and execute the file
+-- Create default timesheet for date
+local function create_default_timesheet(date)
+  return {
+    date = date,
+    intervals = {},
+    daily_total = "00:00"
+  }
+end
+
+-- Load timesheet file content
+local function load_timesheet_file(file_path)
   local chunk = loadfile(file_path)
   if not chunk then
     error("failed to load timesheet file: " .. file_path)
   end
+  return chunk()
+end
+
+function file_ops.load_timesheet(date)
+  date = date or paths.get_today()
+  local file_path = paths.get_timesheet_path(date)
   
-  local timesheet = chunk()
-  return timesheet
+  if vim.fn.filereadable(file_path) == 0 then
+    return create_default_timesheet(date)
+  end
+  
+  return load_timesheet_file(file_path)
 end
 
 -- Validate data directory exists
