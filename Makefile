@@ -13,12 +13,21 @@ NVIM_FLAGS := NVIM_INSTALL_MODE=1
 # Default target shows help
 .DEFAULT_GOAL := help
 
-# Run all tests
+# Run all tests or specific test file
+# Usage: make test [SPEC=filename]  (e.g., make test SPEC=ui_logic)
 test:
+ifdef SPEC
 	$(NVIM_FLAGS) nvim --headless \
 		-c "lua package.path='$(PWD)/lua/?.lua;'..package.path" \
-		-c "PlenaryBustedDirectory $(TEST_DIR) {minimal_init = '$(TEST_DIR)/minimal_init.lua'}" \
+		-c "lua dofile('$(TEST_DIR)/minimal_init.lua')" \
+		-c "lua require('plenary.busted').run('$(TEST_DIR)/$(SPEC)_spec.lua')" \
 		-c "quit"
+else
+	$(NVIM_FLAGS) nvim --headless \
+		-c "lua package.path='$(PWD)/lua/?.lua;'..package.path" \
+		-c "lua require('plenary.test_harness').test_directory('$(TEST_DIR)', {minimal_init = '$(TEST_DIR)/minimal_init.lua'})" \
+		-c "quit"
+endif
 
 # Create test data for manual testing
 data:
@@ -49,7 +58,8 @@ clean:
 # Show help information
 help:
 	@echo "Available commands:"
-	@echo "  make test   - Run all tests"
-	@echo "  make check  - Check file and function length compliance"
-	@echo "  make data   - Create sample timesheet data for manual testing"
-	@echo "  make clean  - Clean temporary files and timesheet data"
+	@echo "  make test            - Run all tests"
+	@echo "  make test SPEC=name  - Run specific test (e.g., make test SPEC=ui_logic)"
+	@echo "  make check           - Check file and function length compliance"
+	@echo "  make data            - Create sample timesheet data for manual testing"
+	@echo "  make clean           - Clean temporary files and timesheet data"

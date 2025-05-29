@@ -3,19 +3,17 @@
 
 describe("report", function()
   local report = require('epoch.report')
-  local report_fixtures = require('tests.fixtures.report_fixtures')
-  local report_helpers = require('tests.helpers.report_helpers')
   
   describe("format_report", function()
     it("formats a report with all expected sections and patterns", function()
       -- Generate report data directly from our fixtures
-      local report_data = report_helpers.generate_report_from_fixtures(report_fixtures.input.timesheets)
+      local report_data = fixtures.get('reports.sample_report_data')
       
       -- Format the report using the actual formatter
       local formatted = report.format_report(report_data)
       
       -- Check that the report contains all expected patterns
-      for _, pattern in ipairs(report_fixtures.expected_patterns) do
+      for _, pattern in ipairs(fixtures.get('reports.expected_patterns')) do
         assert.is_not_nil(
           formatted:match(pattern), 
           "Report should match pattern: " .. pattern

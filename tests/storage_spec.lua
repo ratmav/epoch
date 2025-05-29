@@ -3,9 +3,6 @@
 
 describe("storage", function()
   local storage = require('epoch.storage')
-  local time_fixtures = require('tests.fixtures.time_fixtures')
-  local interval_fixtures = require('tests.fixtures.interval_fixtures')
-  local timesheet_fixtures = require('tests.fixtures.timesheet_fixtures')
   
   -- Set up a test data directory for isolation
   before_each(function()
@@ -81,7 +78,7 @@ describe("storage", function()
   
   describe("serialize_timesheet", function()
     it("serializes timesheet to a valid Lua string", function()
-      local timesheet = timesheet_fixtures.valid.with_intervals
+      local timesheet = fixtures.get('timesheets.valid.with_intervals')
       local lua_string = storage.serialize_timesheet(timesheet)
       
       -- Test if the resulting string is valid Lua
@@ -97,7 +94,7 @@ describe("storage", function()
     end)
     
     it("formats intervals with ordered keys", function()
-      local timesheet = timesheet_fixtures.valid.with_intervals
+      local timesheet = fixtures.get('timesheets.valid.with_intervals')
       local lua_string = storage.serialize_timesheet(timesheet)
       
       -- Check for formatted keys in the serialized string
@@ -111,9 +108,7 @@ describe("storage", function()
     
     it("properly serializes intervals with notes", function()
       -- Create a timesheet with an interval that has notes
-      local timesheet = timesheet_fixtures.create("2025-05-12", {
-        interval_fixtures.base.with_notes
-      })
+      local timesheet = fixtures.get('timesheets.valid.with_interval_with_notes')
       
       -- Save and reload
       storage.save_timesheet(timesheet)
@@ -129,7 +124,7 @@ describe("storage", function()
   
   describe("save_timesheet", function()
     it("saves timesheet to the correct file", function()
-      local timesheet = timesheet_fixtures.valid.with_intervals
+      local timesheet = fixtures.get('timesheets.valid.with_intervals')
       local path = storage.get_timesheet_path(timesheet.date)
       
       storage.save_timesheet(timesheet)
@@ -141,7 +136,7 @@ describe("storage", function()
       -- Remove directory for testing
       vim.fn.system("rm -rf /tmp/epoch_test_data")
       
-      local timesheet = timesheet_fixtures.valid.with_intervals
+      local timesheet = fixtures.get('timesheets.valid.with_intervals')
       local path = storage.get_timesheet_path(timesheet.date)
       
       storage.save_timesheet(timesheet)
@@ -153,7 +148,7 @@ describe("storage", function()
   describe("load_timesheet", function()
     it("loads timesheet from file", function()
       -- Save a timesheet first
-      local original = timesheet_fixtures.valid.with_intervals
+      local original = fixtures.get('timesheets.valid.with_intervals')
       storage.save_timesheet(original)
       
       -- Now load it
@@ -181,15 +176,8 @@ describe("storage", function()
     end)
     
     it("sorts intervals by start time", function()
-      -- Create timesheet with out-of-order intervals
-      local timesheet = {
-        date = "2025-05-12",
-        intervals = {
-          interval_fixtures.base.backend,   -- Starts at 10:45 AM
-          interval_fixtures.base.frontend,  -- Starts at 09:00 AM
-        },
-        daily_total = "03:00"
-      }
+      -- Use timesheet with out-of-order intervals
+      local timesheet = fixtures.get('timesheets.valid.unsorted_intervals')
       
       -- Save and reload it
       storage.save_timesheet(timesheet)

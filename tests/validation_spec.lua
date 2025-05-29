@@ -3,62 +3,59 @@
 
 describe("validation", function()
   local validation = require('epoch.validation')
-  local time_fixtures = require('tests.fixtures.time_fixtures')
-  local interval_fixtures = require('tests.fixtures.interval_fixtures')
-  local timesheet_fixtures = require('tests.fixtures.timesheet_fixtures')
   
   describe("validate_interval", function()
     it("validates valid intervals", function()
-      for _, interval in ipairs(interval_fixtures.valid) do
+      for _, interval in ipairs(fixtures.get('intervals.valid')) do
         local is_valid, _ = validation.validate_interval(interval)
         assert.is_true(is_valid)
       end
     end)
     
     it("rejects intervals with missing client", function()
-      local is_valid, err = validation.validate_interval(interval_fixtures.invalid.missing_client)
+      local is_valid, err = validation.validate_interval(fixtures.get('intervals.invalid.missing_client'))
       assert.is_false(is_valid)
       assert.truthy(err:match("client cannot be empty"))
     end)
     
     it("rejects intervals with missing project", function()
-      local is_valid, err = validation.validate_interval(interval_fixtures.invalid.missing_project)
+      local is_valid, err = validation.validate_interval(fixtures.get('intervals.invalid.missing_project'))
       assert.is_false(is_valid)
       assert.truthy(err:match("project cannot be empty"))
     end)
     
     it("rejects intervals with missing task", function()
-      local is_valid, err = validation.validate_interval(interval_fixtures.invalid.missing_task)
+      local is_valid, err = validation.validate_interval(fixtures.get('intervals.invalid.missing_task'))
       assert.is_false(is_valid)
       assert.truthy(err:match("task cannot be empty"))
     end)
     
     it("rejects intervals with invalid time formats", function()
-      local is_valid, err = validation.validate_interval(interval_fixtures.invalid.invalid_time)
+      local is_valid, err = validation.validate_interval(fixtures.get('intervals.invalid.invalid_time'))
       assert.is_false(is_valid)
       assert.truthy(err:match("must be in format"))
     end)
     
     it("rejects intervals with missing notes", function()
-      local is_valid, err = validation.validate_interval(interval_fixtures.invalid.missing_notes)
+      local is_valid, err = validation.validate_interval(fixtures.get('intervals.invalid.missing_notes'))
       assert.is_false(is_valid)
       assert.truthy(err:match("notes field is required"))
     end)
     
     it("rejects intervals with invalid notes type", function()
-      local is_valid, err = validation.validate_interval(interval_fixtures.invalid.invalid_notes_type)
+      local is_valid, err = validation.validate_interval(fixtures.get('intervals.invalid.invalid_notes_type'))
       assert.is_false(is_valid)
       assert.truthy(err:match("notes must be an array of strings"))
     end)
     
     it("rejects intervals with invalid notes entries", function()
-      local is_valid, err = validation.validate_interval(interval_fixtures.invalid.invalid_notes_entries)
+      local is_valid, err = validation.validate_interval(fixtures.get('intervals.invalid.invalid_notes_entries'))
       assert.is_false(is_valid)
       assert.truthy(err:match("note at position"))
     end)
     
     it("validates intervals with proper notes array", function()
-      local is_valid, err = validation.validate_interval(interval_fixtures.base.with_notes)
+      local is_valid, err = validation.validate_interval(fixtures.get('intervals.valid.with_notes'))
       assert.is_true(is_valid)
     end)
     
@@ -76,26 +73,26 @@ describe("validation", function()
   describe("validate_timesheet", function()
     it("validates valid timesheets", function()
       -- Test each valid timesheet fixture
-      for name, timesheet in pairs(timesheet_fixtures.valid) do
+      for name, timesheet in pairs(fixtures.get('timesheets.valid')) do
         local is_valid, err = validation.validate_timesheet(timesheet)
         assert.is_true(is_valid, "Timesheet '" .. name .. "' should be valid, but got: " .. (err or ""))
       end
     end)
     
     it("rejects timesheets with missing date", function()
-      local is_valid, err = validation.validate_timesheet(timesheet_fixtures.invalid.missing_date)
+      local is_valid, err = validation.validate_timesheet(fixtures.get('timesheets.invalid.missing_date'))
       assert.is_false(is_valid)
       assert.truthy(err:match("missing date field"))
     end)
     
     it("rejects timesheets with missing intervals", function()
-      local is_valid, err = validation.validate_timesheet(timesheet_fixtures.invalid.missing_intervals)
+      local is_valid, err = validation.validate_timesheet(fixtures.get('timesheets.invalid.missing_intervals'))
       assert.is_false(is_valid)
       assert.truthy(err:match("intervals must be a table"))
     end)
     
     it("validates each interval within the timesheet", function()
-      local is_valid, err = validation.validate_timesheet(timesheet_fixtures.invalid.invalid_interval)
+      local is_valid, err = validation.validate_timesheet(fixtures.get('timesheets.invalid.invalid_interval'))
       assert.is_false(is_valid)
       assert.truthy(err:match("invalid interval at index"))
     end)
@@ -113,7 +110,7 @@ describe("validation", function()
   
   describe("check_overlapping_intervals", function()
     it("detects overlapping intervals", function()
-      local overlapping = interval_fixtures.invalid.overlapping
+      local overlapping = fixtures.get('intervals.invalid.overlapping')
       local is_overlapping, msg = validation.check_overlapping_intervals(overlapping)
       
       assert.is_true(is_overlapping)
@@ -121,7 +118,7 @@ describe("validation", function()
     end)
     
     it("detects when unclosed interval start time overlaps with existing interval", function()
-      local overlapping_unclosed = interval_fixtures.invalid.overlapping_unclosed
+      local overlapping_unclosed = fixtures.get('intervals.invalid.overlapping_unclosed')
       local is_overlapping, msg = validation.check_overlapping_intervals(overlapping_unclosed)
       
       assert.is_true(is_overlapping)
@@ -129,14 +126,14 @@ describe("validation", function()
     end)
     
     it("accepts non-overlapping unclosed intervals", function()
-      local non_overlapping_unclosed = interval_fixtures.invalid.non_overlapping_unclosed
+      local non_overlapping_unclosed = fixtures.get('intervals.valid')
       local is_overlapping, _ = validation.check_overlapping_intervals(non_overlapping_unclosed)
       
       assert.is_false(is_overlapping)
     end)
     
     it("accepts non-overlapping intervals", function()
-      local non_overlapping = interval_fixtures.valid
+      local non_overlapping = fixtures.get('intervals.valid')
       local is_overlapping, _ = validation.check_overlapping_intervals(non_overlapping)
       
       assert.is_false(is_overlapping)
@@ -147,7 +144,7 @@ describe("validation", function()
       local is_overlapping, _ = validation.check_overlapping_intervals(empty)
       assert.is_false(is_overlapping)
       
-      local single = { interval_fixtures.valid[1] }
+      local single = { fixtures.get('intervals.valid')[1] }
       is_overlapping, _ = validation.check_overlapping_intervals(single)
       assert.is_false(is_overlapping)
     end)

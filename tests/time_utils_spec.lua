@@ -3,18 +3,17 @@
 
 describe("time_utils", function()
   local time_utils = require('epoch.time_utils')
-  local time_fixtures = require('tests.fixtures.time_fixtures')
   
   describe("is_valid_time_format", function()
     it("returns true for valid 12-hour time formats", function()
-      for _, time_str in pairs(time_fixtures.time_strings.valid) do
+      for _, time_str in pairs(fixtures.get('time.time_strings.valid')) do
         assert.is_true(time_utils.is_valid_time_format(time_str), 
           "should validate time format: " .. time_str)
       end
     end)
     
     it("returns false for invalid time formats", function()
-      for _, time_str in pairs(time_fixtures.time_strings.invalid) do
+      for _, time_str in pairs(fixtures.get('time.time_strings.invalid')) do
         assert.is_false(time_utils.is_valid_time_format(time_str), 
           "should reject invalid time format: " .. time_str)
       end
@@ -28,11 +27,11 @@ describe("time_utils", function()
   
   describe("format_duration", function()
     it("formats minutes as HH:MM", function()
-      assert.equals("00:30", time_utils.format_duration(time_fixtures.durations.thirty_min))
-      assert.equals("01:00", time_utils.format_duration(time_fixtures.durations.one_hour))
-      assert.equals("01:30", time_utils.format_duration(time_fixtures.durations.one_hour_thirty))
-      assert.equals("02:00", time_utils.format_duration(time_fixtures.durations.two_hours))
-      assert.equals("08:00", time_utils.format_duration(time_fixtures.durations.eight_hours))
+      assert.equals("00:30", time_utils.format_duration(fixtures.get('time.durations.thirty_min')))
+      assert.equals("01:00", time_utils.format_duration(fixtures.get('time.durations.one_hour')))
+      assert.equals("01:30", time_utils.format_duration(fixtures.get('time.durations.one_hour_thirty')))
+      assert.equals("02:00", time_utils.format_duration(fixtures.get('time.durations.two_hours')))
+      assert.equals("08:00", time_utils.format_duration(fixtures.get('time.durations.eight_hours')))
     end)
     
     it("handles zero or negative values", function()
@@ -43,7 +42,7 @@ describe("time_utils", function()
   
   describe("time_to_seconds", function()
     it("converts time string to seconds since midnight", function()
-      local date = time_fixtures.dates.valid.today
+      local date = fixtures.get('time.dates.valid.today')
       local midnight = time_utils.time_to_seconds("12:00 AM", date)
       local six_am = time_utils.time_to_seconds("06:00 AM", date)
       local noon = time_utils.time_to_seconds("12:00 PM", date)
@@ -64,7 +63,7 @@ describe("time_utils", function()
     end)
     
     it("returns nil for invalid inputs", function()
-      assert.is_nil(time_utils.time_to_seconds("invalid", time_fixtures.dates.valid.today))
+      assert.is_nil(time_utils.time_to_seconds("invalid", fixtures.get('time.dates.valid.today')))
       assert.is_nil(time_utils.time_to_seconds("12:00 PM", "invalid-date"))
       assert.is_nil(time_utils.time_to_seconds(nil, nil))
     end)

@@ -9,14 +9,10 @@ describe("ui modules", function()
   local validation = require('epoch.validation')
   local time_utils = require('epoch.time_utils')
 
-  -- Load fixtures
-  local ui_fixtures = require('tests.fixtures.ui_fixtures')
-  local timesheet_fixtures = require('tests.fixtures.timesheet_fixtures')
-  local interval_fixtures = require('tests.fixtures.interval_fixtures')
 
   describe("timesheet validation", function()
     it("should validate correctly formatted timesheet content", function()
-      local content = ui_fixtures.buffer_content.valid_timesheet
+      local content = fixtures.get('ui.buffer_content.valid_timesheet')
       local timesheet, err = timesheet_ops.validate_content(content)
 
       assert.is_nil(err)
@@ -26,7 +22,7 @@ describe("ui modules", function()
     end)
 
     it("should reject malformed Lua syntax", function()
-      local content = ui_fixtures.buffer_content.invalid_syntax
+      local content = fixtures.get('ui.buffer_content.invalid_syntax')
       local timesheet, err = timesheet_ops.validate_content(content)
 
       assert.is_nil(timesheet)
@@ -42,7 +38,7 @@ describe("ui modules", function()
     end)
 
     it("should reject invalid timesheet structure", function()
-      local content = ui_fixtures.buffer_content.missing_field
+      local content = fixtures.get('ui.buffer_content.missing_field')
       local timesheet, err = timesheet_ops.validate_content(content)
 
       assert.is_nil(timesheet)
@@ -94,9 +90,7 @@ describe("ui modules", function()
   describe("close_current_interval", function()
     it("should close an open interval", function()
       -- Create a timesheet with an open interval using fixture
-      local timesheet = timesheet_fixtures.create("2025-05-12", {
-        interval_fixtures.invalid.unclosed
-      })
+      local timesheet = fixtures.get('timesheets.valid.with_unclosed_intervals')
 
       -- Close the interval
       local result = interval_ops.close_current(timesheet, "11:00 AM")
@@ -107,17 +101,8 @@ describe("ui modules", function()
     end)
     
     it("should ensure notes field exists when closing interval", function()
-      -- Create a timesheet with an open interval that has no notes field
-      local interval_without_notes = {
-        client = "acme-corp",
-        project = "website-redesign",
-        task = "frontend-planning",
-        start = "09:00 AM",
-        stop = ""
-      }
-      local timesheet = timesheet_fixtures.create("2025-05-12", {
-        interval_without_notes
-      })
+      -- Use a timesheet with an open interval that has no notes field
+      local timesheet = fixtures.get('timesheets.invalid.with_unclosed_interval_no_notes')
 
       -- Close the interval
       local result = interval_ops.close_current(timesheet, "11:00 AM")
@@ -130,9 +115,7 @@ describe("ui modules", function()
 
     it("should not modify already closed intervals", function()
       -- Use a timesheet with a closed interval
-      local timesheet = timesheet_fixtures.create("2025-05-12", {
-        interval_fixtures.base.frontend
-      })
+      local timesheet = fixtures.get('timesheets.valid.with_intervals')
 
       -- Original stop time
       local original_stop = timesheet.intervals[1].stop
@@ -146,7 +129,7 @@ describe("ui modules", function()
 
     it("should handle empty timesheet", function()
       -- Use an empty timesheet
-      local timesheet = timesheet_fixtures.valid.empty
+      local timesheet = fixtures.get('timesheets.valid.empty')
 
       -- Try to close nonexistent interval
       local result = interval_ops.close_current(timesheet)
@@ -158,10 +141,10 @@ describe("ui modules", function()
   describe("add_interval_to_timesheet", function()
     it("should add a new interval to timesheet", function()
       -- Use an empty timesheet
-      local timesheet = timesheet_fixtures.valid.empty
+      local timesheet = fixtures.get('timesheets.valid.empty')
 
       -- Use an interval from fixture
-      local interval = interval_fixtures.base.frontend
+      local interval = fixtures.get('intervals.valid.frontend')
 
       -- Add it to the timesheet
       local updated = interval_ops.add_to_timesheet(timesheet, interval)
@@ -172,12 +155,10 @@ describe("ui modules", function()
 
     it("should close any open interval before adding new one", function()
       -- Create a timesheet with an unclosed interval
-      local timesheet = timesheet_fixtures.create("2025-05-12", {
-        interval_fixtures.invalid.unclosed
-      })
+      local timesheet = fixtures.get('timesheets.valid.with_unclosed_intervals')
 
       -- Add a new interval
-      local new_interval = interval_fixtures.base.backend
+      local new_interval = fixtures.get('intervals.valid.backend')
 
       -- Set a fixed stop time for predictable testing
       local stop_time = "10:30 AM"
@@ -208,7 +189,7 @@ describe("ui modules", function()
   describe("calculate_daily_total", function()
     it("should calculate correct total for intervals", function()
       -- Use timesheet with intervals from fixture
-      local timesheet = timesheet_fixtures.valid.with_intervals
+      local timesheet = fixtures.get('timesheets.valid.with_intervals')
 
       -- Calculate without relying on fixture's pre-calculated total
       timesheet.daily_total = "00:00" -- Reset to ensure we're calculating fresh
@@ -223,7 +204,7 @@ describe("ui modules", function()
 
     it("should handle empty intervals list", function()
       -- Use empty timesheet from fixture
-      local timesheet = timesheet_fixtures.valid.empty
+      local timesheet = fixtures.get('timesheets.valid.empty')
 
       local total = interval_ops.calculate_daily_total(timesheet)
 
@@ -232,7 +213,7 @@ describe("ui modules", function()
 
     it("should handle unclosed intervals", function()
       -- Use our fixture with only unclosed intervals
-      local timesheet = timesheet_fixtures.valid.with_unclosed_intervals
+      local timesheet = fixtures.get('timesheets.valid.with_unclosed_intervals')
 
       local total = interval_ops.calculate_daily_total(timesheet)
 
@@ -244,7 +225,7 @@ describe("ui modules", function()
   describe("update_daily_total", function()
     it("should update daily total based on intervals", function()
       -- Use timesheet with intervals but reset its total
-      local timesheet = vim.deepcopy(timesheet_fixtures.valid.with_intervals)
+      local timesheet = fixtures.get('timesheets.valid.with_intervals')
       timesheet.daily_total = "00:00" -- Reset to ensure we're updating
 
       local updated = timesheet_ops.update_daily_total(timesheet, interval_ops.calculate_daily_total)

@@ -17,6 +17,11 @@ end
 local function handle_unclosed_interval(last_interval, current_time)
   local last_start_time = time_utils.parse_time(last_interval.start)
   
+  -- Debug: Add error handling for nil parse result
+  if not last_start_time then
+    error("Failed to parse start time: " .. tostring(last_interval.start))
+  end
+  
   if current_time - last_start_time < 60 then
     local adjusted_previous_stop = time_utils.format_time(last_start_time + 60)
     local adjusted_current = last_start_time + 120

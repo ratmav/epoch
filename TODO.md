@@ -1,5 +1,82 @@
 # TODO
 
+## 0. Fixtures AND Factories AND a Failing test
+
+### The Strategy
+
+Factories are perfect for:
+- ✅ Valid data variations -
+factory.build_report({total_minutes = 120})
+- ✅ Happy path testing - consistent, well-formed structures
+- ✅ Dynamic test data - different values per test run
+- ✅ Default states - empty reports, new timesheets
+
+Fixtures still make sense for:
+- ✅ Failure cases - malformed data like {client = nil,
+project = "test"}
+- ✅ Complex scenarios - realistic multi-week reports with
+specific patterns
+- ✅ Edge cases - overlapping intervals, invalid time formats
+- ✅ Regression data - capturing specific bugs found in
+production
+- ✅ Real-world examples - actual user data patterns
+
+The best of both worlds:
+-- Simple valid variations - use factory
+local empty_report = factory.build_report()
+local custom_report = factory.build_report({total_minutes = 300})
+
+-- Complex/failure scenarios - use fixtures
+local malformed_timesheet =
+fixtures.get('timesheets.invalid.missing_date')
+local overlapping_intervals =
+fixtures.get('intervals.invalid.overlapping')
+
+This way:
+- Factories handle the "construction" of valid data
+- Fixtures handle the "curation" of specific scenarios
+- Registry still prevents mutation bugs
+- Tests are more readable and maintainable
+
+The factory validates our data contracts, while fixtures
+capture real-world complexity. Perfect balance!
+
+### The Objective
+
+Fix:
+
+```
+[ratmav@deck epoch]$ make test SPEC=report
+NVIM_INSTALL_MODE=1 nvim --headless \
+        -c "lua package.path='/home/ratmav/Source/epoch/lua/?.lua;'..package.path" \
+        -c "lua dofile('./tests/minimal_init.lua')" \
+        -c "lua require('plenary.busted').run('./tests/report_spec.lua')" \
+        -c "quit"
+using plenary.nvim from: /home/ratmav/.local/share/nvim/site/pack/paqs/start/plenary.nvim
+========================================
+Testing:        ./tests/report_spec.lua
+Fail    ||      report format_report formats a report with all expected sections and patterns
+            ...ratmav/Source/epoch/lua/epoch/report/formatter/table.lua:60: attempt to get length of local 'summary' (a nil valu
+e)
+
+            stack traceback:
+                ...ratmav/Source/epoch/lua/epoch/report/formatter/table.lua:60: in function 'format_summary_table'
+                .../ratmav/Source/epoch/lua/epoch/report/formatter/week.lua:37: in function 'format_week_section'
+                /home/ratmav/Source/epoch/lua/epoch/report/formatter.lua:81: in function 'add_week_sections'
+                /home/ratmav/Source/epoch/lua/epoch/report/formatter.lua:108: in function 'build_report_lines'
+                /home/ratmav/Source/epoch/lua/epoch/report/formatter.lua:122: in function 'format_report'
+                ./tests/report_spec.lua:13: in function <./tests/report_spec.lua:8>
+
+Success ||      report format_report handles empty data gracefully
+
+Success:        1
+Failed :        1
+Errors :        0
+========================================
+Tests Failed. Exit: 1
+make: *** [Makefile:20: test] Error 1
+```
+
 ## 1. Refactoring for laconic compliance
 
 - run `make check` to detect laconic violations

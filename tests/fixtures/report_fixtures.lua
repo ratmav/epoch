@@ -3,7 +3,7 @@
 
 local interval_fixtures = require('tests.fixtures.interval_fixtures')
 local time_fixtures = require('tests.fixtures.time_fixtures')
-local timesheet_helpers = require('tests.helpers.timesheet_helpers')
+local timesheet_fixtures = require('tests.fixtures.timesheet_fixtures')
 
 local report_fixtures = {}
 
@@ -287,6 +287,24 @@ report_fixtures.expected_patterns = {
   
   -- Footer totals
   "TOTAL%s+13:45"
+}
+
+-- Sample report data structure for testing formatter
+report_fixtures.sample_report_data = {
+  timesheets = {},
+  summary = {
+    {
+      client = "acme-corp",
+      project = "website-redesign",
+      task = "frontend-planning",
+      minutes = 90
+    }
+  },
+  total_minutes = 825,
+  dates = {"2025-05-12"},
+  weeks = {
+    "2025-19"
+  }
 }
 
 return report_fixtures

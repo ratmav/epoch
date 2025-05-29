@@ -47,8 +47,8 @@ package.path = string.format(
   plenary_root
 )
 
--- Add plugin_root/tests/helpers to the package path for test helpers
-package.path = package.path .. ';' .. plugin_root .. '/tests/?.lua;' .. plugin_root .. '/tests/helpers/?.lua'
+-- Add plugin_root/tests to the package path for test modules and fixtures
+package.path = package.path .. ';' .. plugin_root .. '/tests/?.lua;' .. plugin_root .. '/tests/?/init.lua;' .. plugin_root .. '/tests/helpers/?.lua'
 
 -- minimal neovim configuration
 vim.cmd([[
@@ -66,6 +66,9 @@ vim.env.XDG_DATA_HOME = plugin_root .. '/test_data'
 
 -- log the plenary path for debugging
 print("using plenary.nvim from: " .. plenary_root)
+
+-- Global fixture registry for all tests (after path setup)
+_G.fixtures = require('fixtures.init')
 
 -- return package path for debugging
 return package.path
