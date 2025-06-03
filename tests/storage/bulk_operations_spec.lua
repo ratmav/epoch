@@ -20,7 +20,7 @@ describe("storage bulk_operations", function()
   
   describe("delete_all_timesheets", function()
     it("deletes all timesheet files", function()
-      local dates = {"2025-05-10", "2025-05-11", "2025-05-12"}
+      local dates = fixtures.get('time.dates.storage_test_dates')
       for _, date in ipairs(dates) do
         local timesheet = vim.deepcopy(fixtures.get('timesheets.valid.empty'))
         timesheet.date = date

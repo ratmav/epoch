@@ -1,7 +1,6 @@
 -- tests/report/formatter_spec.lua
 
 local formatter = require('epoch.report.formatter')
-local fixtures = require('tests.fixtures')
 
 describe("report formatter", function()
   describe("format_report", function()
@@ -22,7 +21,7 @@ describe("report formatter", function()
     end)
     
     it("delegates to report_builder for empty reports", function()
-      local report_data = {weeks = {}, summary = {}, total_minutes = 0}
+      local report_data = fixtures.get('reports.formatter_data.empty_report_builder_data')
       local result = formatter.format_report(report_data)
       
       assert.is_string(result)
@@ -30,19 +29,7 @@ describe("report formatter", function()
     end)
     
     it("delegates to report_builder for reports with data", function()
-      local report_data = {
-        weeks = {
-          {
-            week = "2025-01",
-            summary = {},
-            total_minutes = 480,
-            daily_totals = {},
-            dates = {}
-          }
-        },
-        summary = {},
-        total_minutes = 480
-      }
+      local report_data = fixtures.get('reports.formatter_data.report_with_weeks')
       local result = formatter.format_report(report_data)
       
       assert.is_string(result)

@@ -200,7 +200,7 @@ describe("storage", function()
     
     it("returns all timesheet files in the data directory", function()
       -- Create some test files
-      local dates = {"2025-05-10", "2025-05-11", "2025-05-12"}
+      local dates = fixtures.get('time.dates.storage_test_dates')
       for _, date in ipairs(dates) do
         local timesheet = storage.create_default_timesheet(date)
         storage.save_timesheet(timesheet)
@@ -214,7 +214,7 @@ describe("storage", function()
   describe("delete_all_timesheets", function()
     it("deletes all timesheet files", function()
       -- Create some test files
-      local dates = {"2025-05-10", "2025-05-11", "2025-05-12"}
+      local dates = fixtures.get('time.dates.storage_test_dates')
       for _, date in ipairs(dates) do
         local timesheet = storage.create_default_timesheet(date)
         storage.save_timesheet(timesheet)

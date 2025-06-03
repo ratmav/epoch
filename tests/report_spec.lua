@@ -50,14 +50,7 @@ describe("report", function()
     end)
     
     it("handles empty data gracefully", function()
-      -- Create empty report data
-      local empty_report = {
-        timesheets = {},
-        summary = {},
-        total_minutes = 0,
-        dates = {},
-        weeks = {}
-      }
+      local empty_report = fixtures.get('reports.main_report_data.empty_report')
       
       local formatted = report.format_report(empty_report)
       

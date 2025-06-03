@@ -405,6 +405,142 @@ report_fixtures.day_processor_timesheets = {
   }
 }
 
+-- Test data for main report spec testing
+report_fixtures.main_report_data = {
+  empty_report = {
+    timesheets = {},
+    summary = {},
+    total_minutes = 0,
+    dates = {},
+    weeks = {}
+  }
+}
+
+-- Test data for main formatter testing
+report_fixtures.formatter_data = {
+  empty_report_builder_data = {weeks = {}, summary = {}, total_minutes = 0},
+  
+  report_with_weeks = {
+    weeks = {
+      {
+        week = "2025-01",
+        summary = {},
+        total_minutes = 480,
+        daily_totals = {},
+        dates = {}
+      }
+    },
+    summary = {},
+    total_minutes = 480
+  }
+}
+
+-- Test data for week_utils subdirectory testing
+report_fixtures.week_utils_data = {
+  complete_interval = {
+    client = "test",
+    project = "test", 
+    task = "test",
+    start = "9:00 AM",
+    stop = "10:30 AM"
+  },
+  
+  incomplete_interval = {
+    client = "test",
+    project = "test",
+    task = "test", 
+    start = "9:00 AM"
+  },
+  
+  empty_stop_interval = {
+    client = "test",
+    project = "test",
+    task = "test",
+    start = "9:00 AM",
+    stop = ""
+  },
+  
+  invalid_time_interval = {
+    client = "test",
+    project = "test",
+    task = "test",
+    start = "invalid",
+    stop = "10:30 AM"
+  },
+  
+  negative_duration_interval = {
+    client = "test",
+    project = "test",
+    task = "test",
+    start = "10:30 AM",
+    stop = "9:00 AM"
+  },
+  
+  test_date = "2025-01-01",
+  test_week_strings = {
+    valid_1 = "2025-01",
+    valid_2 = "2024-52",
+    invalid = {"invalid", "2025", ""}
+  }
+}
+
+-- Test UI mock data for report UI testing
+report_fixtures.ui_mocks = {
+  window_config_expectations = {
+    id = "report",
+    title = "epoch - report",
+    width_percent = 0.5,
+    height_percent = 0.6,
+    filetype = "markdown",
+    modifiable = false
+  },
+  
+  window_close_id = "report"
+}
+
+-- Test column calculator data for table column calculator testing
+report_fixtures.column_calculator_data = {
+  long_names_summary = {
+    {client = "very-long-client-name", project = "short", task = "medium-task", minutes = 480},
+    {client = "short", project = "very-long-project-name", task = "task", minutes = 240}
+  },
+  
+  short_names_summary = {
+    {client = "a", project = "b", task = "c", minutes = 480}
+  },
+  
+  two_column_rows = {
+    {"2025-01-01", "08:00"},
+    {"very-long-date-string", "10:00"}
+  },
+  
+  simple_two_column_rows = {
+    {"2025-01-01", "08:00"}
+  },
+  
+  headers = {
+    date = "Date",
+    long_header = "Very Long Header"
+  }
+}
+
+-- Test row builder data for table row builder testing
+report_fixtures.row_builder_data = {
+  column_widths = {
+    client = 10,
+    project = 12,
+    task = 8
+  },
+  
+  single_summary = {
+    {client = "acme", project = "web", task = "dev", minutes = 480}
+  },
+  
+  separator_line = "----------",
+  
+  test_total_minutes = 480
+}
+
 -- Test report builder data for report builder testing
 report_fixtures.report_builder_data = {
   basic_report = {
@@ -660,6 +796,33 @@ report_fixtures.week_processor_data = {
         }
       }
     }
+  }
+}
+
+-- Empty and valid report structures for formatter tests
+report_fixtures.empty = {
+  weeks = {},
+  summary = {},
+  total_minutes = 0,
+  dates = {},
+  date_range = {first = "2025-01-01", last = "2025-01-01"}
+}
+
+report_fixtures.valid = {
+  with_data = {
+    weeks = {
+      {
+        week = "2025-01",
+        summary = {{client = "test", project = "test", task = "test", minutes = 480}},
+        total_minutes = 480,
+        daily_totals = {["2025-01-01"] = 480},
+        dates = {"2025-01-01"}
+      }
+    },
+    summary = {{client = "test", project = "test", task = "test", minutes = 480}},
+    total_minutes = 480,
+    dates = {"2025-01-01"},
+    date_range = {first = "2025-01-01", last = "2025-01-01"}
   }
 }
 

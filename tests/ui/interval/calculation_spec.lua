@@ -3,7 +3,6 @@
 
 describe("ui interval calculation", function()
   local calculation = require('epoch.ui.interval.calculation')
-  local fixtures = require('fixtures')
 
   describe("calculate_daily_total", function()
     it("should calculate correct total for valid intervals", function()
@@ -32,7 +31,7 @@ describe("ui interval calculation", function()
     end)
     
     it("should handle invalid timesheet structure", function()
-      local invalid_timesheet = { intervals = { { client = "test" } } }
+      local invalid_timesheet = fixtures.get("timesheets.storage.incomplete_interval")
       
       local total = calculation.calculate_daily_total(invalid_timesheet)
       

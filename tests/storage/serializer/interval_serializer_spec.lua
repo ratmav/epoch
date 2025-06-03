@@ -1,7 +1,6 @@
 -- tests/storage/serializer/interval_serializer_spec.lua
 
 local interval_serializer = require('epoch.storage.serializer.interval_serializer')
-local fixtures = require('tests.fixtures')
 
 describe("storage serializer interval_serializer", function()
   describe("is_interval", function()

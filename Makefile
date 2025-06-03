@@ -22,10 +22,7 @@ ifdef SPEC
 		-c "lua require('plenary.test_harness').test_directory('$(TEST_DIR)/$(SPEC)_spec.lua', {minimal_init = '$(TEST_DIR)/minimal_init.lua'})" \
 		-c "quit"
 else
-	$(NVIM_FLAGS) nvim --headless \
-		-c "lua package.path='$(PWD)/lua/?.lua;'..package.path" \
-		-c "lua require('plenary.test_harness').test_directory('$(TEST_DIR)', {minimal_init = '$(TEST_DIR)/minimal_init.lua'})" \
-		-c "quit"
+	$(NVIM_FLAGS) nvim --headless -l $(TEST_DIR)/run_all_tests.lua
 endif
 
 # Create test data for manual testing
@@ -46,6 +43,13 @@ coverage:
 # Lint Lua code with luacheck
 lint:
 	@luacheck . --no-color
+
+# Run all tests using the old plenary test_harness (may hang)
+test-old:
+	$(NVIM_FLAGS) nvim --headless \
+		-c "lua package.path='$(PWD)/lua/?.lua;'..package.path" \
+		-c "lua require('plenary.test_harness').test_directory('$(TEST_DIR)', {minimal_init = '$(TEST_DIR)/minimal_init.lua'})" \
+		-c "quit"
 
 # Run all checks (tests, laconic, coverage, lint)
 check: test laconic coverage lint

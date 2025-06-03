@@ -42,22 +42,25 @@
 - [x] tests/report/formatter/daily_spec.lua - extracted daily totals data
 - [x] tests/report/formatter/table_spec.lua - extracted summary and row data
 - [x] tests/report/formatter/week_spec.lua - extracted week data structures
-- [ ] tests/report/formatter/overall_spec.lua - summary data
-- [ ] tests/report/formatter/report_builder_spec.lua - report data structures
-- [ ] tests/report/formatter/table/row_builder_spec.lua - summary data
-- [ ] tests/report/formatter/table/column_calculator_spec.lua - table data
-- [ ] tests/report/ui_spec.lua - mock data (special case)
-- [ ] Extend tests/fixtures/report_fixtures.lua for all above
-- [ ] Run `make test` after every 3-4 files
+- [x] tests/report/formatter/overall_spec.lua - extracted summary data
+- [x] tests/report/formatter/report_builder_spec.lua - extracted report data structures
+- [x] tests/report/formatter/table/row_builder_spec.lua - extracted summary data
+- [x] tests/report/formatter/table/column_calculator_spec.lua - extracted table data
+- [x] tests/report/ui_spec.lua - extracted mock data (special case)
+- [x] tests/report/formatter_spec.lua - extracted remaining inline data
+- [x] tests/report_spec.lua - extracted empty report structure
+- [x] tests/report/week_utils/interval_calculation_spec.lua - extracted inline intervals
+- [x] Extend tests/fixtures/report_fixtures.lua for all above
+- [x] Run `make test` after every 3-4 files
 
-### Phase 6: Verification
-- [ ] Run full `make check` to ensure 100% coverage maintained
-- [ ] Verify NO inline fixtures remain in any test file
-- [ ] Document fixture organization in tests/fixtures/README.md
+### Phase 6: Verification - ✅ COMPLETE
+- [x] Run full `make check` to ensure 100% coverage maintained
+- [x] Verify NO inline fixtures remain in any test file
+- [x] Document fixture organization in tests/fixtures/README.md
 
-### Phase 7: Performance
-
+### Phase 7: Performance - IN PROGRESS
 - [ ] Run each spec individually and confirm test runs complete in under 20 seconds
+- [ ] Run full `make check` to ensure 100% coverage maintained
 
 ## 0. Fixtures AND Factories AND a Failing test
 

@@ -17,11 +17,12 @@ describe("report ui", function()
       
       window.create = function(config)
         create_called = true
-        assert.equals("report", config.id)
-        assert.equals("epoch - report", config.title)
-        assert.equals(0.5, config.width_percent)
-        assert.equals(0.6, config.height_percent)
-        assert.equals("markdown", config.filetype)
+        local expected = fixtures.get('reports.ui_mocks.window_config_expectations')
+        assert.equals(expected.id, config.id)
+        assert.equals(expected.title, config.title)
+        assert.equals(expected.width_percent, config.width_percent)
+        assert.equals(expected.height_percent, config.height_percent)
+        assert.equals(expected.filetype, config.filetype)
         assert.is_false(config.modifiable)
         assert.is_string(config.content)
       end
@@ -47,7 +48,8 @@ describe("report ui", function()
       
       window.close = function(id)
         close_called = true
-        assert.equals("report", id)
+        local expected_id = fixtures.get('reports.ui_mocks.window_close_id')
+        assert.equals(expected_id, id)
       end
       
       ui.toggle_report()

@@ -5,15 +5,25 @@ local date_calculation = {}
 
 -- Get week number from date string (YYYY-MM-DD)
 function date_calculation.get_week_number(date_str)
+  if not date_str or type(date_str) ~= "string" then
+    return nil
+  end
+  
   local year, month, day = date_str:match("(%d+)-(%d+)-(%d+)")
   if not year or not month or not day then
     return nil
   end
   
+  -- Validate date ranges
+  local y, m, d = tonumber(year), tonumber(month), tonumber(day)
+  if m < 1 or m > 12 or d < 1 or d > 31 then
+    return nil
+  end
+  
   local date = os.time({
-    year = tonumber(year),
-    month = tonumber(month),
-    day = tonumber(day)
+    year = y,
+    month = m,
+    day = d
   })
   
   -- Calculate week number (Sunday is first day of week)
@@ -22,6 +32,10 @@ end
 
 -- Parse week string format (YYYY-WW)
 function date_calculation.parse_week_string(week_str)
+  if not week_str or type(week_str) ~= "string" then
+    return nil
+  end
+  
   local year, week = week_str:match("(%d+)-(%d+)")
   if not year or not week then
     return nil

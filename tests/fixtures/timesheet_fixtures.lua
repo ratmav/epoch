@@ -197,6 +197,12 @@ return {
         {client = "test", project = "test", task = "test"}
       },
       daily_total = "00:00"
+    },
+    
+    incomplete_interval = {
+      intervals = {
+        {client = "test"}  -- Missing required fields
+      }
     }
   }
 }

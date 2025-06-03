@@ -188,5 +188,16 @@ return {
       stop = "08:30 PM",
       notes = {}
     }
+  },
+  
+  -- Test data for serializer testing
+  serializer = {
+    no_stop_time = {
+      client = "test",
+      project = "test",
+      task = "test",
+      start = "9:00 AM"
+      -- stop is nil/missing
+    }
   }
 }

@@ -26,7 +26,7 @@ describe("storage discovery", function()
     end)
     
     it("returns all timesheet files in the data directory", function()
-      local dates = {"2025-05-10", "2025-05-11", "2025-05-12"}
+      local dates = fixtures.get('time.dates.storage_test_dates')
       for _, date in ipairs(dates) do
         local timesheet = vim.deepcopy(fixtures.get('timesheets.valid.empty'))
         timesheet.date = date
@@ -38,6 +38,10 @@ describe("storage discovery", function()
     end)
     
     it("filters out non-timesheet lua files", function()
+      -- Ensure clean directory first
+      vim.fn.system("rm -rf /tmp/epoch_test_data")
+      vim.fn.mkdir("/tmp/epoch_test_data", "p")
+      
       -- Create a valid timesheet file
       local timesheet = vim.deepcopy(fixtures.get('timesheets.valid.empty'))
       timesheet.date = "2025-05-10"
