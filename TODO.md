@@ -20,28 +20,28 @@
 - [x] tests/storage/bulk_operations_spec.lua - extracted simple timesheet fixtures
 - [x] All individual tests passing
 
-### Phase 3: Time Utils Module (3 files - Complex)
-- [ ] tests/time_utils/validation_spec.lua - hardcoded time strings
-- [ ] tests/time_utils/formatting_spec.lua - timestamp values  
-- [ ] tests/time_utils/parsing_spec.lua - date/time test data (needs fix)
-- [ ] Create comprehensive tests/fixtures/time_fixtures.lua
-- [ ] Run `make test` after each file
+### Phase 3: Time Utils Module (3 files - Complex) - ✅ COMPLETE
+- [x] tests/time_utils/validation_spec.lua - extracted hardcoded time strings
+- [x] tests/time_utils/formatting_spec.lua - extracted timestamp values  
+- [x] tests/time_utils/parsing_spec.lua - extracted date/time test data
+- [x] Create comprehensive tests/fixtures/time_fixtures.lua
+- [x] Run `make test` after each file
 
-### Phase 4: Validation Module (2 files - Simple)
+### Phase 4: Validation Module (2 files - Simple) - ✅ COMPLETE
 - [x] tests/validation/fields/context_spec.lua (DONE)
-- [ ] tests/validation_modules_spec.lua - extract remaining inline intervals
-- [ ] Run `make test` after completion
+- [x] tests/validation_modules_spec.lua - extracted remaining inline intervals
+- [x] Run `make test` after completion
 
 ### Phase 5: Report Module (18 files - Most Complex)
-- [ ] tests/report/week_utils_spec.lua - simple intervals
-- [ ] tests/report/generator/data_loader_spec.lua - timesheet data
-- [ ] tests/report/generator/summary_utils_spec.lua - summary dictionaries
-- [ ] tests/report/generator/processor/day_spec.lua - complex timesheet structures
-- [ ] tests/report/generator/processor/week_spec.lua - week data structures
-- [ ] tests/report/generator_spec.lua - timesheet creation inline fixtures
-- [ ] tests/report/formatter/daily_spec.lua - daily totals data
-- [ ] tests/report/formatter/table_spec.lua - summary and row data
-- [ ] tests/report/formatter/week_spec.lua - week data structures
+- [x] tests/report/week_utils_spec.lua - extracted simple intervals
+- [x] tests/report/generator/data_loader_spec.lua - extracted timesheet data
+- [x] tests/report/generator/summary_utils_spec.lua - extracted summary dictionaries
+- [x] tests/report/generator/processor/day_spec.lua - extracted complex timesheet structures
+- [x] tests/report/generator/processor/week_spec.lua - extracted week data structures
+- [x] tests/report/generator_spec.lua - extracted timesheet creation inline fixtures
+- [x] tests/report/formatter/daily_spec.lua - extracted daily totals data
+- [x] tests/report/formatter/table_spec.lua - extracted summary and row data
+- [x] tests/report/formatter/week_spec.lua - extracted week data structures
 - [ ] tests/report/formatter/overall_spec.lua - summary data
 - [ ] tests/report/formatter/report_builder_spec.lua - report data structures
 - [ ] tests/report/formatter/table/row_builder_spec.lua - summary data
@@ -54,6 +54,10 @@
 - [ ] Run full `make check` to ensure 100% coverage maintained
 - [ ] Verify NO inline fixtures remain in any test file
 - [ ] Document fixture organization in tests/fixtures/README.md
+
+### Phase 7: Performance
+
+- [ ] Run each spec individually and confirm test runs complete in under 20 seconds
 
 ## 0. Fixtures AND Factories AND a Failing test
 

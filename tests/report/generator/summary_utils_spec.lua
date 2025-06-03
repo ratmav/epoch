@@ -5,13 +5,7 @@ local summary_utils = require('epoch.report.generator.summary_utils')
 describe("report generator summary_utils", function()
   describe("sort_summary", function()
     it("sorts summary by client, project, task", function()
-      local summary_dict = {
-        ["zebra|project|task"] = {client = "zebra", project = "project", task = "task", minutes = 480},
-        ["alpha|project|task"] = {client = "alpha", project = "project", task = "task", minutes = 240},
-        ["alpha|zebra|task"] = {client = "alpha", project = "zebra", task = "task", minutes = 120},
-        ["alpha|alpha|zebra"] = {client = "alpha", project = "alpha", task = "zebra", minutes = 60},
-        ["alpha|alpha|alpha"] = {client = "alpha", project = "alpha", task = "alpha", minutes = 30}
-      }
+      local summary_dict = fixtures.get('reports.test_summaries.multi_entry_sort')
       
       local result = summary_utils.sort_summary(summary_dict)
       
@@ -34,9 +28,7 @@ describe("report generator summary_utils", function()
     end)
     
     it("converts dictionary to array", function()
-      local summary_dict = {
-        ["client|project|task"] = {client = "client", project = "project", task = "task", minutes = 480}
-      }
+      local summary_dict = fixtures.get('reports.test_summaries.single_entry')
       
       local result = summary_utils.sort_summary(summary_dict)
       
@@ -50,11 +42,7 @@ describe("report generator summary_utils", function()
   
   describe("calculate_total_minutes", function()
     it("sums minutes from all entries", function()
-      local summary_dict = {
-        ["entry1"] = {minutes = 480},
-        ["entry2"] = {minutes = 240},
-        ["entry3"] = {minutes = 120}
-      }
+      local summary_dict = fixtures.get('reports.test_summaries.minutes_calculation')
       
       local result = summary_utils.calculate_total_minutes(summary_dict)
       
@@ -68,9 +56,7 @@ describe("report generator summary_utils", function()
     end)
     
     it("handles single entry", function()
-      local summary_dict = {
-        ["entry1"] = {minutes = 480}
-      }
+      local summary_dict = fixtures.get('reports.test_summaries.single_minutes')
       
       local result = summary_utils.calculate_total_minutes(summary_dict)
       

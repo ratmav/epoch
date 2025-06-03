@@ -5,12 +5,10 @@ local daily_formatter = require('epoch.report.formatter.daily')
 describe("report formatter daily", function()
   describe("format_daily_section", function()
     it("formats daily totals with proper headers", function()
-      local daily_totals = {
-        ["2025-01-01"] = 480,
-        ["2025-01-02"] = 520
-      }
-      local dates = {"2025-01-01", "2025-01-02"}
-      local week_total_minutes = 1000
+      local data = fixtures.get('reports.daily_totals_data.two_days')
+      local daily_totals = data.daily_totals
+      local dates = data.dates
+      local week_total_minutes = data.week_total_minutes
       
       local result = daily_formatter.format_daily_section(daily_totals, dates, week_total_minutes)
       
@@ -21,12 +19,10 @@ describe("report formatter daily", function()
     end)
     
     it("sorts dates chronologically", function()
-      local daily_totals = {
-        ["2025-01-02"] = 520,
-        ["2025-01-01"] = 480
-      }
-      local dates = {"2025-01-02", "2025-01-01"}
-      local week_total_minutes = 1000
+      local data = fixtures.get('reports.daily_totals_data.unsorted_dates')
+      local daily_totals = data.daily_totals
+      local dates = data.dates
+      local week_total_minutes = data.week_total_minutes
       
       local result = daily_formatter.format_daily_section(daily_totals, dates, week_total_minutes)
       
@@ -57,11 +53,10 @@ describe("report formatter daily", function()
     end)
     
     it("includes total row", function()
-      local daily_totals = {
-        ["2025-01-01"] = 480
-      }
-      local dates = {"2025-01-01"}
-      local week_total_minutes = 480
+      local data = fixtures.get('reports.daily_totals_data.single_day')
+      local daily_totals = data.daily_totals
+      local dates = data.dates
+      local week_total_minutes = data.week_total_minutes
       
       local result = daily_formatter.format_daily_section(daily_totals, dates, week_total_minutes)
       

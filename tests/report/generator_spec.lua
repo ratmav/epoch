@@ -36,20 +36,7 @@ describe("report generator", function()
     end)
     
     it("generates report with timesheet data", function()
-      -- Create test timesheet
-      local timesheet = {
-        date = "2025-01-01",
-        intervals = {
-          {
-            client = "acme",
-            project = "web",
-            task = "dev",
-            start = "9:00 AM",
-            stop = "10:30 AM"
-          }
-        },
-        daily_total = "01:30"
-      }
+      local timesheet = fixtures.get('reports.generator_timesheets.basic_with_dev_interval')
       storage.save_timesheet(timesheet)
       
       local report = generator.generate_report()
@@ -66,20 +53,8 @@ describe("report generator", function()
     
     it("sorts weeks chronologically", function()
       -- Create timesheets in different weeks
-      storage.save_timesheet({
-        date = "2025-01-15",
-        intervals = {
-          {client = "acme", project = "web", task = "dev", start = "9:00 AM", stop = "10:30 AM"}
-        },
-        daily_total = "01:30"
-      })
-      storage.save_timesheet({
-        date = "2025-01-01",
-        intervals = {
-          {client = "acme", project = "web", task = "dev", start = "9:00 AM", stop = "10:30 AM"}
-        },
-        daily_total = "01:30"
-      })
+      storage.save_timesheet(fixtures.get('reports.generator_timesheets.week_15_timesheet'))
+      storage.save_timesheet(fixtures.get('reports.generator_timesheets.week_01_timesheet'))
       
       local report = generator.generate_report()
       
@@ -91,20 +66,8 @@ describe("report generator", function()
     end)
     
     it("includes date range for multiple dates", function()
-      storage.save_timesheet({
-        date = "2025-01-01",
-        intervals = {
-          {client = "acme", project = "web", task = "dev", start = "9:00 AM", stop = "10:30 AM"}
-        },
-        daily_total = "01:30"
-      })
-      storage.save_timesheet({
-        date = "2025-01-03",
-        intervals = {
-          {client = "acme", project = "web", task = "dev", start = "9:00 AM", stop = "10:30 AM"}
-        },
-        daily_total = "01:30"
-      })
+      storage.save_timesheet(fixtures.get('reports.generator_timesheets.first_date_timesheet'))
+      storage.save_timesheet(fixtures.get('reports.generator_timesheets.last_date_timesheet'))
       
       local report = generator.generate_report()
       

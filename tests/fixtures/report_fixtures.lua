@@ -289,6 +289,380 @@ report_fixtures.expected_patterns = {
   "TOTAL%s+13:45"
 }
 
+-- Simple test intervals for week utils testing
+report_fixtures.test_intervals = {
+  simple = {
+    client = "test",
+    project = "test", 
+    task = "test",
+    start = "9:00 AM",
+    stop = "10:30 AM"
+  }
+}
+
+-- Test timesheet structures for data loader testing
+report_fixtures.test_timesheets = {
+  basic_empty = {
+    intervals = {},
+    daily_total = "00:00"
+  },
+  
+  basic_with_interval = {
+    intervals = {{client = "test", project = "test", task = "test", start = "9:00 AM"}},
+    daily_total = "08:00"
+  },
+  
+  basic_with_interval_2 = {
+    intervals = {{client = "test", project = "test", task = "test", start = "10:00 AM"}},
+    daily_total = "08:00"
+  }
+}
+
+-- Test summary dictionaries for summary utils testing
+report_fixtures.test_summaries = {
+  multi_entry_sort = {
+    ["zebra|project|task"] = {client = "zebra", project = "project", task = "task", minutes = 480},
+    ["alpha|project|task"] = {client = "alpha", project = "project", task = "task", minutes = 240},
+    ["alpha|zebra|task"] = {client = "alpha", project = "zebra", task = "task", minutes = 120},
+    ["alpha|alpha|zebra"] = {client = "alpha", project = "alpha", task = "zebra", minutes = 60},
+    ["alpha|alpha|alpha"] = {client = "alpha", project = "alpha", task = "alpha", minutes = 30}
+  },
+  
+  single_entry = {
+    ["client|project|task"] = {client = "client", project = "project", task = "task", minutes = 480}
+  },
+  
+  minutes_calculation = {
+    ["entry1"] = {minutes = 480},
+    ["entry2"] = {minutes = 240},
+    ["entry3"] = {minutes = 120}
+  },
+  
+  single_minutes = {
+    ["entry1"] = {minutes = 480}
+  }
+}
+
+-- Test timesheet structures for day processor testing
+report_fixtures.day_processor_timesheets = {
+  complete_interval = {
+    date = "2025-01-01",
+    intervals = {
+      {
+        client = "acme",
+        project = "web",
+        task = "dev",
+        start = "9:00 AM",
+        stop = "10:30 AM"
+      }
+    }
+  },
+  
+  incomplete_interval = {
+    date = "2025-01-01",
+    intervals = {
+      {
+        client = "acme",
+        project = "web",
+        -- missing task
+        start = "9:00 AM",
+        stop = "10:30 AM"
+      }
+    }
+  },
+  
+  multiple_intervals = {
+    date = "2025-01-01",
+    intervals = {
+      {
+        client = "acme",
+        project = "web",
+        task = "dev",
+        start = "9:00 AM",
+        stop = "10:30 AM"
+      },
+      {
+        client = "acme",
+        project = "web",
+        task = "dev",
+        start = "2:00 PM",
+        stop = "3:00 PM"
+      }
+    }
+  },
+  
+  no_stop_time = {
+    date = "2025-01-01",
+    intervals = {
+      {
+        client = "acme",
+        project = "web",
+        task = "dev",
+        start = "9:00 AM"
+        -- no stop time
+      }
+    }
+  }
+}
+
+-- Test report builder data for report builder testing
+report_fixtures.report_builder_data = {
+  basic_report = {
+    date_range = {first = "2025-01-01", last = "2025-01-07"},
+    weeks = {},
+    summary = {},
+    total_minutes = 0
+  },
+  
+  report_with_weeks = {
+    weeks = {
+      {
+        week = "2025-01",
+        date_range = {first = "2025-01-01", last = "2025-01-07"},
+        daily_totals = {},
+        dates = {},
+        total_minutes = 480,
+        summary = {}
+      }
+    },
+    summary = {},
+    total_minutes = 480
+  },
+  
+  report_for_overall = {
+    weeks = {
+      {week = "2025-01", total_minutes = 480, summary = {}}
+    },
+    summary = {},
+    total_minutes = 480
+  },
+  
+  empty_report_data = {
+    date_range = {first = "2025-01-01", last = "2025-01-07"},
+    summary = {},
+    total_minutes = 0
+  }
+}
+
+-- Test overall summary data for overall formatter testing
+report_fixtures.overall_data = {
+  weeks_with_range = {
+    weeks = {
+      {
+        week = "2025-01",
+        date_range = {first = "2025-01-01", last = "2025-01-07"},
+        total_minutes = 480
+      }
+    },
+    total_minutes = 480
+  },
+  
+  simple_weeks = {
+    weeks = {
+      {week = "2025-01", total_minutes = 480}
+    },
+    total_minutes = 480
+  },
+  
+  client_summary = {
+    summary = {
+      {client = "acme", project = "web", task = "dev", minutes = 480}
+    },
+    total_minutes = 480
+  }
+}
+
+-- Test week data for week formatter testing
+report_fixtures.week_formatter_data = {
+  complete_week = {
+    week = "2025-01",
+    date_range = {first = "2025-01-01", last = "2025-01-07"},
+    daily_totals = {["2025-01-01"] = 480},
+    dates = {"2025-01-01"},
+    total_minutes = 480,
+    summary = {
+      {client = "acme", project = "web", task = "dev", minutes = 480}
+    }
+  },
+  
+  minimal_week = {
+    week = "2025-01",
+    daily_totals = {},
+    dates = {},
+    total_minutes = 0,
+    summary = {}
+  },
+  
+  week_with_daily = {
+    week = "2025-01",
+    daily_totals = {["2025-01-01"] = 480},
+    dates = {"2025-01-01"},
+    total_minutes = 480,
+    summary = {}
+  },
+  
+  week_with_summary = {
+    week = "2025-01",
+    daily_totals = {},
+    dates = {},
+    total_minutes = 480,
+    summary = {
+      {client = "acme", project = "web", task = "dev", minutes = 480}
+    }
+  }
+}
+
+-- Test table data for table formatter testing
+report_fixtures.table_data = {
+  single_summary_entry = {
+    summary = {
+      {client = "acme", project = "web", task = "dev", minutes = 480}
+    },
+    total_mins = 480
+  },
+  
+  two_column_headers = {"Date", "Hours"},
+  two_column_rows = {{"2025-01-01", "08:00"}},
+  two_column_total_label = "TOTAL",
+  two_column_total_value = "08:00"
+}
+
+-- Test daily totals data for daily formatter testing
+report_fixtures.daily_totals_data = {
+  two_days = {
+    daily_totals = {
+      ["2025-01-01"] = 480,
+      ["2025-01-02"] = 520
+    },
+    dates = {"2025-01-01", "2025-01-02"},
+    week_total_minutes = 1000
+  },
+  
+  unsorted_dates = {
+    daily_totals = {
+      ["2025-01-02"] = 520,
+      ["2025-01-01"] = 480
+    },
+    dates = {"2025-01-02", "2025-01-01"},
+    week_total_minutes = 1000
+  },
+  
+  single_day = {
+    daily_totals = {
+      ["2025-01-01"] = 480
+    },
+    dates = {"2025-01-01"},
+    week_total_minutes = 480
+  }
+}
+
+-- Test timesheet data for main generator testing
+report_fixtures.generator_timesheets = {
+  basic_with_dev_interval = {
+    date = "2025-01-01",
+    intervals = {
+      {
+        client = "acme",
+        project = "web",
+        task = "dev",
+        start = "9:00 AM",
+        stop = "10:30 AM"
+      }
+    },
+    daily_total = "01:30"
+  },
+  
+  week_15_timesheet = {
+    date = "2025-01-15",
+    intervals = {
+      {client = "acme", project = "web", task = "dev", start = "9:00 AM", stop = "10:30 AM"}
+    },
+    daily_total = "01:30"
+  },
+  
+  week_01_timesheet = {
+    date = "2025-01-01",
+    intervals = {
+      {client = "acme", project = "web", task = "dev", start = "9:00 AM", stop = "10:30 AM"}
+    },
+    daily_total = "01:30"
+  },
+  
+  first_date_timesheet = {
+    date = "2025-01-01",
+    intervals = {
+      {client = "acme", project = "web", task = "dev", start = "9:00 AM", stop = "10:30 AM"}
+    },
+    daily_total = "01:30"
+  },
+  
+  last_date_timesheet = {
+    date = "2025-01-03",
+    intervals = {
+      {client = "acme", project = "web", task = "dev", start = "9:00 AM", stop = "10:30 AM"}
+    },
+    daily_total = "01:30"
+  }
+}
+
+-- Test data structures for week processor testing
+report_fixtures.week_processor_data = {
+  simple_timesheets = {
+    {date = "2025-01-01", intervals = {}},
+    {date = "2025-01-02", intervals = {}},
+    {date = "2025-01-08", intervals = {}}
+  },
+  
+  single_timesheet = {
+    {date = "2025-01-01", intervals = {}}
+  },
+  
+  unsorted_dates = {"2025-01-03", "2025-01-01", "2025-01-02"},
+  
+  week_data_with_interval = {
+    dates = {"2025-01-01"},
+    timesheets = {
+      {
+        date = "2025-01-01",
+        intervals = {
+          {
+            client = "acme",
+            project = "web",
+            task = "dev",
+            start = "9:00 AM",
+            stop = "10:30 AM"
+          }
+        }
+      }
+    },
+    date_range = {first = "2025-01-01", last = "2025-01-07"}
+  },
+  
+  week_data_for_sorting = {
+    dates = {"2025-01-03", "2025-01-01", "2025-01-02"},
+    timesheets = {},
+    date_range = {first = "2025-01-01", last = "2025-01-07"}
+  },
+  
+  week_data_for_summary = {
+    dates = {"2025-01-01"},
+    timesheets = {
+      {
+        date = "2025-01-01",
+        intervals = {
+          {
+            client = "acme",
+            project = "web",
+            task = "dev",
+            start = "9:00 AM",
+            stop = "10:30 AM"
+          }
+        }
+      }
+    }
+  }
+}
+
 -- Sample report data structure for testing formatter
 report_fixtures.sample_report_data = {
   timesheets = {},

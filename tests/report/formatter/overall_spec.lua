@@ -5,14 +5,9 @@ local overall = require('epoch.report.formatter.overall')
 describe("report formatter overall", function()
   describe("format_overall_weeks_section", function()
     it("formats weeks summary with headers", function()
-      local weeks = {
-        {
-          week = "2025-01",
-          date_range = {first = "2025-01-01", last = "2025-01-07"},
-          total_minutes = 480
-        }
-      }
-      local total_minutes = 480
+      local data = fixtures.get('reports.overall_data.weeks_with_range')
+      local weeks = data.weeks
+      local total_minutes = data.total_minutes
       
       local result = overall.format_overall_weeks_section(weeks, total_minutes)
       
@@ -23,10 +18,9 @@ describe("report formatter overall", function()
     end)
     
     it("includes total row", function()
-      local weeks = {
-        {week = "2025-01", total_minutes = 480}
-      }
-      local total_minutes = 480
+      local data = fixtures.get('reports.overall_data.simple_weeks')
+      local weeks = data.weeks
+      local total_minutes = data.total_minutes
       
       local result = overall.format_overall_weeks_section(weeks, total_minutes)
       
@@ -44,10 +38,9 @@ describe("report formatter overall", function()
   
   describe("format_overall_clients_section", function()
     it("formats client summary with headers", function()
-      local summary = {
-        {client = "acme", project = "web", task = "dev", minutes = 480}
-      }
-      local total_minutes = 480
+      local data = fixtures.get('reports.overall_data.client_summary')
+      local summary = data.summary
+      local total_minutes = data.total_minutes
       
       local result = overall.format_overall_clients_section(summary, total_minutes)
       

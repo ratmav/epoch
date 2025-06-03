@@ -5,16 +5,7 @@ local week_formatter = require('epoch.report.formatter.week')
 describe("report formatter week", function()
   describe("format_week_section", function()
     it("formats week with date range", function()
-      local week_data = {
-        week = "2025-01",
-        date_range = {first = "2025-01-01", last = "2025-01-07"},
-        daily_totals = {["2025-01-01"] = 480},
-        dates = {"2025-01-01"},
-        total_minutes = 480,
-        summary = {
-          {client = "acme", project = "web", task = "dev", minutes = 480}
-        }
-      }
+      local week_data = fixtures.get('reports.week_formatter_data.complete_week')
       
       local result = week_formatter.format_week_section(week_data)
       
@@ -25,13 +16,7 @@ describe("report formatter week", function()
     end)
     
     it("formats week without date range", function()
-      local week_data = {
-        week = "2025-01",
-        daily_totals = {},
-        dates = {},
-        total_minutes = 0,
-        summary = {}
-      }
+      local week_data = fixtures.get('reports.week_formatter_data.minimal_week')
       
       local result = week_formatter.format_week_section(week_data)
       
@@ -40,13 +25,7 @@ describe("report formatter week", function()
     end)
     
     it("includes daily totals section", function()
-      local week_data = {
-        week = "2025-01",
-        daily_totals = {["2025-01-01"] = 480},
-        dates = {"2025-01-01"},
-        total_minutes = 480,
-        summary = {}
-      }
+      local week_data = fixtures.get('reports.week_formatter_data.week_with_daily')
       
       local result = week_formatter.format_week_section(week_data)
       
@@ -62,15 +41,7 @@ describe("report formatter week", function()
     end)
     
     it("includes client summary section", function()
-      local week_data = {
-        week = "2025-01",
-        daily_totals = {},
-        dates = {},
-        total_minutes = 480,
-        summary = {
-          {client = "acme", project = "web", task = "dev", minutes = 480}
-        }
-      }
+      local week_data = fixtures.get('reports.week_formatter_data.week_with_summary')
       
       local result = week_formatter.format_week_section(week_data)
       

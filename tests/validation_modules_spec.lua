@@ -135,11 +135,7 @@ describe("validation modules", function()
     end)
     
     it("should generate context for partial intervals", function()
-      local partial_interval = {
-        client = "test-client",
-        project = "test-project"
-        -- Missing task and start
-      }
+      local partial_interval = fixtures.get('intervals.test.partial')
       
       local interval_context = context.get_interval_context(partial_interval)
       
@@ -159,12 +155,7 @@ describe("validation modules", function()
     end)
     
     it("should generate context with all fields", function()
-      local complete_interval = {
-        client = "client",
-        project = "project", 
-        task = "task",
-        start = "10:00 AM"
-      }
+      local complete_interval = fixtures.get('intervals.test.complete')
       
       local interval_context = context.get_interval_context(complete_interval)
       

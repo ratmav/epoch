@@ -5,10 +5,9 @@ local table_formatter = require('epoch.report.formatter.table')
 describe("report formatter table", function()
   describe("format_summary_table", function()
     it("formats summary table with headers", function()
-      local summary = {
-        {client = "acme", project = "web", task = "dev", minutes = 480}
-      }
-      local total_mins = 480
+      local data = fixtures.get('reports.table_data.single_summary_entry')
+      local summary = data.summary
+      local total_mins = data.total_mins
       
       local result = table_formatter.format_summary_table(summary, total_mins)
       
@@ -20,10 +19,9 @@ describe("report formatter table", function()
     end)
     
     it("includes separator lines", function()
-      local summary = {
-        {client = "acme", project = "web", task = "dev", minutes = 480}
-      }
-      local total_mins = 480
+      local data = fixtures.get('reports.table_data.single_summary_entry')
+      local summary = data.summary
+      local total_mins = data.total_mins
       
       local result = table_formatter.format_summary_table(summary, total_mins)
       
@@ -48,10 +46,10 @@ describe("report formatter table", function()
   
   describe("format_two_column_table", function()
     it("formats two column table with headers", function()
-      local headers = {"Date", "Hours"}
-      local rows = {{"2025-01-01", "08:00"}}
-      local total_label = "TOTAL"
-      local total_value = "08:00"
+      local headers = fixtures.get('reports.table_data.two_column_headers')
+      local rows = fixtures.get('reports.table_data.two_column_rows')
+      local total_label = fixtures.get('reports.table_data.two_column_total_label')
+      local total_value = fixtures.get('reports.table_data.two_column_total_value')
       
       local result = table_formatter.format_two_column_table(headers, rows, total_label, total_value)
       
@@ -61,10 +59,10 @@ describe("report formatter table", function()
     end)
     
     it("includes total row when provided", function()
-      local headers = {"Date", "Hours"}
-      local rows = {{"2025-01-01", "08:00"}}
-      local total_label = "TOTAL"
-      local total_value = "08:00"
+      local headers = fixtures.get('reports.table_data.two_column_headers')
+      local rows = fixtures.get('reports.table_data.two_column_rows')
+      local total_label = fixtures.get('reports.table_data.two_column_total_label')
+      local total_value = fixtures.get('reports.table_data.two_column_total_value')
       
       local result = table_formatter.format_two_column_table(headers, rows, total_label, total_value)
       
@@ -80,8 +78,8 @@ describe("report formatter table", function()
     end)
     
     it("handles no total", function()
-      local headers = {"Date", "Hours"}
-      local rows = {{"2025-01-01", "08:00"}}
+      local headers = fixtures.get('reports.table_data.two_column_headers')
+      local rows = fixtures.get('reports.table_data.two_column_rows')
       
       local result = table_formatter.format_two_column_table(headers, rows)
       

@@ -24,13 +24,7 @@ describe("report week_utils", function()
   
   describe("calculate_interval_minutes", function()
     it("delegates to interval calculation module", function()
-      local interval = {
-        client = "test",
-        project = "test",
-        task = "test",
-        start = "9:00 AM",
-        stop = "10:30 AM"
-      }
+      local interval = fixtures.get('reports.test_intervals.simple')
       local date = "2025-01-01"
       
       local minutes = week_utils.calculate_interval_minutes(interval, date)

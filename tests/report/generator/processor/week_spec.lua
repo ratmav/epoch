@@ -5,11 +5,7 @@ local week = require('epoch.report.generator.processor.week')
 describe("report generator processor week", function()
   describe("group_timesheets_by_week", function()
     it("groups timesheets by week number", function()
-      local timesheets = {
-        {date = "2025-01-01", intervals = {}},
-        {date = "2025-01-02", intervals = {}},
-        {date = "2025-01-08", intervals = {}}
-      }
+      local timesheets = fixtures.get('reports.week_processor_data.simple_timesheets')
       
       local result = week.group_timesheets_by_week(timesheets)
       
@@ -23,9 +19,7 @@ describe("report generator processor week", function()
     end)
     
     it("creates proper week data structure", function()
-      local timesheets = {
-        {date = "2025-01-01", intervals = {}}
-      }
+      local timesheets = fixtures.get('reports.week_processor_data.single_timesheet')
       
       local result = week.group_timesheets_by_week(timesheets)
       
@@ -50,24 +44,7 @@ describe("report generator processor week", function()
   
   describe("process_week_data", function()
     it("processes week data and returns summary", function()
-      local week_data = {
-        dates = {"2025-01-01"},
-        timesheets = {
-          {
-            date = "2025-01-01",
-            intervals = {
-              {
-                client = "acme",
-                project = "web",
-                task = "dev",
-                start = "9:00 AM",
-                stop = "10:30 AM"
-              }
-            }
-          }
-        },
-        date_range = {first = "2025-01-01", last = "2025-01-07"}
-      }
+      local week_data = fixtures.get('reports.week_processor_data.week_data_with_interval')
       local all_summary = {}
       
       local result = week.process_week_data("2025-01", week_data, all_summary)
@@ -82,11 +59,7 @@ describe("report generator processor week", function()
     end)
     
     it("sorts dates chronologically", function()
-      local week_data = {
-        dates = {"2025-01-03", "2025-01-01", "2025-01-02"},
-        timesheets = {},
-        date_range = {first = "2025-01-01", last = "2025-01-07"}
-      }
+      local week_data = fixtures.get('reports.week_processor_data.week_data_for_sorting')
       local all_summary = {}
       
       local result = week.process_week_data("2025-01", week_data, all_summary)
@@ -97,23 +70,7 @@ describe("report generator processor week", function()
     end)
     
     it("updates all_summary with week data", function()
-      local week_data = {
-        dates = {"2025-01-01"},
-        timesheets = {
-          {
-            date = "2025-01-01",
-            intervals = {
-              {
-                client = "acme",
-                project = "web",
-                task = "dev",
-                start = "9:00 AM",
-                stop = "10:30 AM"
-              }
-            }
-          }
-        }
-      }
+      local week_data = fixtures.get('reports.week_processor_data.week_data_for_summary')
       local all_summary = {}
       
       week.process_week_data("2025-01", week_data, all_summary)

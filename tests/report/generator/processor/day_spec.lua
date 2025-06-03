@@ -5,18 +5,7 @@ local day = require('epoch.report.generator.processor.day')
 describe("report generator processor day", function()
   describe("process_timesheet_intervals", function()
     it("processes complete intervals", function()
-      local timesheet = {
-        date = "2025-01-01",
-        intervals = {
-          {
-            client = "acme",
-            project = "web",
-            task = "dev",
-            start = "9:00 AM",
-            stop = "10:30 AM"
-          }
-        }
-      }
+      local timesheet = fixtures.get('reports.day_processor_timesheets.complete_interval')
       local week_summary = {}
       local all_summary = {}
       
@@ -30,18 +19,7 @@ describe("report generator processor day", function()
     end)
     
     it("skips incomplete intervals", function()
-      local timesheet = {
-        date = "2025-01-01",
-        intervals = {
-          {
-            client = "acme",
-            project = "web",
-            -- missing task
-            start = "9:00 AM",
-            stop = "10:30 AM"
-          }
-        }
-      }
+      local timesheet = fixtures.get('reports.day_processor_timesheets.incomplete_interval')
       local week_summary = {}
       local all_summary = {}
       
@@ -53,25 +31,7 @@ describe("report generator processor day", function()
     end)
     
     it("accumulates multiple intervals", function()
-      local timesheet = {
-        date = "2025-01-01",
-        intervals = {
-          {
-            client = "acme",
-            project = "web",
-            task = "dev",
-            start = "9:00 AM",
-            stop = "10:30 AM"
-          },
-          {
-            client = "acme",
-            project = "web",
-            task = "dev",
-            start = "2:00 PM",
-            stop = "3:00 PM"
-          }
-        }
-      }
+      local timesheet = fixtures.get('reports.day_processor_timesheets.multiple_intervals')
       local week_summary = {}
       local all_summary = {}
       
@@ -83,18 +43,7 @@ describe("report generator processor day", function()
     end)
     
     it("handles intervals without stop time", function()
-      local timesheet = {
-        date = "2025-01-01",
-        intervals = {
-          {
-            client = "acme",
-            project = "web",
-            task = "dev",
-            start = "9:00 AM"
-            -- no stop time
-          }
-        }
-      }
+      local timesheet = fixtures.get('reports.day_processor_timesheets.no_stop_time')
       local week_summary = {}
       local all_summary = {}
       

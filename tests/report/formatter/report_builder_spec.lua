@@ -5,12 +5,7 @@ local report_builder = require('epoch.report.formatter.report_builder')
 describe("report formatter report_builder", function()
   describe("build_report_lines", function()
     it("builds report with period header", function()
-      local report_data = {
-        date_range = {first = "2025-01-01", last = "2025-01-07"},
-        weeks = {},
-        summary = {},
-        total_minutes = 0
-      }
+      local report_data = fixtures.get('reports.report_builder_data.basic_report')
       
       local result = report_builder.build_report_lines(report_data)
       
@@ -21,20 +16,7 @@ describe("report formatter report_builder", function()
     end)
     
     it("includes week sections", function()
-      local report_data = {
-        weeks = {
-          {
-            week = "2025-01",
-            date_range = {first = "2025-01-01", last = "2025-01-07"},
-            daily_totals = {},
-            dates = {},
-            total_minutes = 480,
-            summary = {}
-          }
-        },
-        summary = {},
-        total_minutes = 480
-      }
+      local report_data = fixtures.get('reports.report_builder_data.report_with_weeks')
       
       local result = report_builder.build_report_lines(report_data)
       
@@ -50,13 +32,7 @@ describe("report formatter report_builder", function()
     end)
     
     it("includes overall summaries when weeks exist", function()
-      local report_data = {
-        weeks = {
-          {week = "2025-01", total_minutes = 480, summary = {}}
-        },
-        summary = {},
-        total_minutes = 480
-      }
+      local report_data = fixtures.get('reports.report_builder_data.report_for_overall')
       
       local result = report_builder.build_report_lines(report_data)
       
@@ -78,11 +54,7 @@ describe("report formatter report_builder", function()
   
   describe("format_empty_report", function()
     it("formats empty report with period header", function()
-      local report_data = {
-        date_range = {first = "2025-01-01", last = "2025-01-07"},
-        summary = {},
-        total_minutes = 0
-      }
+      local report_data = fixtures.get('reports.report_builder_data.empty_report_data')
       
       local result = report_builder.format_empty_report(report_data)
       
