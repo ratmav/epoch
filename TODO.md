@@ -43,39 +43,9 @@ capture real-world complexity. Perfect balance!
 
 ### The Objective
 
-Fix:
+## 0. linting
 
-```
-[ratmav@deck epoch]$ make test SPEC=report
-NVIM_INSTALL_MODE=1 nvim --headless \
-        -c "lua package.path='/home/ratmav/Source/epoch/lua/?.lua;'..package.path" \
-        -c "lua dofile('./tests/minimal_init.lua')" \
-        -c "lua require('plenary.busted').run('./tests/report_spec.lua')" \
-        -c "quit"
-using plenary.nvim from: /home/ratmav/.local/share/nvim/site/pack/paqs/start/plenary.nvim
-========================================
-Testing:        ./tests/report_spec.lua
-Fail    ||      report format_report formats a report with all expected sections and patterns
-            ...ratmav/Source/epoch/lua/epoch/report/formatter/table.lua:60: attempt to get length of local 'summary' (a nil valu
-e)
-
-            stack traceback:
-                ...ratmav/Source/epoch/lua/epoch/report/formatter/table.lua:60: in function 'format_summary_table'
-                .../ratmav/Source/epoch/lua/epoch/report/formatter/week.lua:37: in function 'format_week_section'
-                /home/ratmav/Source/epoch/lua/epoch/report/formatter.lua:81: in function 'add_week_sections'
-                /home/ratmav/Source/epoch/lua/epoch/report/formatter.lua:108: in function 'build_report_lines'
-                /home/ratmav/Source/epoch/lua/epoch/report/formatter.lua:122: in function 'format_report'
-                ./tests/report_spec.lua:13: in function <./tests/report_spec.lua:8>
-
-Success ||      report format_report handles empty data gracefully
-
-Success:        1
-Failed :        1
-Errors :        0
-========================================
-Tests Failed. Exit: 1
-make: *** [Makefile:20: test] Error 1
-```
+- let's integrate https://github.com/mpeterv/luacheck with anew `make lint` target, and then we can have a `make check` target that tests, runs laconic, and lints.
 
 ## 1. Refactoring for laconic compliance
 
@@ -97,6 +67,8 @@ make: *** [Makefile:20: test] Error 1
 - Apply coding standards throughout codebase
 
 ## Post-Refactoring
+- add support for :EpochEdit <date/> to open the timesheet for a specific date
+  - no date opens today's timesheet by default
 - Complete manual test plan execution (MANUAL_TEST_PLAN.md)
   - Test all 24 test cases across 11 test groups
   - Verify clean toggle behavior and user experience

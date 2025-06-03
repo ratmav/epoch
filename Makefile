@@ -8,7 +8,7 @@ TEST_DIR := ./tests
 # for better semantics
 NVIM_FLAGS := NVIM_INSTALL_MODE=1
 
-.PHONY: test clean data laconic help
+.PHONY: test clean data laconic lint check help
 
 # Default target shows help
 .DEFAULT_GOAL := help
@@ -40,6 +40,14 @@ data:
 laconic:
 	@lua scripts/laconic.lua
 
+# Lint Lua code with luacheck
+lint:
+	@luacheck . --no-color
+
+# Run all checks (tests, laconic, lint)
+check: test laconic lint
+	@echo "✅ All checks completed successfully!"
+
 # Clean generated files and timesheet data
 clean:
 	find . -name "*.bak" -delete
@@ -61,5 +69,7 @@ help:
 	@echo "  make test            - Run all tests"
 	@echo "  make test SPEC=name  - Run specific test (e.g., make test SPEC=ui_logic)"
 	@echo "  make laconic         - Check laconic compliance (file/function length, test coverage)"
+	@echo "  make lint            - Lint Lua code with luacheck"
+	@echo "  make check           - Run all checks (tests, laconic, lint)"
 	@echo "  make data            - Create sample timesheet data for manual testing"
 	@echo "  make clean           - Clean temporary files and timesheet data"
