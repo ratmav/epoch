@@ -3,7 +3,6 @@
 
 local overlap = {}
 local time_utils = require('epoch.validation.time_utils')
-local fields = require('epoch.validation.fields')
 
 -- Get stop time value for interval (handles unclosed intervals)
 local function get_stop_time_value(interval)

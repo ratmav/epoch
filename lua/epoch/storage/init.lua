@@ -1,5 +1,6 @@
 -- epoch/storage.lua
 -- Main storage interface - delegates to specialized modules
+-- coverage: no tests
 
 local storage = {}
 local paths = require('epoch.storage.paths')

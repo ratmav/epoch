@@ -1,0 +1,32 @@
+-- tests/time_utils/validation_spec.lua
+
+local validation = require('epoch.time_utils.validation')
+
+describe("time_utils validation", function()
+  describe("is_valid_time_format", function()
+    it("validates correct 12-hour time formats", function()
+      assert.is_true(validation.is_valid_time_format("9:00 AM"))
+      assert.is_true(validation.is_valid_time_format("12:00 PM"))
+      assert.is_true(validation.is_valid_time_format("11:59 PM"))
+      assert.is_true(validation.is_valid_time_format("12:00 AM"))
+      assert.is_true(validation.is_valid_time_format("6:30 PM"))
+    end)
+    
+    it("rejects invalid time formats", function()
+      assert.is_false(validation.is_valid_time_format("25:00 AM"))
+      assert.is_false(validation.is_valid_time_format("12:60 PM"))
+      assert.is_false(validation.is_valid_time_format("0:30 AM"))
+      assert.is_false(validation.is_valid_time_format("13:00 PM"))
+      assert.is_false(validation.is_valid_time_format("9:00"))
+      assert.is_false(validation.is_valid_time_format("9 AM"))
+      assert.is_false(validation.is_valid_time_format(""))
+      assert.is_false(validation.is_valid_time_format(nil))
+    end)
+    
+    it("requires proper spacing and case", function()
+      assert.is_false(validation.is_valid_time_format("9:00AM"))
+      assert.is_false(validation.is_valid_time_format("9:00 am"))
+      assert.is_false(validation.is_valid_time_format("9:00  AM"))
+    end)
+  end)
+end)

@@ -40,6 +40,21 @@ return {
       notes = {"Added API documentation", "Reviewed with team"}
     }
   },
+
+  -- Test intervals for context generation
+  test = {
+    partial = {
+      client = "test-client",
+      project = "test-project"
+    },
+    
+    complete = {
+      client = "client",
+      project = "project",
+      task = "task",
+      start = "10:00 AM"
+    }
+  },
   
   -- Invalid intervals
   invalid = {

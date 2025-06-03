@@ -19,8 +19,7 @@ test:
 ifdef SPEC
 	$(NVIM_FLAGS) nvim --headless \
 		-c "lua package.path='$(PWD)/lua/?.lua;'..package.path" \
-		-c "lua dofile('$(TEST_DIR)/minimal_init.lua')" \
-		-c "lua require('plenary.busted').run('$(TEST_DIR)/$(SPEC)_spec.lua')" \
+		-c "lua require('plenary.test_harness').test_directory('$(TEST_DIR)/$(SPEC)_spec.lua', {minimal_init = '$(TEST_DIR)/minimal_init.lua'})" \
 		-c "quit"
 else
 	$(NVIM_FLAGS) nvim --headless \

@@ -1,5 +1,60 @@
 # TODO
 
+## INLINE FIXTURE ELIMINATION PLAN
+
+### Phase 0: Fix Current Test Failures (Base Case) - ✅ COMPLETE
+- [x] Fix storage/serializer/table_serializer_spec.lua mixed keys test failure
+- [x] Fix time_utils/parsing_spec.lua invalid date format test failure  
+- [x] Run specific failing tests only to verify fixes
+
+### Phase 1: Storage Serializer Module (4 files - DONE)
+- [x] tests/storage/serializer/array_detection_spec.lua
+- [x] tests/storage/serializer/value_formatter_spec.lua  
+- [x] tests/storage/serializer/array_serializer_spec.lua
+- [x] tests/storage/serializer/table_serializer_spec.lua (needs fix)
+
+### Phase 2: Storage Core Module (3 files - Simple) - ✅ COMPLETE
+- [x] tests/storage/serializer/interval_sorter_spec.lua - extracted timesheet inline fixtures  
+- [x] tests/storage/discovery_spec.lua - extracted simple timesheet fixtures
+- [x] BLOCKER FIXED: Individual test fixture loading (use global fixtures, not require)
+- [x] tests/storage/bulk_operations_spec.lua - extracted simple timesheet fixtures
+- [x] All individual tests passing
+
+### Phase 3: Time Utils Module (3 files - Complex)
+- [ ] tests/time_utils/validation_spec.lua - hardcoded time strings
+- [ ] tests/time_utils/formatting_spec.lua - timestamp values  
+- [ ] tests/time_utils/parsing_spec.lua - date/time test data (needs fix)
+- [ ] Create comprehensive tests/fixtures/time_fixtures.lua
+- [ ] Run `make test` after each file
+
+### Phase 4: Validation Module (2 files - Simple)
+- [x] tests/validation/fields/context_spec.lua (DONE)
+- [ ] tests/validation_modules_spec.lua - extract remaining inline intervals
+- [ ] Run `make test` after completion
+
+### Phase 5: Report Module (18 files - Most Complex)
+- [ ] tests/report/week_utils_spec.lua - simple intervals
+- [ ] tests/report/generator/data_loader_spec.lua - timesheet data
+- [ ] tests/report/generator/summary_utils_spec.lua - summary dictionaries
+- [ ] tests/report/generator/processor/day_spec.lua - complex timesheet structures
+- [ ] tests/report/generator/processor/week_spec.lua - week data structures
+- [ ] tests/report/generator_spec.lua - timesheet creation inline fixtures
+- [ ] tests/report/formatter/daily_spec.lua - daily totals data
+- [ ] tests/report/formatter/table_spec.lua - summary and row data
+- [ ] tests/report/formatter/week_spec.lua - week data structures
+- [ ] tests/report/formatter/overall_spec.lua - summary data
+- [ ] tests/report/formatter/report_builder_spec.lua - report data structures
+- [ ] tests/report/formatter/table/row_builder_spec.lua - summary data
+- [ ] tests/report/formatter/table/column_calculator_spec.lua - table data
+- [ ] tests/report/ui_spec.lua - mock data (special case)
+- [ ] Extend tests/fixtures/report_fixtures.lua for all above
+- [ ] Run `make test` after every 3-4 files
+
+### Phase 6: Verification
+- [ ] Run full `make check` to ensure 100% coverage maintained
+- [ ] Verify NO inline fixtures remain in any test file
+- [ ] Document fixture organization in tests/fixtures/README.md
+
 ## 0. Fixtures AND Factories AND a Failing test
 
 ### The Strategy
@@ -48,8 +103,11 @@ capture real-world complexity. Perfect balance!
 - we want 100% passing for all `make check` tests
     - we need to focus on our test coverage `make test` first
     - we need to make sure that a spec file is ***only*** testing the file with the matching name
+    - we need to review all tests to confirm that we're always using fixtures defined in their own files, in the nested structure so that a given fixture is stored at the lowest level it can be (shared fixture is stored at level above two tests that use fixture, etc.)
     - then we can focus on laconic and linting
 - some modules have an init.lua, some do not. we should always have an init.lua, not a foo.lua, then a foo directory (module)
+    - init.lua should only delegate. if there is logic in init.lua, then that logic needs to be migrated to the appropriate module or broken out into a new module if it's a new responsiblity. we should also make sure that logic is tested
+- the ui module has ui handling code that is often deliberately untested, but we also have logic that is testable. that logic should live in it's own ui/logic module (with an init, tests, etc.)
 
 ## 1. Refactoring for laconic compliance
 

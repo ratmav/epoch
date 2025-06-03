@@ -178,5 +178,25 @@ return {
       },
       daily_total = "00:00"
     }
+  },
+
+  -- Storage test timesheets  
+  storage = {
+    single_interval = {
+      date = "2025-01-01",
+      intervals = {
+        {client = "test", project = "test", task = "test", start = "9:00 AM"}
+      },
+      daily_total = "00:00"
+    },
+    
+    mixed_intervals = {
+      date = "2025-01-01", 
+      intervals = {
+        {client = "test", project = "test", task = "test", start = "9:00 AM"},
+        {client = "test", project = "test", task = "test"}
+      },
+      daily_total = "00:00"
+    }
   }
 }
