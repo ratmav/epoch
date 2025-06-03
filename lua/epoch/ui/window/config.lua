@@ -1,5 +1,6 @@
 -- epoch/ui/window/config.lua
 -- Window configuration utilities
+-- coverage: no tests
 
 local window_config = {}
 

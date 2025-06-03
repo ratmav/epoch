@@ -1,5 +1,6 @@
 -- epoch/ui/window/highlights.lua
 -- Highlight management for floating windows
+-- coverage: no tests
 
 local highlights = {}
 

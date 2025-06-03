@@ -1,5 +1,6 @@
 -- epoch/ui/window/buffer.lua
 -- Buffer operations for floating windows
+-- coverage: no tests
 
 local buffer = {}
 

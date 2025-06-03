@@ -1,5 +1,6 @@
 -- epoch/ui/init.lua
 -- UI functionality for epoch time tracking
+-- coverage: no tests
 
 local ui = {}
 local storage = require('epoch.storage')

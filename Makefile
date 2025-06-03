@@ -8,7 +8,7 @@ TEST_DIR := ./tests
 # for better semantics
 NVIM_FLAGS := NVIM_INSTALL_MODE=1
 
-.PHONY: test clean data laconic lint check help
+.PHONY: test clean data laconic coverage lint check help
 
 # Default target shows help
 .DEFAULT_GOAL := help
@@ -36,16 +36,20 @@ data:
 		-c "lua dofile('$(PWD)/tests/scripts/create_test_data.lua')" \
 		-c "quit"
 
-# Check laconic compliance (file/function length, test coverage)
+# Check laconic compliance (file/function length)
 laconic:
 	@lua scripts/laconic.lua
+
+# Check test coverage
+coverage:
+	@lua scripts/coverage.lua
 
 # Lint Lua code with luacheck
 lint:
 	@luacheck . --no-color
 
-# Run all checks (tests, laconic, lint)
-check: test laconic lint
+# Run all checks (tests, laconic, coverage, lint)
+check: test laconic coverage lint
 	@echo "✅ All checks completed successfully!"
 
 # Clean generated files and timesheet data
@@ -68,8 +72,9 @@ help:
 	@echo "Available commands:"
 	@echo "  make test            - Run all tests"
 	@echo "  make test SPEC=name  - Run specific test (e.g., make test SPEC=ui_logic)"
-	@echo "  make laconic         - Check laconic compliance (file/function length, test coverage)"
+	@echo "  make laconic         - Check laconic compliance (file/function length)"
+	@echo "  make coverage        - Check test coverage"
 	@echo "  make lint            - Lint Lua code with luacheck"
-	@echo "  make check           - Run all checks (tests, laconic, lint)"
+	@echo "  make check           - Run all checks (tests, laconic, coverage, lint)"
 	@echo "  make data            - Create sample timesheet data for manual testing"
 	@echo "  make clean           - Clean temporary files and timesheet data"

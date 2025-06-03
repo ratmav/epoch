@@ -1,5 +1,6 @@
 -- epoch/ui/window/creation.lua
 -- Window creation utilities
+-- coverage: no tests
 
 local window_config = require("epoch.ui.window.config")
 

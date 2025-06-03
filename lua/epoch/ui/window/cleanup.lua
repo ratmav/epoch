@@ -1,5 +1,6 @@
 -- epoch/ui/window/cleanup.lua
 -- Window cleanup and resource management
+-- coverage: no tests
 
 local state = require("epoch.ui.window.state")
 

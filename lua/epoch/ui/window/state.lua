@@ -1,5 +1,6 @@
 -- epoch/ui/window/state.lua
 -- Window state tracking and management
+-- coverage: no tests
 
 local state = {}
 

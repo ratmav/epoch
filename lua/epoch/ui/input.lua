@@ -1,5 +1,6 @@
 -- epoch/ui/input.lua
 -- User input handling for time tracking operations
+-- coverage: no tests
 
 local input = {}
 local workflow = require('epoch.ui.workflow')

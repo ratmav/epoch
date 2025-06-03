@@ -1,6 +1,6 @@
 -- epoch/config.lua
 -- configuration for epoch time tracking
--- laconic: no tests
+-- coverage: no tests
 
 local config = {}
 

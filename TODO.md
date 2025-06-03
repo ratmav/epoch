@@ -43,16 +43,20 @@ capture real-world complexity. Perfect balance!
 
 ### The Objective
 
-## 0. linting
+## 0. pass all checks
 
-- let's integrate https://github.com/mpeterv/luacheck with anew `make lint` target, and then we can have a `make check` target that tests, runs laconic, and lints.
+- we want 100% passing for all `make check` tests
+    - we need to focus on our test coverage `make test` first
+    - we need to make sure that a spec file is ***only*** testing the file with the matching name
+    - then we can focus on laconic and linting
+- some modules have an init.lua, some do not. we should always have an init.lua, not a foo.lua, then a foo directory (module)
 
 ## 1. Refactoring for laconic compliance
 
-- run `make laconic` to detect laconic violations
+- run `make check` to detect violations
 - for each violation
     - refactor the violation
-    - run `make test` to detect regresssions
+    - run `make check` to detect regresssions
         - for each regression
             - fix regression
 

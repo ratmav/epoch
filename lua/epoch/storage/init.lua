@@ -3,7 +3,9 @@
 
 local storage = {}
 local paths = require('epoch.storage.paths')
-local file_ops = require('epoch.storage.file_ops')
+local persistence = require('epoch.storage.persistence')
+local discovery = require('epoch.storage.discovery')
+local bulk_operations = require('epoch.storage.bulk_operations')
 local serializer = require('epoch.storage.serializer')
 
 -- Path management functions
@@ -47,19 +49,19 @@ function storage.serialize_timesheet(timesheet)
 end
 
 function storage.save_timesheet(timesheet)
-  return file_ops.save_timesheet(timesheet)
+  return persistence.save_timesheet(timesheet)
 end
 
 function storage.load_timesheet(date)
-  return file_ops.load_timesheet(date)
+  return persistence.load_timesheet(date)
 end
 
 function storage.get_all_timesheet_files()
-  return file_ops.get_all_timesheet_files()
+  return discovery.get_all_timesheet_files()
 end
 
 function storage.delete_all_timesheets()
-  return file_ops.delete_all_timesheets()
+  return bulk_operations.delete_all_timesheets()
 end
 
 return storage

@@ -1,5 +1,6 @@
 -- epoch/ui/confirmations.lua
 -- User confirmation dialog utilities
+-- coverage: no tests
 
 local confirmations = {}
 

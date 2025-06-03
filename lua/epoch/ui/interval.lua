@@ -1,5 +1,6 @@
 -- epoch/ui/interval.lua
 -- Interval operations - main module
+-- coverage: no tests
 
 local creation = require('epoch.ui.interval.creation')
 local calculation = require('epoch.ui.interval.calculation')

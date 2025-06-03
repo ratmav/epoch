@@ -1,5 +1,6 @@
 -- epoch/ui/window.lua
 -- Generic floating window management for timesheet and report display
+-- coverage: no tests
 
 local state = require("epoch.ui.window.state")
 local buffer_ops = require("epoch.ui.window.buffer")

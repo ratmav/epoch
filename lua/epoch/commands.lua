@@ -1,6 +1,6 @@
 -- epoch/commands.lua
 -- command handling module for epoch time tracking
--- laconic: no tests
+-- coverage: no tests
 
 local commands = {}
 local ui = require('epoch.ui')

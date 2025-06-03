@@ -1,5 +1,6 @@
 -- epoch/ui/window/lifecycle.lua
 -- Window creation and destruction lifecycle
+-- coverage: no tests
 
 local creation = require("epoch.ui.window.creation")
 local cleanup = require("epoch.ui.window.cleanup")
