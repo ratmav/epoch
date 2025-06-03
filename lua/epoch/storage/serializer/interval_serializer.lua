@@ -21,7 +21,10 @@ end
 
 -- Check if table looks like an interval
 function interval_serializer.is_interval(tbl)
-  return tbl.client and tbl.project and tbl.task and tbl.start
+  if type(tbl) ~= "table" then
+    return false
+  end
+  return not not (tbl.client and tbl.project and tbl.task and tbl.start)
 end
 
 return interval_serializer

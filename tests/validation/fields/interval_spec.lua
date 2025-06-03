@@ -1,7 +1,6 @@
 -- tests/validation/fields/interval_spec.lua
 
 local validation = require('epoch.validation')
-local fixtures = require('tests.fixtures')
 
 describe("validation fields interval", function()
   describe("validate_interval", function()

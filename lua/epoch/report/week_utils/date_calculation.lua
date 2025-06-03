@@ -3,8 +3,8 @@
 
 local date_calculation = {}
 
--- Get week number from date string (YYYY-MM-DD)
-function date_calculation.get_week_number(date_str)
+-- Parse and validate date string components
+local function parse_date_string(date_str)
   if not date_str or type(date_str) ~= "string" then
     return nil
   end
@@ -14,19 +14,26 @@ function date_calculation.get_week_number(date_str)
     return nil
   end
   
-  -- Validate date ranges
-  local y, m, d = tonumber(year), tonumber(month), tonumber(day)
-  if m < 1 or m > 12 or d < 1 or d > 31 then
+  return tonumber(year), tonumber(month), tonumber(day)
+end
+
+-- Validate date component ranges
+local function validate_date_components(year, month, day)
+  return month >= 1 and month <= 12 and day >= 1 and day <= 31
+end
+
+-- Get week number from date string (YYYY-MM-DD)
+function date_calculation.get_week_number(date_str)
+  local year, month, day = parse_date_string(date_str)
+  if not year then
     return nil
   end
   
-  local date = os.time({
-    year = y,
-    month = m,
-    day = d
-  })
+  if not validate_date_components(year, month, day) then
+    return nil
+  end
   
-  -- Calculate week number (Sunday is first day of week)
+  local date = os.time({year = year, month = month, day = day})
   return os.date("%Y-%U", date)
 end
 

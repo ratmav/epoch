@@ -2,7 +2,7 @@
 
 local persistence = require('epoch.storage.persistence')
 local paths = require('epoch.storage.paths')
-local fixtures = require('tests.fixtures')
+local fixtures = require('fixtures.init')
 
 describe("storage persistence", function()
   -- Set up a test data directory for isolation

@@ -60,9 +60,6 @@ vim.cmd([[
 vim.opt.runtimepath:append(plenary_root)
 vim.opt.runtimepath:append(plugin_root)
 
--- set a specific data directory for tests to avoid polluting the user's data
-vim.fn.mkdir(plugin_root .. '/test_data', 'p')
-vim.env.XDG_DATA_HOME = plugin_root .. '/test_data'
 
 -- log the plenary path for debugging
 print("using plenary.nvim from: " .. plenary_root)

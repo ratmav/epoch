@@ -1,0 +1,661 @@
+NVIM_INSTALL_MODE=1 nvim --headless \
+	-c "lua package.path='/home/ratmav/Source/epoch/lua/?.lua;'..package.path" \
+	-c "PlenaryBustedDirectory ./tests {minimal_init = './tests/minimal_init.lua'}" \
+	-c "quit"
+Starting...Scheduling: ./tests/report/week_utils/interval_calculation_spec.lua
+Scheduling: ./tests/report/week_utils/range_calculation_spec.lua
+Scheduling: ./tests/report/week_utils/date_calculation_spec.lua
+Scheduling: ./tests/report/generator/summary_utils_spec.lua
+Scheduling: ./tests/report/generator/processor/week_spec.lua
+Scheduling: ./tests/report/generator/processor/day_spec.lua
+Scheduling: ./tests/report/generator/data_loader_spec.lua
+Scheduling: ./tests/report/formatter_spec.lua
+Scheduling: ./tests/report/ui_spec.lua
+Scheduling: ./tests/report/week_utils_spec.lua
+Scheduling: ./tests/report/formatter/overall_spec.lua
+Scheduling: ./tests/report/formatter/table/column_calculator_spec.lua
+Scheduling: ./tests/report/formatter/table/row_builder_spec.lua
+Scheduling: ./tests/report/formatter/week_spec.lua
+Scheduling: ./tests/report/formatter/report_builder_spec.lua
+Scheduling: ./tests/report/formatter/table_spec.lua
+Scheduling: ./tests/report/formatter/daily_spec.lua
+Scheduling: ./tests/report/generator_spec.lua
+Scheduling: ./tests/report_spec.lua
+Scheduling: ./tests/factory_spec.lua
+Scheduling: ./tests/validation_spec.lua
+Scheduling: ./tests/storage/persistence_spec.lua
+Scheduling: ./tests/storage/serializer_spec.lua
+Scheduling: ./tests/storage/discovery_spec.lua
+Scheduling: ./tests/storage/paths_spec.lua
+Scheduling: ./tests/storage/serializer/array_serializer_spec.lua
+Scheduling: ./tests/storage/serializer/interval_sorter_spec.lua
+Scheduling: ./tests/storage/serializer/interval_serializer_spec.lua
+Scheduling: ./tests/storage/serializer/table_serializer_spec.lua
+Scheduling: ./tests/storage/serializer/value_formatter_spec.lua
+Scheduling: ./tests/storage/serializer/array_detection_spec.lua
+Scheduling: ./tests/storage/bulk_operations_spec.lua
+Scheduling: ./tests/storage_spec.lua
+Scheduling: ./tests/ui_logic_spec.lua
+Scheduling: ./tests/ui/workflow_spec.lua
+Scheduling: ./tests/ui/interval/creation_spec.lua
+Scheduling: ./tests/ui/interval/calculation_spec.lua
+Scheduling: ./tests/ui/interval/timing_spec.lua
+Scheduling: ./tests/ui/timesheet_spec.lua
+Scheduling: ./tests/time_utils/validation_spec.lua
+Scheduling: ./tests/time_utils/formatting_spec.lua
+Scheduling: ./tests/time_utils/parsing_spec.lua
+Scheduling: ./tests/time_utils_spec.lua
+Scheduling: ./tests/validation/overlap_spec.lua
+Scheduling: ./tests/validation/time_utils_spec.lua
+Scheduling: ./tests/validation/fields/interval_spec.lua
+Scheduling: ./tests/validation/fields/context_spec.lua
+Scheduling: ./tests/validation/fields/timesheet_spec.lua
+Scheduling: ./tests/validation_modules_spec.lua
+using plenary.nvim from: /home/ratmav/.local/share/nvim/site/pack/paqs/start/plenary.nvim
+
+========================================	
+Testing: 	/home/ratmav/Source/epoch/tests/report_spec.lua	
+[32mSuccess[0m	||	report format_report formats a report with all expected sections and patterns	
+[32mSuccess[0m	||	report format_report handles empty data gracefully	
+	
+[32mSuccess: [0m	2	
+[31mFailed : [0m	0	
+[31mErrors : [0m	0	
+========================================	
+using plenary.nvim from: /home/ratmav/.local/share/nvim/site/pack/paqs/start/plenary.nvim
+
+========================================	
+Testing: 	/home/ratmav/Source/epoch/tests/report/formatter/daily_spec.lua	
+[32mSuccess[0m	||	report formatter daily format_daily_section formats daily totals with proper headers	
+[32mSuccess[0m	||	report formatter daily format_daily_section sorts dates chronologically	
+[32mSuccess[0m	||	report formatter daily format_daily_section handles empty data gracefully	
+[32mSuccess[0m	||	report formatter daily format_daily_section includes total row	
+	
+[32mSuccess: [0m	4	
+[31mFailed : [0m	0	
+[31mErrors : [0m	0	
+========================================	
+using plenary.nvim from: /home/ratmav/.local/share/nvim/site/pack/paqs/start/plenary.nvim
+
+========================================	
+Testing: 	/home/ratmav/Source/epoch/tests/report/formatter/table_spec.lua	
+[32mSuccess[0m	||	report formatter table format_summary_table formats summary table with headers	
+[32mSuccess[0m	||	report formatter table format_summary_table includes separator lines	
+[32mSuccess[0m	||	report formatter table format_summary_table handles empty summary	
+[32mSuccess[0m	||	report formatter table format_two_column_table formats two column table with headers	
+[32mSuccess[0m	||	report formatter table format_two_column_table includes total row when provided	
+[32mSuccess[0m	||	report formatter table format_two_column_table handles no total	
+	
+[32mSuccess: [0m	6	
+[31mFailed : [0m	0	
+[31mErrors : [0m	0	
+========================================	
+using plenary.nvim from: /home/ratmav/.local/share/nvim/site/pack/paqs/start/plenary.nvim
+
+========================================	
+Testing: 	/home/ratmav/Source/epoch/tests/report/formatter/report_builder_spec.lua	
+[32mSuccess[0m	||	report formatter report_builder build_report_lines builds report with period header	
+[32mSuccess[0m	||	report formatter report_builder build_report_lines includes week sections	
+[32mSuccess[0m	||	report formatter report_builder build_report_lines includes overall summaries when weeks exist	
+[32mSuccess[0m	||	report formatter report_builder format_empty_report formats empty report with period header	
+	
+[32mSuccess: [0m	4	
+[31mFailed : [0m	0	
+[31mErrors : [0m	0	
+========================================	
+using plenary.nvim from: /home/ratmav/.local/share/nvim/site/pack/paqs/start/plenary.nvim
+
+========================================	
+Testing: 	/home/ratmav/Source/epoch/tests/report/formatter/table/column_calculator_spec.lua	
+[32mSuccess[0m	||	report formatter table column_calculator calculate_column_widths returns minimum header widths for empty summary	
+[32mSuccess[0m	||	report formatter table column_calculator calculate_column_widths calculates widths based on data	
+[32mSuccess[0m	||	report formatter table column_calculator calculate_column_widths uses header width when data is shorter	
+[32mSuccess[0m	||	report formatter table column_calculator calculate_two_column_width returns minimum width based on header	
+[32mSuccess[0m	||	report formatter table column_calculator calculate_two_column_width calculates width based on data	
+[32mSuccess[0m	||	report formatter table column_calculator calculate_two_column_width uses header width when larger than data	
+	
+[32mSuccess: [0m	6	
+[31mFailed : [0m	0	
+[31mErrors : [0m	0	
+========================================	
+using plenary.nvim from: /home/ratmav/.local/share/nvim/site/pack/paqs/start/plenary.nvim
+
+========================================	
+Testing: 	/home/ratmav/Source/epoch/tests/report/generator/processor/day_spec.lua	
+[32mSuccess[0m	||	report generator processor day process_timesheet_intervals processes complete intervals	
+[32mSuccess[0m	||	report generator processor day process_timesheet_intervals skips incomplete intervals	
+[32mSuccess[0m	||	report generator processor day process_timesheet_intervals accumulates multiple intervals	
+[32mSuccess[0m	||	report generator processor day process_timesheet_intervals handles intervals without stop time	
+	
+[32mSuccess: [0m	4	
+[31mFailed : [0m	0	
+[31mErrors : [0m	0	
+========================================	
+using plenary.nvim from: /home/ratmav/.local/share/nvim/site/pack/paqs/start/plenary.nvim
+
+========================================	
+Testing: 	/home/ratmav/Source/epoch/tests/report/generator/processor/week_spec.lua	
+[32mSuccess[0m	||	report generator processor week group_timesheets_by_week groups timesheets by week number	
+[32mSuccess[0m	||	report generator processor week group_timesheets_by_week creates proper week data structure	
+[32mSuccess[0m	||	report generator processor week group_timesheets_by_week handles empty timesheet list	
+[32mSuccess[0m	||	report generator processor week process_week_data processes week data and returns summary	
+[32mSuccess[0m	||	report generator processor week process_week_data sorts dates chronologically	
+[32mSuccess[0m	||	report generator processor week process_week_data updates all_summary with week data	
+	
+[32mSuccess: [0m	6	
+[31mFailed : [0m	0	
+[31mErrors : [0m	0	
+========================================	
+using plenary.nvim from: /home/ratmav/.local/share/nvim/site/pack/paqs/start/plenary.nvim
+using plenary.nvim from: /home/ratmav/.local/share/nvim/site/pack/paqs/start/plenary.nvim
+
+========================================	
+Testing: 	/home/ratmav/Source/epoch/tests/report/week_utils/range_calculation_spec.lua	
+[32mSuccess[0m	||	report week_utils range_calculation get_week_date_range returns date range for valid week string	
+[32mSuccess[0m	||	report week_utils range_calculation get_week_date_range returns nil for invalid week string	
+[32mSuccess[0m	||	report week_utils range_calculation get_week_date_range calculates week range spanning 7 days	
+	
+[32mSuccess: [0m	3	
+[31mFailed : [0m	0	
+[31mErrors : [0m	0	
+========================================	
+using plenary.nvim from: /home/ratmav/.local/share/nvim/site/pack/paqs/start/plenary.nvim
+
+========================================	
+Testing: 	/home/ratmav/Source/epoch/tests/report/week_utils/interval_calculation_spec.lua	
+[32mSuccess[0m	||	report week_utils interval_calculation calculate_interval_minutes calculates minutes for complete intervals	
+[32mSuccess[0m	||	report week_utils interval_calculation calculate_interval_minutes returns 0 for incomplete intervals	
+[32mSuccess[0m	||	report week_utils interval_calculation calculate_interval_minutes returns 0 for intervals with empty stop time	
+[32mSuccess[0m	||	report week_utils interval_calculation calculate_interval_minutes returns 0 for intervals with invalid time formats	
+[32mSuccess[0m	||	report week_utils interval_calculation calculate_interval_minutes handles negative durations by returning 0	
+	
+[32mSuccess: [0m	5	
+[31mFailed : [0m	0	
+[31mErrors : [0m	0	
+========================================	
+using plenary.nvim from: /home/ratmav/.local/share/nvim/site/pack/paqs/start/plenary.nvim
+
+========================================	
+Testing: 	/home/ratmav/Source/epoch/tests/validation_modules_spec.lua	
+[32mSuccess[0m	||	validation modules interval validation module should validate complete valid intervals	
+[32mSuccess[0m	||	validation modules interval validation module should reject intervals with missing client	
+[32mSuccess[0m	||	validation modules interval validation module should reject intervals with missing project	
+[32mSuccess[0m	||	validation modules interval validation module should reject intervals with missing task	
+[32mSuccess[0m	||	validation modules interval validation module should reject intervals with invalid time format	
+[32mSuccess[0m	||	validation modules interval validation module should reject intervals with missing notes	
+[32mSuccess[0m	||	validation modules interval validation module should reject intervals with invalid notes type	
+[32mSuccess[0m	||	validation modules interval validation module should reject non-table inputs	
+[32mSuccess[0m	||	validation modules interval validation module should validate intervals with notes	
+[32mSuccess[0m	||	validation modules timesheet validation module should validate complete valid timesheets	
+[32mSuccess[0m	||	validation modules timesheet validation module should validate empty timesheets	
+[32mSuccess[0m	||	validation modules timesheet validation module should reject timesheets with missing date	
+[32mSuccess[0m	||	validation modules timesheet validation module should reject timesheets with missing intervals	
+[32mSuccess[0m	||	validation modules timesheet validation module should reject timesheets with invalid intervals	
+[32mSuccess[0m	||	validation modules timesheet validation module should reject non-table inputs	
+[32mSuccess[0m	||	validation modules timesheet validation module should provide context for invalid intervals	
+[32mSuccess[0m	||	validation modules context generation module should generate context for complete intervals	
+[32mSuccess[0m	||	validation modules context generation module should generate context for partial intervals	
+[32mSuccess[0m	||	validation modules context generation module should handle empty intervals	
+[32mSuccess[0m	||	validation modules context generation module should handle nil intervals	
+[32mSuccess[0m	||	validation modules context generation module should generate context with all fields	
+	
+[32mSuccess: [0m	21	
+[31mFailed : [0m	0	
+[31mErrors : [0m	0	
+========================================	
+using plenary.nvim from: /home/ratmav/.local/share/nvim/site/pack/paqs/start/plenary.nvim
+
+========================================	
+Testing: 	/home/ratmav/Source/epoch/tests/storage/serializer/value_formatter_spec.lua	
+[32mSuccess[0m	||	storage serializer value_formatter format_value formats strings with quotes	
+[32mSuccess[0m	||	storage serializer value_formatter format_value formats numbers as strings	
+[32mSuccess[0m	||	storage serializer value_formatter format_value formats booleans as strings	
+[32mSuccess[0m	||	storage serializer value_formatter format_value formats nil as string	
+	
+[32mSuccess: [0m	4	
+[31mFailed : [0m	0	
+[31mErrors : [0m	0	
+========================================	
+using plenary.nvim from: /home/ratmav/.local/share/nvim/site/pack/paqs/start/plenary.nvim
+
+========================================	
+Testing: 	/home/ratmav/Source/epoch/tests/storage/serializer/interval_serializer_spec.lua	
+[31mFail[0m	||	storage serializer interval_serializer is_interval returns true for valid intervals	
+            ...ch/tests/storage/serializer/interval_serializer_spec.lua:9: Expected objects to be the same.
+            Passed in:
+            (string) '09:00 AM'
+            Expected:
+            (boolean) true
+            
+            stack traceback:
+            	...ch/tests/storage/serializer/interval_serializer_spec.lua:9: in function <...ch/tests/storage/serializer/interval_serializer_spec.lua:7>
+            	
+[31mFail[0m	||	storage serializer interval_serializer is_interval returns false for incomplete intervals	
+            ...ch/tests/storage/serializer/interval_serializer_spec.lua:13: Expected objects to be the same.
+            Passed in:
+            (nil)
+            Expected:
+            (boolean) false
+            
+            stack traceback:
+            	...ch/tests/storage/serializer/interval_serializer_spec.lua:13: in function <...ch/tests/storage/serializer/interval_serializer_spec.lua:12>
+            	
+[31mFail[0m	||	storage serializer interval_serializer serialize_interval_keys serializes interval with proper key order	
+            ...e/epoch/lua/epoch/storage/serializer/value_formatter.lua:12: attempt to call field 'serialize_table' (a nil value)
+            
+            stack traceback:
+            	...e/epoch/lua/epoch/storage/serializer/value_formatter.lua:12: in function 'format_value'
+            	...och/lua/epoch/storage/serializer/interval_serializer.lua:15: in function 'serialize_interval_keys'
+            	...ch/tests/storage/serializer/interval_serializer_spec.lua:27: in function <...ch/tests/storage/serializer/interval_serializer_spec.lua:21>
+            	
+[32mSuccess[0m	||	storage serializer interval_serializer serialize_interval_keys skips nil values	
+	
+[32mSuccess: [0m	1	
+[31mFailed : [0m	3	
+[31mErrors : [0m	0	
+========================================	
+Tests Failed. Exit: 1	
+using plenary.nvim from: /home/ratmav/.local/share/nvim/site/pack/paqs/start/plenary.nvim
+using plenary.nvim from: /home/ratmav/.local/share/nvim/site/pack/paqs/start/plenary.nvim
+
+========================================	
+Testing: 	/home/ratmav/Source/epoch/tests/storage/discovery_spec.lua	
+[32mSuccess[0m	||	storage discovery get_all_timesheet_files returns empty array when no files exist	
+[32mSuccess[0m	||	storage discovery get_all_timesheet_files returns all timesheet files in the data directory	
+[32mSuccess[0m	||	storage discovery get_all_timesheet_files filters out non-timesheet lua files	
+	
+[32mSuccess: [0m	3	
+[31mFailed : [0m	0	
+[31mErrors : [0m	0	
+========================================	
+using plenary.nvim from: /home/ratmav/.local/share/nvim/site/pack/paqs/start/plenary.nvim
+
+========================================	
+Testing: 	/home/ratmav/Source/epoch/tests/factory_spec.lua	
+[32mSuccess[0m	||	factory build_report creates empty report with default values	
+[32mSuccess[0m	||	factory build_report creates report with custom values	
+[32mSuccess[0m	||	factory build_timesheet creates timesheet with default values	
+[32mSuccess[0m	||	factory build_timesheet creates timesheet with custom values	
+[32mSuccess[0m	||	factory build_interval creates interval with default values	
+[32mSuccess[0m	||	factory build_interval creates interval with custom values	
+	
+[32mSuccess: [0m	6	
+[31mFailed : [0m	0	
+[31mErrors : [0m	0	
+========================================	
+using plenary.nvim from: /home/ratmav/.local/share/nvim/site/pack/paqs/start/plenary.nvim
+
+========================================	
+Testing: 	/home/ratmav/Source/epoch/tests/report/formatter/table/row_builder_spec.lua	
+[32mSuccess[0m	||	report formatter table row_builder create_table_header creates properly formatted header	
+[32mSuccess[0m	||	report formatter table row_builder create_separator_line creates separator with proper width	
+[32mSuccess[0m	||	report formatter table row_builder format_data_rows formats data rows into result table	
+[32mSuccess[0m	||	report formatter table row_builder format_total_row adds total row when total > 0	
+[32mSuccess[0m	||	report formatter table row_builder format_total_row does not add total row when total is 0	
+[32mSuccess[0m	||	report formatter table row_builder format_total_row does not add total row when total is nil	
+	
+[32mSuccess: [0m	6	
+[31mFailed : [0m	0	
+[31mErrors : [0m	0	
+========================================	
+using plenary.nvim from: /home/ratmav/.local/share/nvim/site/pack/paqs/start/plenary.nvim
+
+========================================	
+Testing: 	/home/ratmav/Source/epoch/tests/report/ui_spec.lua	
+[32mSuccess[0m	||	report ui toggle_report opens window when not open	
+[32mSuccess[0m	||	report ui toggle_report closes window when already open	
+	
+[32mSuccess: [0m	2	
+[31mFailed : [0m	0	
+[31mErrors : [0m	0	
+========================================	
+using plenary.nvim from: /home/ratmav/.local/share/nvim/site/pack/paqs/start/plenary.nvim
+using plenary.nvim from: /home/ratmav/.local/share/nvim/site/pack/paqs/start/plenary.nvim
+
+========================================	
+Testing: 	/home/ratmav/Source/epoch/tests/report/generator/summary_utils_spec.lua	
+[32mSuccess[0m	||	report generator summary_utils sort_summary sorts summary by client, project, task	
+[32mSuccess[0m	||	report generator summary_utils sort_summary handles empty summary	
+[32mSuccess[0m	||	report generator summary_utils sort_summary converts dictionary to array	
+[32mSuccess[0m	||	report generator summary_utils calculate_total_minutes sums minutes from all entries	
+[32mSuccess[0m	||	report generator summary_utils calculate_total_minutes returns 0 for empty summary	
+[32mSuccess[0m	||	report generator summary_utils calculate_total_minutes handles single entry	
+	
+[32mSuccess: [0m	6	
+[31mFailed : [0m	0	
+[31mErrors : [0m	0	
+========================================	
+using plenary.nvim from: /home/ratmav/.local/share/nvim/site/pack/paqs/start/plenary.nvim
+using plenary.nvim from: /home/ratmav/.local/share/nvim/site/pack/paqs/start/plenary.nvim
+
+========================================	
+Testing: 	/home/ratmav/Source/epoch/tests/ui/workflow_spec.lua	
+[32mSuccess[0m	||	ui workflow add_interval should reject missing client	
+[32mSuccess[0m	||	ui workflow add_interval should reject missing project	
+[32mSuccess[0m	||	ui workflow add_interval should reject missing task	
+[32mSuccess[0m	||	ui workflow add_interval should successfully add interval with valid inputs	
+	
+[32mSuccess: [0m	4	
+[31mFailed : [0m	0	
+[31mErrors : [0m	0	
+========================================	
+using plenary.nvim from: /home/ratmav/.local/share/nvim/site/pack/paqs/start/plenary.nvim
+
+========================================	
+Testing: 	/home/ratmav/Source/epoch/tests/storage/serializer/array_detection_spec.lua	
+[32mSuccess[0m	||	storage serializer array_detection is_array returns true for arrays	
+[32mSuccess[0m	||	storage serializer array_detection is_array returns false for non-arrays	
+[32mSuccess[0m	||	storage serializer array_detection is_array returns false for sparse arrays	
+	
+[32mSuccess: [0m	3	
+[31mFailed : [0m	0	
+[31mErrors : [0m	0	
+========================================	
+using plenary.nvim from: /home/ratmav/.local/share/nvim/site/pack/paqs/start/plenary.nvim
+
+========================================	
+Testing: 	/home/ratmav/Source/epoch/tests/report/formatter/overall_spec.lua	
+[32mSuccess[0m	||	report formatter overall format_overall_weeks_section formats weeks summary with headers	
+[32mSuccess[0m	||	report formatter overall format_overall_weeks_section includes total row	
+[32mSuccess[0m	||	report formatter overall format_overall_clients_section formats client summary with headers	
+[32mSuccess[0m	||	report formatter overall format_overall_clients_section handles empty summary	
+	
+[32mSuccess: [0m	4	
+[31mFailed : [0m	0	
+[31mErrors : [0m	0	
+========================================	
+using plenary.nvim from: /home/ratmav/.local/share/nvim/site/pack/paqs/start/plenary.nvim
+
+========================================	
+Testing: 	/home/ratmav/Source/epoch/tests/report/generator/data_loader_spec.lua	
+[32mSuccess[0m	||	report generator data_loader get_all_timesheet_dates returns empty array when no files exist	
+[32mSuccess[0m	||	report generator data_loader get_all_timesheet_dates extracts dates from timesheet files	
+[32mSuccess[0m	||	report generator data_loader get_all_timesheet_dates filters out invalid date formats	
+[32mSuccess[0m	||	report generator data_loader load_timesheets loads timesheets for given dates	
+[32mSuccess[0m	||	report generator data_loader load_timesheets skips timesheets with no intervals	
+	
+[32mSuccess: [0m	5	
+[31mFailed : [0m	0	
+[31mErrors : [0m	0	
+========================================	
+using plenary.nvim from: /home/ratmav/.local/share/nvim/site/pack/paqs/start/plenary.nvim
+
+========================================	
+Testing: 	/home/ratmav/Source/epoch/tests/storage_spec.lua	
+[32mSuccess[0m	||	storage create_default_timesheet creates a timesheet with default values	
+[32mSuccess[0m	||	storage create_default_timesheet uses current date when no date is provided	
+[32mSuccess[0m	||	storage serialize_timesheet serializes timesheet to a valid Lua string	
+[32mSuccess[0m	||	storage serialize_timesheet formats intervals with ordered keys	
+[32mSuccess[0m	||	storage serialize_timesheet properly serializes intervals with notes	
+	
+[32mSuccess: [0m	5	
+[31mFailed : [0m	0	
+[31mErrors : [0m	0	
+========================================	
+using plenary.nvim from: /home/ratmav/.local/share/nvim/site/pack/paqs/start/plenary.nvim
+
+========================================	
+Testing: 	/home/ratmav/Source/epoch/tests/report/formatter/week_spec.lua	
+[32mSuccess[0m	||	report formatter week format_week_section formats week with date range	
+[32mSuccess[0m	||	report formatter week format_week_section formats week without date range	
+[32mSuccess[0m	||	report formatter week format_week_section includes daily totals section	
+[32mSuccess[0m	||	report formatter week format_week_section includes client summary section	
+	
+[32mSuccess: [0m	4	
+[31mFailed : [0m	0	
+[31mErrors : [0m	0	
+========================================	
+using plenary.nvim from: /home/ratmav/.local/share/nvim/site/pack/paqs/start/plenary.nvim
+
+========================================	
+Testing: 	/home/ratmav/Source/epoch/tests/report/week_utils_spec.lua	
+[32mSuccess[0m	||	report week_utils get_week_number delegates to date calculation module	
+[32mSuccess[0m	||	report week_utils get_week_date_range delegates to range calculation module	
+[32mSuccess[0m	||	report week_utils calculate_interval_minutes delegates to interval calculation module	
+	
+[32mSuccess: [0m	3	
+[31mFailed : [0m	0	
+[31mErrors : [0m	0	
+========================================	
+using plenary.nvim from: /home/ratmav/.local/share/nvim/site/pack/paqs/start/plenary.nvim
+
+========================================	
+Testing: 	/home/ratmav/Source/epoch/tests/time_utils_spec.lua	
+[32mSuccess[0m	||	time_utils is_valid_time_format returns true for valid 12-hour time formats	
+[32mSuccess[0m	||	time_utils is_valid_time_format returns false for invalid time formats	
+[32mSuccess[0m	||	time_utils is_valid_time_format returns false for nil or empty input	
+[32mSuccess[0m	||	time_utils format_duration formats minutes as HH:MM	
+[32mSuccess[0m	||	time_utils format_duration handles zero or negative values	
+[31mFail[0m	||	time_utils time_to_seconds converts time string to seconds since midnight	
+            /home/ratmav/Source/epoch/tests/fixtures/init.lua:31: Fixture not found: time.dates.valid.today
+            
+            stack traceback:
+            	/home/ratmav/Source/epoch/tests/fixtures/init.lua:31: in function 'get'
+            	/home/ratmav/Source/epoch/tests/time_utils_spec.lua:46: in function </home/ratmav/Source/epoch/tests/time_utils_spec.lua:45>
+            	
+[31mFail[0m	||	time_utils time_to_seconds returns nil for invalid inputs	
+            /home/ratmav/Source/epoch/tests/fixtures/init.lua:31: Fixture not found: time.dates.valid.today
+            
+            stack traceback:
+            	/home/ratmav/Source/epoch/tests/fixtures/init.lua:31: in function 'get'
+            	/home/ratmav/Source/epoch/tests/time_utils_spec.lua:67: in function </home/ratmav/Source/epoch/tests/time_utils_spec.lua:66>
+            	
+[32mSuccess[0m	||	time_utils format_time formats timestamp as 12-hour time	
+	
+[32mSuccess: [0m	6	
+[31mFailed : [0m	2	
+[31mErrors : [0m	0	
+========================================	
+Tests Failed. Exit: 1	
+using plenary.nvim from: /home/ratmav/.local/share/nvim/site/pack/paqs/start/plenary.nvim
+
+========================================	
+Testing: 	/home/ratmav/Source/epoch/tests/storage/serializer/array_serializer_spec.lua	
+[32mSuccess[0m	||	storage serializer array_serializer serialize_array_elements serializes array elements with proper indentation	
+[32mSuccess[0m	||	storage serializer array_serializer serialize_array_elements handles empty arrays	
+[32mSuccess[0m	||	storage serializer array_serializer serialize_array_elements handles arrays with different value types	
+	
+[32mSuccess: [0m	3	
+[31mFailed : [0m	0	
+[31mErrors : [0m	0	
+========================================	
+using plenary.nvim from: /home/ratmav/.local/share/nvim/site/pack/paqs/start/plenary.nvim
+
+========================================	
+Testing: 	/home/ratmav/Source/epoch/tests/ui/interval/calculation_spec.lua	
+[32mSuccess[0m	||	ui interval calculation calculate_daily_total should calculate correct total for valid intervals	
+[32mSuccess[0m	||	ui interval calculation calculate_daily_total should return 00:00 for empty timesheet	
+[32mSuccess[0m	||	ui interval calculation calculate_daily_total should ignore unclosed intervals	
+[32mSuccess[0m	||	ui interval calculation calculate_daily_total should handle invalid timesheet structure	
+	
+[32mSuccess: [0m	4	
+[31mFailed : [0m	0	
+[31mErrors : [0m	0	
+========================================	
+using plenary.nvim from: /home/ratmav/.local/share/nvim/site/pack/paqs/start/plenary.nvim
+
+========================================	
+Testing: 	/home/ratmav/Source/epoch/tests/ui/interval/timing_spec.lua	
+[32mSuccess[0m	||	ui interval timing resolve_timing should resolve timing for empty timesheet	
+[32mSuccess[0m	||	ui interval timing resolve_timing should handle unclosed interval timing conflict	
+[32mSuccess[0m	||	ui interval timing resolve_timing should handle closed interval without conflict	
+	
+[32mSuccess: [0m	3	
+[31mFailed : [0m	0	
+[31mErrors : [0m	0	
+========================================	
+using plenary.nvim from: /home/ratmav/.local/share/nvim/site/pack/paqs/start/plenary.nvim
+
+========================================	
+Testing: 	/home/ratmav/Source/epoch/tests/storage/bulk_operations_spec.lua	
+[32mSuccess[0m	||	storage bulk_operations delete_all_timesheets deletes all timesheet files	
+[32mSuccess[0m	||	storage bulk_operations delete_all_timesheets returns 0 when no files exist	
+	
+[32mSuccess: [0m	2	
+[31mFailed : [0m	0	
+[31mErrors : [0m	0	
+========================================	
+using plenary.nvim from: /home/ratmav/.local/share/nvim/site/pack/paqs/start/plenary.nvim
+
+========================================	
+Testing: 	/home/ratmav/Source/epoch/tests/storage/serializer/table_serializer_spec.lua	
+[32mSuccess[0m	||	storage serializer table_serializer serialize_regular_keys serializes table keys in sorted order	
+[32mSuccess[0m	||	storage serializer table_serializer serialize_regular_keys handles numeric keys	
+[32mSuccess[0m	||	storage serializer table_serializer serialize_regular_keys handles string keys	
+[32mSuccess[0m	||	storage serializer table_serializer serialize_regular_keys handles numeric keys only	
+	
+[32mSuccess: [0m	4	
+[31mFailed : [0m	0	
+[31mErrors : [0m	0	
+========================================	
+using plenary.nvim from: /home/ratmav/.local/share/nvim/site/pack/paqs/start/plenary.nvim
+
+========================================	
+Testing: 	/home/ratmav/Source/epoch/tests/time_utils/parsing_spec.lua	
+[32mSuccess[0m	||	time_utils parsing time_to_seconds converts valid time and date to timestamp	
+[32mSuccess[0m	||	time_utils parsing time_to_seconds handles 12 AM and 12 PM correctly	
+[32mSuccess[0m	||	time_utils parsing time_to_seconds returns nil for invalid time format	
+[32mSuccess[0m	||	time_utils parsing time_to_seconds returns nil for invalid date format	
+[32mSuccess[0m	||	time_utils parsing parse_time parses time string using today's date	
+[32mSuccess[0m	||	time_utils parsing parse_time returns nil for invalid time format	
+	
+[32mSuccess: [0m	6	
+[31mFailed : [0m	0	
+[31mErrors : [0m	0	
+========================================	
+using plenary.nvim from: /home/ratmav/.local/share/nvim/site/pack/paqs/start/plenary.nvim
+
+========================================	
+Testing: 	/home/ratmav/Source/epoch/tests/ui/interval/creation_spec.lua	
+[32mSuccess[0m	||	ui interval creation create should create interval with default time	
+[32mSuccess[0m	||	ui interval creation create should create interval with specified time	
+[32mSuccess[0m	||	ui interval creation close_current should close current interval when one exists	
+[32mSuccess[0m	||	ui interval creation close_current should not close already closed intervals	
+[32mSuccess[0m	||	ui interval creation close_current should handle empty timesheet gracefully	
+	
+[32mSuccess: [0m	5	
+[31mFailed : [0m	0	
+[31mErrors : [0m	0	
+========================================	
+using plenary.nvim from: /home/ratmav/.local/share/nvim/site/pack/paqs/start/plenary.nvim
+
+========================================	
+Testing: 	/home/ratmav/Source/epoch/tests/validation_spec.lua	
+[32mSuccess[0m	||	validation validate_interval validates valid intervals	
+[32mSuccess[0m	||	validation validate_interval rejects intervals with missing client	
+[32mSuccess[0m	||	validation validate_interval rejects intervals with missing project	
+[32mSuccess[0m	||	validation validate_interval rejects intervals with missing task	
+[32mSuccess[0m	||	validation validate_interval rejects intervals with invalid time formats	
+[32mSuccess[0m	||	validation validate_interval rejects intervals with missing notes	
+[32mSuccess[0m	||	validation validate_interval rejects intervals with invalid notes type	
+[32mSuccess[0m	||	validation validate_interval rejects intervals with invalid notes entries	
+[32mSuccess[0m	||	validation validate_interval validates intervals with proper notes array	
+[32mSuccess[0m	||	validation validate_interval handles non-table inputs gracefully	
+[32mSuccess[0m	||	validation validate_timesheet validates valid timesheets	
+[32mSuccess[0m	||	validation validate_timesheet rejects timesheets with missing date	
+[32mSuccess[0m	||	validation validate_timesheet rejects timesheets with missing intervals	
+[32mSuccess[0m	||	validation validate_timesheet validates each interval within the timesheet	
+[32mSuccess[0m	||	validation validate_timesheet handles non-table inputs gracefully	
+[32mSuccess[0m	||	validation check_overlapping_intervals detects overlapping intervals	
+[32mSuccess[0m	||	validation check_overlapping_intervals detects when unclosed interval start time overlaps with existing interval	
+[32mSuccess[0m	||	validation check_overlapping_intervals accepts non-overlapping unclosed intervals	
+[32mSuccess[0m	||	validation check_overlapping_intervals accepts non-overlapping intervals	
+[32mSuccess[0m	||	validation check_overlapping_intervals handles empty or single intervals	
+	
+[32mSuccess: [0m	20	
+[31mFailed : [0m	0	
+[31mErrors : [0m	0	
+========================================	
+using plenary.nvim from: /home/ratmav/.local/share/nvim/site/pack/paqs/start/plenary.nvim
+
+========================================	
+Testing: 	/home/ratmav/Source/epoch/tests/time_utils/formatting_spec.lua	
+[32mSuccess[0m	||	time_utils formatting format_duration formats minutes as HH:MM	
+[32mSuccess[0m	||	time_utils formatting format_duration handles invalid inputs	
+[32mSuccess[0m	||	time_utils formatting format_time formats timestamp as h:MM AM/PM	
+	
+[32mSuccess: [0m	3	
+[31mFailed : [0m	0	
+[31mErrors : [0m	0	
+========================================	
+using plenary.nvim from: /home/ratmav/.local/share/nvim/site/pack/paqs/start/plenary.nvim
+
+========================================	
+Testing: 	/home/ratmav/Source/epoch/tests/ui_logic_spec.lua	
+[32mSuccess[0m	||	ui modules timesheet validation should validate correctly formatted timesheet content	
+[32mSuccess[0m	||	ui modules timesheet validation should reject malformed Lua syntax	
+[32mSuccess[0m	||	ui modules timesheet validation should reject content that isn't a table	
+[32mSuccess[0m	||	ui modules timesheet validation should reject invalid timesheet structure	
+[32mSuccess[0m	||	ui modules interval operations should create a valid interval with current time	
+[32mSuccess[0m	||	ui modules interval operations should use provided time when specified	
+[32mSuccess[0m	||	ui modules interval operations should initialize with empty notes array	
+[32mSuccess[0m	||	ui modules interval operations close_current_interval should close an open interval	
+[32mSuccess[0m	||	ui modules interval operations close_current_interval should ensure notes field exists when closing interval	
+[32mSuccess[0m	||	ui modules interval operations close_current_interval should not modify already closed intervals	
+[32mSuccess[0m	||	ui modules interval operations close_current_interval should handle empty timesheet	
+[32mSuccess[0m	||	ui modules interval operations add_interval_to_timesheet should add a new interval to timesheet	
+[32mSuccess[0m	||	ui modules interval operations add_interval_to_timesheet should close any open interval before adding new one	
+[32mSuccess[0m	||	ui modules interval operations calculate_daily_total should calculate correct total for intervals	
+[32mSuccess[0m	||	ui modules interval operations calculate_daily_total should handle empty intervals list	
+[32mSuccess[0m	||	ui modules interval operations calculate_daily_total should handle unclosed intervals	
+[32mSuccess[0m	||	ui modules interval operations update_daily_total should update daily total based on intervals	
+	
+[32mSuccess: [0m	17	
+[31mFailed : [0m	0	
+[31mErrors : [0m	0	
+========================================	
+using plenary.nvim from: /home/ratmav/.local/share/nvim/site/pack/paqs/start/plenary.nvim
+
+========================================	
+Testing: 	/home/ratmav/Source/epoch/tests/time_utils/validation_spec.lua	
+[32mSuccess[0m	||	time_utils validation is_valid_time_format validates correct 12-hour time formats	
+[32mSuccess[0m	||	time_utils validation is_valid_time_format rejects invalid time formats	
+[32mSuccess[0m	||	time_utils validation is_valid_time_format requires proper spacing and case	
+	
+[32mSuccess: [0m	3	
+[31mFailed : [0m	0	
+[31mErrors : [0m	0	
+========================================	
+using plenary.nvim from: /home/ratmav/.local/share/nvim/site/pack/paqs/start/plenary.nvim
+
+========================================	
+Testing: 	/home/ratmav/Source/epoch/tests/storage/paths_spec.lua	
+[32mSuccess[0m	||	storage paths get_data_dir returns the configured data directory	
+[32mSuccess[0m	||	storage paths get_today returns today's date in YYYY-MM-DD format	
+[32mSuccess[0m	||	storage paths get_timesheet_path returns the correct path for a given date	
+[32mSuccess[0m	||	storage paths get_timesheet_path uses today's date when no date is provided	
+[32mSuccess[0m	||	storage paths ensure_data_dir creates the data directory if it doesn't exist	
+	
+[32mSuccess: [0m	5	
+[31mFailed : [0m	0	
+[31mErrors : [0m	0	
+========================================	
+using plenary.nvim from: /home/ratmav/.local/share/nvim/site/pack/paqs/start/plenary.nvim
+
+========================================	
+Testing: 	/home/ratmav/Source/epoch/tests/report/generator_spec.lua	
+[32mSuccess[0m	||	report generator get_all_timesheet_dates delegates to data loader	
+[32mSuccess[0m	||	report generator generate_report returns empty report when no timesheets exist	
+[32mSuccess[0m	||	report generator generate_report generates report with timesheet data	
+[32mSuccess[0m	||	report generator generate_report sorts weeks chronologically	
+[32mSuccess[0m	||	report generator generate_report includes date range for multiple dates	
+	
+[32mSuccess: [0m	5	
+[31mFailed : [0m	0	
+[31mErrors : [0m	0	
+========================================	
+using plenary.nvim from: /home/ratmav/.local/share/nvim/site/pack/paqs/start/plenary.nvim
+
+========================================	
+Testing: 	/home/ratmav/Source/epoch/tests/ui/timesheet_spec.lua	
+[32mSuccess[0m	||	ui timesheet validate_content should validate correctly formatted timesheet content	
+[32mSuccess[0m	||	ui timesheet validate_content should reject malformed Lua syntax	
+[32mSuccess[0m	||	ui timesheet validate_content should reject content that isn't a table	
+[32mSuccess[0m	||	ui timesheet validate_content should reject invalid timesheet structure	
+[32mSuccess[0m	||	ui timesheet update_daily_total should update daily total using provided calculation function	
+	
+[32mSuccess: [0m	5	
+[31mFailed : [0m	0	
+[31mErrors : [0m	0	
+========================================	
+make: *** [Makefile:25: test] Error 1

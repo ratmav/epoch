@@ -1,7 +1,7 @@
 -- tests/validation/overlap_spec.lua
 
 local validation = require('epoch.validation')
-local fixtures = require('tests.fixtures')
+local fixtures = require('fixtures.init')
 
 describe("validation overlap", function()
   describe("check_overlapping_intervals", function()

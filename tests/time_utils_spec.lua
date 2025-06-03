@@ -3,6 +3,7 @@
 
 describe("time_utils", function()
   local time_utils = require('epoch.time_utils')
+  local fixtures = require('fixtures.init')
   
   describe("is_valid_time_format", function()
     it("returns true for valid 12-hour time formats", function()

@@ -141,7 +141,7 @@ return {
   },
   
   -- Common date arrays for testing
-  dates = {
+  date_arrays = {
     storage_test_dates = {"2025-05-10", "2025-05-11", "2025-05-12"},
     generator_test_dates = {"2025-01-01", "2025-01-03", "2025-01-02"},
     sorted_generator_dates = {"2025-01-01", "2025-01-02"},

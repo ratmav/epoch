@@ -1,7 +1,7 @@
 -- tests/storage/serializer_spec.lua
 
 local serializer = require('epoch.storage.serializer')
-local fixtures = require('tests.fixtures')
+local fixtures = require('fixtures.init')
 
 describe("storage serializer", function()
   describe("serialize_timesheet", function()

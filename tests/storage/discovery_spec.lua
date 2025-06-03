@@ -7,9 +7,10 @@ local persistence = require('epoch.storage.persistence')
 describe("storage discovery", function()
   -- Set up a test data directory for isolation
   before_each(function()
-    paths.set_data_dir("/tmp/epoch_test_data")
+    -- Ensure completely clean directory
+    vim.fn.system("rm -rf /tmp/epoch_test_data")
     vim.fn.mkdir("/tmp/epoch_test_data", "p")
-    vim.fn.system("rm -f /tmp/epoch_test_data/*.lua")
+    paths.set_data_dir("/tmp/epoch_test_data")
   end)
   
   -- Clean up after tests
@@ -19,14 +20,12 @@ describe("storage discovery", function()
   
   describe("get_all_timesheet_files", function()
     it("returns empty array when no files exist", function()
-      vim.fn.system("rm -f /tmp/epoch_test_data/*.lua")
-      
       local files = discovery.get_all_timesheet_files()
       assert.same({}, files)
     end)
     
     it("returns all timesheet files in the data directory", function()
-      local dates = fixtures.get('time.dates.storage_test_dates')
+      local dates = fixtures.get('time.date_arrays.storage_test_dates')
       for _, date in ipairs(dates) do
         local timesheet = vim.deepcopy(fixtures.get('timesheets.valid.empty'))
         timesheet.date = date
@@ -38,10 +37,6 @@ describe("storage discovery", function()
     end)
     
     it("filters out non-timesheet lua files", function()
-      -- Ensure clean directory first
-      vim.fn.system("rm -rf /tmp/epoch_test_data")
-      vim.fn.mkdir("/tmp/epoch_test_data", "p")
-      
       -- Create a valid timesheet file
       local timesheet = vim.deepcopy(fixtures.get('timesheets.valid.empty'))
       timesheet.date = "2025-05-10"

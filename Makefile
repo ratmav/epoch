@@ -15,6 +15,7 @@ NVIM_FLAGS := NVIM_INSTALL_MODE=1
 
 # Run all tests or specific test file
 # Usage: make test [SPEC=filename]  (e.g., make test SPEC=ui_logic)
+
 test:
 ifdef SPEC
 	$(NVIM_FLAGS) nvim --headless \
@@ -22,7 +23,10 @@ ifdef SPEC
 		-c "lua require('plenary.test_harness').test_directory('$(TEST_DIR)/$(SPEC)_spec.lua', {minimal_init = '$(TEST_DIR)/minimal_init.lua'})" \
 		-c "quit"
 else
-	$(NVIM_FLAGS) nvim --headless -l $(TEST_DIR)/run_all_tests.lua
+	$(NVIM_FLAGS) nvim --headless \
+		-c "lua package.path='$(PWD)/lua/?.lua;'..package.path" \
+		-c "lua require('plenary.test_harness').test_directory('$(TEST_DIR)', {minimal_init = '$(TEST_DIR)/minimal_init.lua', sequential = true})" \
+		-c "quit"
 endif
 
 # Create test data for manual testing

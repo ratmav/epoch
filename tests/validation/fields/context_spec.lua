@@ -1,7 +1,7 @@
 -- tests/validation/fields/context_spec.lua
 
 local context = require('epoch.validation.fields.context')
-local fixtures = require('tests.fixtures')
+local fixtures = require('fixtures.init')
 
 describe("validation fields context", function()
   describe("get_interval_context", function()

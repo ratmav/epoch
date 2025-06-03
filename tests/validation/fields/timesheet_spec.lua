@@ -1,7 +1,6 @@
 -- tests/validation/fields/timesheet_spec.lua
 
 local validation = require('epoch.validation')
-local fixtures = require('tests.fixtures')
 
 describe("validation fields timesheet", function()
   describe("validate_timesheet", function()
