@@ -8,7 +8,7 @@ TEST_DIR := ./tests
 # for better semantics
 NVIM_FLAGS := NVIM_INSTALL_MODE=1
 
-.PHONY: test clean data check help
+.PHONY: test clean data laconic help
 
 # Default target shows help
 .DEFAULT_GOAL := help
@@ -36,8 +36,8 @@ data:
 		-c "lua dofile('$(PWD)/tests/scripts/create_test_data.lua')" \
 		-c "quit"
 
-# Check file and function length compliance
-check:
+# Check laconic compliance (file/function length, test coverage)
+laconic:
 	@lua scripts/laconic.lua
 
 # Clean generated files and timesheet data
@@ -60,6 +60,6 @@ help:
 	@echo "Available commands:"
 	@echo "  make test            - Run all tests"
 	@echo "  make test SPEC=name  - Run specific test (e.g., make test SPEC=ui_logic)"
-	@echo "  make check           - Check file and function length compliance"
+	@echo "  make laconic         - Check laconic compliance (file/function length, test coverage)"
 	@echo "  make data            - Create sample timesheet data for manual testing"
 	@echo "  make clean           - Clean temporary files and timesheet data"

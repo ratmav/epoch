@@ -79,7 +79,7 @@ make: *** [Makefile:20: test] Error 1
 
 ## 1. Refactoring for laconic compliance
 
-- run `make check` to detect laconic violations
+- run `make laconic` to detect laconic violations
 - for each violation
     - refactor the violation
     - run `make test` to detect regresssions

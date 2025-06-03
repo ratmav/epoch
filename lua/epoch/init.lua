@@ -1,5 +1,6 @@
 -- epoch/init.lua
 -- a lightweight time tracking plugin for neovim
+-- laconic: no tests
 
 local epoch = {}
 
