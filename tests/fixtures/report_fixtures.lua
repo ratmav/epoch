@@ -296,14 +296,139 @@ report_fixtures.sample_report_data = {
     {
       client = "acme-corp",
       project = "website-redesign",
+      task = "planning",
+      minutes = 90
+    },
+    {
+      client = "acme-corp",
+      project = "website-redesign",
       task = "frontend-planning",
       minutes = 90
+    },
+    {
+      client = "acme-corp",
+      project = "website-redesign",
+      task = "backend-planning",
+      minutes = 90
+    },
+    {
+      client = "client-x",
+      project = "mobile-app",
+      task = "design-review",
+      minutes = 120
+    },
+    {
+      client = "client-x",
+      project = "mobile-app",
+      task = "development",
+      minutes = 210
+    },
+    {
+      client = "client-y",
+      project = "api-service",
+      task = "documentation",
+      minutes = 180
+    },
+    {
+      client = "personal",
+      project = "admin",
+      task = "email",
+      minutes = 45
     }
   },
   total_minutes = 825,
-  dates = {"2025-05-12"},
+  dates = {"2025-04-28", "2025-04-30", "2025-05-05", "2025-05-06", "2025-05-12"},
+  date_range = {
+    first = "2025-04-28",
+    last = "2025-05-12"
+  },
   weeks = {
-    "2025-19"
+    {
+      week = "2025-19",
+      dates = {"2025-05-12"},
+      summary = {
+        {
+          client = "client-x",
+          project = "mobile-app",
+          task = "development",
+          minutes = 210
+        },
+        {
+          client = "client-y",
+          project = "api-service",
+          task = "documentation",
+          minutes = 180
+        }
+      },
+      total_minutes = 390,
+      date_range = {
+        first = "2025-05-11",
+        last = "2025-05-17"
+      },
+      daily_totals = {
+        ["2025-05-12"] = 390
+      }
+    },
+    {
+      week = "2025-18",
+      dates = {"2025-05-05", "2025-05-06"},
+      summary = {
+        {
+          client = "acme-corp",
+          project = "website-redesign",
+          task = "frontend-planning",
+          minutes = 90
+        },
+        {
+          client = "acme-corp",
+          project = "website-redesign",
+          task = "backend-planning",
+          minutes = 90
+        },
+        {
+          client = "client-x",
+          project = "mobile-app",
+          task = "design-review",
+          minutes = 120
+        }
+      },
+      total_minutes = 300,
+      date_range = {
+        first = "2025-05-04",
+        last = "2025-05-10"
+      },
+      daily_totals = {
+        ["2025-05-05"] = 210,
+        ["2025-05-06"] = 90
+      }
+    },
+    {
+      week = "2025-17",
+      dates = {"2025-04-28", "2025-04-30"},
+      summary = {
+        {
+          client = "acme-corp",
+          project = "website-redesign",
+          task = "planning",
+          minutes = 90
+        },
+        {
+          client = "personal",
+          project = "admin",
+          task = "email",
+          minutes = 45
+        }
+      },
+      total_minutes = 135,
+      date_range = {
+        first = "2025-04-27",
+        last = "2025-05-03"
+      },
+      daily_totals = {
+        ["2025-04-28"] = 90,
+        ["2025-04-30"] = 45
+      }
+    }
   }
 }
 
