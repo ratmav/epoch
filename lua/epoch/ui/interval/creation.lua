@@ -7,10 +7,10 @@ local creation = {}
 
 -- Create a new interval to track time
 -- Returns: interval object
-function creation.create(client, project, task, start_time, notes)
+function creation.create(client, project, task, start_time)
   start_time = start_time or os.time()
   local formatted_time = time_utils.format_time(start_time)
-  
+
   return {
     client = client,
     project = project,
@@ -30,7 +30,7 @@ end
 local function close_interval_with_time(interval, stop_time)
   local formatted_time = stop_time or time_utils.format_time(os.time())
   interval.stop = formatted_time
-  
+
   if interval.notes == nil then
     interval.notes = {}
   end
@@ -42,14 +42,14 @@ function creation.close_current(timesheet, stop_time)
   if not validate_timesheet_for_close(timesheet) then
     return false
   end
-  
+
   local last_interval = timesheet.intervals[#timesheet.intervals]
-  
+
   if not last_interval.stop or last_interval.stop == "" then
     close_interval_with_time(last_interval, stop_time)
     return true
   end
-  
+
   return false
 end
 

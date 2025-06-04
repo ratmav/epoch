@@ -14,7 +14,7 @@ local function register_edit_command()
   end, {})
 end
 
--- Register interval command  
+-- Register interval command
 local function register_interval_command()
   vim.api.nvim_create_user_command('EpochInterval', function()
     ui.add_interval()

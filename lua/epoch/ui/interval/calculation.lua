@@ -24,14 +24,14 @@ local function calculate_interval_minutes(interval)
   if not time_utils.is_valid_time_format(interval.start) or not time_utils.is_valid_time_format(interval.stop) then
     return 0
   end
-  
+
   local start_value = validation.time_value(interval.start)
   local stop_value = validation.time_value(interval.stop)
-  
+
   if start_value and stop_value and stop_value > start_value then
     return math.floor((stop_value - start_value) / 60)
   end
-  
+
   return 0
 end
 

@@ -1,8 +1,17 @@
 # TODO
 
-## 1. Refactor to meet coding standings
+## 1. Refactor to meet coding standards
 
-`make check` must pass
+1. `make test` must pass
+2. `make coverage` must pass
+    - no `make test` regressions
+3. `make laconic` must pass
+    - no `make test` regressions
+    - no `make coverage` regressions
+4. `make lint` must pass
+    - no `make test` regressions
+    - no `make coverage` regressions
+    - no `make laconic` regressions
 
 ### Refactoring Guidelines
 
@@ -16,17 +25,25 @@
 * OUR TEST FIXTURES SHOULD NOT CHANGE, BUT MAY NEED TO BE MOVED TO ALIGN WITH UPDATES TO THE PROJECT STRUCTURE
 * DO NOT ENCODE METADATA IN FILENAMES, I.E `report_calculations.lua`. USE THE PROJECT FILESYTEM STRUCTURE FOR THIS, I.E `report/calculate.lua`
 
-## Post-Refactoring
-- add support for :EpochEdit <date/> to open the timesheet for a specific date
-  - no date opens today's timesheet by default
+## Post Standards Refactoring
+- no logic in init.lua, only delegation to modules
+- no foo.lua (which acts like an init.lua), the a foo directory
+    - should be foo/init.lua
+    - init.lua only delegates
+- review files ignored from testing to confirm they are ONLY init.lua files
+- confirm that we use the day's existing timesheet, we don't create new ones (and lose existing) without a confirmation dialog
 - Complete manual test plan execution (MANUAL_TEST_PLAN.md)
   - Test all 24 test cases across 11 test groups
   - Verify clean toggle behavior and user experience
-  - Ensure no regressions after architectural changes
+- Update documentation, including README for developer and the plugin .txt documentation
+- GitHub action to lint, check formatting, and test new pull requests
+
+## post v0.1.0 New features
+
+- add support for :EpochEdit <date/> to open the timesheet for a specific date
+  - no date opens today's timesheet by default
 
 **Final Steps:**
-- Update documentation for new modular architecture
-- GitHub action to lint, check formatting, and test new pull requests
 
 ## Testing
 

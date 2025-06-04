@@ -10,12 +10,12 @@ local function parse_time_components(time_str)
   if not validation.is_valid_time_format(time_str) then
     return nil
   end
-  
+
   local hour, min, period = time_str:match("(%d+):(%d+)%s+([AP]M)")
   if not hour or not min or not period then
     return nil
   end
-  
+
   return tonumber(hour), tonumber(min), period
 end
 
@@ -53,10 +53,10 @@ end
 function parsing.time_to_seconds(time_str, date_str)
   local hour, min, period = parse_time_components(time_str)
   if not hour then return nil end
-  
+
   local year, month, day = parse_date_components(date_str)
   if not year then return nil end
-  
+
   local hour_24 = convert_to_24_hour(hour, period)
   return create_timestamp(year, month, day, hour_24, min)
 end
@@ -66,10 +66,10 @@ end
 function parsing.parse_time(time_str)
   local hour, min, period = parse_time_components(time_str)
   if not hour then return nil end
-  
+
   local today = os.date("*t")
   local hour_24 = convert_to_24_hour(hour, period)
-  
+
   return create_timestamp(today.year, today.month, today.day, hour_24, min)
 end
 

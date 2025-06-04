@@ -52,7 +52,7 @@ end
 local function build_final_report(timesheets, all_dates, weeks, all_summary)
   local total_minutes = summary_utils.calculate_total_minutes(all_summary)
   local summary_array = summary_utils.sort_summary(all_summary)
-  
+
   return {
     timesheets = timesheets,
     summary = summary_array,
@@ -67,14 +67,14 @@ end
 function generator.generate_report()
   local all_dates = data_loader.get_all_timesheet_dates()
   local timesheets = data_loader.load_timesheets(all_dates)
-  
+
   if #timesheets == 0 then
     return create_empty_report(all_dates)
   end
-  
+
   local all_summary = {}
   local weeks = process_and_sort_weeks(timesheets, all_summary)
-  
+
   return build_final_report(timesheets, all_dates, weeks, all_summary)
 end
 

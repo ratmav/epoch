@@ -8,21 +8,21 @@ describe("storage serializer", function()
     it("serializes timesheet to a valid Lua string", function()
       local timesheet = fixtures.get('timesheets.valid.with_intervals')
       local lua_string = serializer.serialize_timesheet(timesheet)
-      
+
       local chunk, err = loadstring(lua_string)
       assert.is_nil(err)
       assert.is_function(chunk)
-      
+
       local result = chunk()
       assert.is_table(result)
       assert.equals(timesheet.date, result.date)
       assert.equals(#timesheet.intervals, #result.intervals)
     end)
-    
+
     it("formats intervals with ordered keys", function()
       local timesheet = fixtures.get('timesheets.valid.with_intervals')
       local lua_string = serializer.serialize_timesheet(timesheet)
-      
+
       assert.truthy(lua_string:match('client'))
       assert.truthy(lua_string:match('project'))
       assert.truthy(lua_string:match('task'))
@@ -30,14 +30,14 @@ describe("storage serializer", function()
       assert.truthy(lua_string:match('stop'))
       assert.truthy(lua_string:match('notes'))
     end)
-    
+
     it("properly serializes intervals with notes", function()
       local timesheet = fixtures.get('timesheets.valid.with_interval_with_notes')
       local lua_string = serializer.serialize_timesheet(timesheet)
-      
+
       local chunk = loadstring(lua_string)
       local result = chunk()
-      
+
       assert.is_table(result.intervals[1].notes)
       assert.equals(2, #result.intervals[1].notes)
       assert.equals("Added API documentation", result.intervals[1].notes[1])

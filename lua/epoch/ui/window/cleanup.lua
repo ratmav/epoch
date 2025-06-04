@@ -17,7 +17,7 @@ end
 
 -- Handle buffer save if modified
 local function handle_buffer_save(win_data)
-  if win_data.buffer and vim.api.nvim_buf_is_valid(win_data.buffer) 
+  if win_data.buffer and vim.api.nvim_buf_is_valid(win_data.buffer)
      and vim.api.nvim_buf_get_option(win_data.buffer, 'modified')
      and win_data.config.on_save then
     local save_success = win_data.config.on_save()
@@ -34,12 +34,12 @@ local function cleanup_window_resources(win_data, window_id)
   if win_data.window and vim.api.nvim_win_is_valid(win_data.window) then
     vim.api.nvim_win_close(win_data.window, true)
   end
-  
+
   -- Clean up buffer
   if win_data.buffer and vim.api.nvim_buf_is_valid(win_data.buffer) then
     vim.api.nvim_buf_delete(win_data.buffer, { force = true })
   end
-  
+
   -- Clear from tracking
   state.untrack(window_id)
 end
@@ -48,10 +48,10 @@ end
 function cleanup.close_window(window_id)
   local win_data = validate_window_data(window_id)
   if not win_data then return end
-  
+
   local save_success = handle_buffer_save(win_data)
   if not save_success then return end
-  
+
   cleanup_window_resources(win_data, window_id)
 end
 
@@ -60,7 +60,7 @@ function cleanup.setup_quit_handler()
   vim.api.nvim_create_autocmd("QuitPre", {
     callback = function()
       for _, win_data in pairs(state.get_all()) do
-        if win_data.buffer and vim.api.nvim_buf_is_valid(win_data.buffer) 
+        if win_data.buffer and vim.api.nvim_buf_is_valid(win_data.buffer)
            and vim.api.nvim_buf_get_option(win_data.buffer, 'modified')
            and win_data.config.on_save then
           win_data.config.on_save()

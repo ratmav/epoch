@@ -11,7 +11,7 @@ describe("storage serializer array_detection", function()
       assert.is_true(array_detection.is_array(serializer_fixtures.arrays.strings))
       assert.is_true(array_detection.is_array(serializer_fixtures.arrays.mixed_types))
     end)
-    
+
     it("returns false for non-arrays", function()
       assert.is_false(array_detection.is_array(serializer_fixtures.non_arrays.object))
       assert.is_false(array_detection.is_array(serializer_fixtures.non_arrays.sparse))
@@ -20,7 +20,7 @@ describe("storage serializer array_detection", function()
       assert.is_false(array_detection.is_array(nil))
       assert.is_false(array_detection.is_array(serializer_fixtures.non_arrays.number))
     end)
-    
+
     it("returns false for sparse arrays", function()
       assert.is_false(array_detection.is_array(serializer_fixtures.non_arrays.sparse))
     end)

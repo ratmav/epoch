@@ -31,7 +31,7 @@ local function track_and_return_window(window_id, win, buffer, config)
     buffer = buffer,
     config = config
   })
-  
+
   return {
     window = win,
     buffer = buffer,
@@ -41,13 +41,13 @@ end
 
 function window.create(config)
   local window_id = config.id or "default"
-  
+
   prepare_window_creation(window_id)
   local buffer = create_and_setup_buffer(config)
   local win = lifecycle.create_window(buffer, config)
-  
+
   buffer_ops.setup_keymaps(buffer, window_id, config.keymaps)
-  
+
   return track_and_return_window(window_id, win, buffer, config)
 end
 
@@ -64,7 +64,7 @@ end
 -- Toggle a window (close if open, create if closed)
 function window.toggle(config)
   local window_id = config.id or "default"
-  
+
   if state.is_open(window_id) then
     lifecycle.close_window(window_id)
   else
@@ -76,7 +76,7 @@ end
 function window.get_content(window_id)
   local win_data = state.get(window_id or "default")
   if not win_data then return nil end
-  
+
   return buffer_ops.get_content(win_data.buffer)
 end
 
@@ -84,7 +84,7 @@ end
 function window.set_content(window_id, content)
   local win_data = state.get(window_id or "default")
   if not win_data then return false end
-  
+
   return buffer_ops.update_content(win_data.buffer, content)
 end
 

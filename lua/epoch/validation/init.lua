@@ -21,13 +21,13 @@ function validation.validate_timesheet(timesheet)
   if not valid then
     return false, err
   end
-  
+
   -- Then check for overlapping intervals
-  local has_overlap, overlap_err = overlap.check_overlapping_intervals(timesheet.intervals, timesheet.date)
+  local has_overlap, overlap_err = overlap.check_overlapping_intervals(timesheet.intervals)
   if has_overlap then
     return false, overlap_err
   end
-  
+
   return true
 end
 
@@ -42,8 +42,8 @@ function validation.time_value(time_str)
 end
 
 -- Public API: Check for overlapping intervals
-function validation.check_overlapping_intervals(intervals, date)
-  return overlap.check_overlapping_intervals(intervals, date)
+function validation.check_overlapping_intervals(intervals)
+  return overlap.check_overlapping_intervals(intervals)
 end
 
 return validation

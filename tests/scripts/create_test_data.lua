@@ -9,12 +9,12 @@ local function write_table_to_file(file_path, tbl)
     print("Failed to open file: " .. file_path)
     return false
   end
-  
+
   -- Simple function to serialize a table
   local function serialize(val, indent)
     indent = indent or 0
     local spaces = string.rep("  ", indent)
-    
+
     if type(val) == "table" then
       local result = "{\n"
       for k, v in pairs(val) do
@@ -24,7 +24,7 @@ local function write_table_to_file(file_path, tbl)
         else
           key_str = "[" .. tostring(k) .. "] = "
         end
-        
+
         result = result .. spaces .. "  " .. key_str .. serialize(v, indent + 1) .. ",\n"
       end
       result = result .. spaces .. "}"
@@ -35,7 +35,7 @@ local function write_table_to_file(file_path, tbl)
       return tostring(val)
     end
   end
-  
+
   file:write("return " .. serialize(tbl))
   file:close()
   return true
@@ -76,7 +76,7 @@ local test_data = {
       }
     }
   },
-  
+
   -- Last week
   ["2025-05-06"] = {
     date = "2025-05-06",
@@ -98,7 +98,7 @@ local test_data = {
       }
     }
   },
-  
+
   -- Yesterday
   ["2025-05-22"] = {
     date = "2025-05-22",
@@ -106,7 +106,7 @@ local test_data = {
     intervals = {
       {
         client = "acme-corp",
-        project = "website-redesign", 
+        project = "website-redesign",
         task = "coding",
         start = "09:00 AM",
         stop = "11:45 AM",
@@ -127,7 +127,7 @@ local test_data = {
       }
     }
   },
-  
+
   -- Today
   ["2025-05-23"] = {
     date = "2025-05-23",

@@ -64,7 +64,7 @@ describe("ui logic", function()
       it("should reject missing client", function()
         local timesheet = fixtures.get('timesheets.valid.empty')
         local success, error_msg = workflow_logic.add_interval("", "project", "task", timesheet)
-        
+
         assert.is_false(success)
         assert.equals("client is required", error_msg)
       end)
@@ -72,7 +72,7 @@ describe("ui logic", function()
       it("should reject missing project", function()
         local timesheet = fixtures.get('timesheets.valid.empty')
         local success, error_msg = workflow_logic.add_interval("client", "", "task", timesheet)
-        
+
         assert.is_false(success)
         assert.equals("project is required", error_msg)
       end)
@@ -80,7 +80,7 @@ describe("ui logic", function()
       it("should reject missing task", function()
         local timesheet = fixtures.get('timesheets.valid.empty')
         local success, error_msg = workflow_logic.add_interval("client", "project", "", timesheet)
-        
+
         assert.is_false(success)
         assert.equals("task is required", error_msg)
       end)
@@ -88,7 +88,7 @@ describe("ui logic", function()
       it("should successfully add interval with valid inputs", function()
         local timesheet = fixtures.get('timesheets.valid.empty')
         local success, error_msg, updated_timesheet = workflow_logic.add_interval("client", "project", "task", timesheet)
-        
+
         assert.is_true(success)
         assert.is_nil(error_msg)
         assert.is_table(updated_timesheet)

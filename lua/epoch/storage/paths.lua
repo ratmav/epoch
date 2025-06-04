@@ -2,7 +2,6 @@
 -- Path and directory management for timesheet storage
 
 local paths = {}
-local config = require('epoch.config')
 
 -- Data directory path (configurable for testing)
 local data_dir = nil
@@ -17,7 +16,7 @@ function paths.get_data_dir()
   if data_dir then
     return data_dir
   end
-  
+
   local nvim_data = vim.fn.stdpath('data')
   return nvim_data .. '/epoch'
 end

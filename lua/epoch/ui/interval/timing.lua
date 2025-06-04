@@ -23,7 +23,7 @@ local function validate_start_time(start_time_str)
 end
 
 -- Calculate timing for close intervals
-local function calculate_close_timing(last_start_time, current_time)
+local function calculate_close_timing(last_start_time)
   local adjusted_previous_stop = time_utils.format_time(last_start_time + 60)
   local adjusted_current = last_start_time + 120
   return adjusted_current, adjusted_previous_stop
@@ -39,9 +39,9 @@ end
 -- Handle timing for unclosed intervals
 local function handle_unclosed_interval(last_interval, current_time)
   local last_start_time = validate_start_time(last_interval.start)
-  
+
   if current_time - last_start_time < 60 then
-    return calculate_close_timing(last_start_time, current_time)
+    return calculate_close_timing(last_start_time)
   else
     return calculate_gap_timing(current_time)
   end
@@ -63,7 +63,7 @@ function timing.resolve_timing(timesheet, current_time)
   if not last_interval then
     return current_time, nil
   end
-  
+
   if not last_interval.stop or last_interval.stop == "" then
     return handle_unclosed_interval(last_interval, current_time)
   else

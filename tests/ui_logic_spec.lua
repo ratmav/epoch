@@ -79,10 +79,10 @@ describe("ui modules", function()
       assert.equals("", interval.stop)
       assert.same({}, interval.notes)
     end)
-    
+
     it("should initialize with empty notes array", function()
       local interval = interval_ops.create("acme-corp", "website-redesign", "frontend-planning")
-      
+
       assert.is_table(interval.notes)
       assert.equals(0, #interval.notes)
     end)
@@ -99,7 +99,7 @@ describe("ui modules", function()
       assert.equals("11:00 AM", timesheet.intervals[1].stop)
       assert.is_table(timesheet.intervals[1].notes)
     end)
-    
+
     it("should ensure notes field exists when closing interval", function()
       -- Use a timesheet with an open interval that has no notes field
       local timesheet = fixtures.get('timesheets.invalid.with_unclosed_interval_no_notes')

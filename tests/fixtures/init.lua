@@ -21,9 +21,9 @@ local registry = {
 
 -- Get a deep copy of any fixture
 function fixtures.get(fixture_path)
-  -- Parse path like "timesheets.valid.with_intervals" 
+  -- Parse path like "timesheets.valid.with_intervals"
   local parts = vim.split(fixture_path, ".", { plain = true })
-  
+
   local current = registry
   for _, part in ipairs(parts) do
     current = current[part]
@@ -31,7 +31,7 @@ function fixtures.get(fixture_path)
       error("Fixture not found: " .. fixture_path)
     end
   end
-  
+
   return vim.deepcopy(current)
 end
 

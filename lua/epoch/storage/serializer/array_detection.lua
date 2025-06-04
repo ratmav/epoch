@@ -8,18 +8,18 @@ function array_detection.is_array(tbl)
   if type(tbl) ~= "table" then
     return false
   end
-  
+
   local count = 0
   for _ in pairs(tbl) do
     count = count + 1
   end
-  
+
   for i = 1, count do
     if tbl[i] == nil then
       return false
     end
   end
-  
+
   return true
 end
 

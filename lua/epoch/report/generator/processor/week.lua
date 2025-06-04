@@ -10,7 +10,7 @@ local week = {}
 -- Group timesheets by week
 function week.group_timesheets_by_week(timesheets)
   local timesheets_by_week = {}
-  
+
   for _, timesheet in ipairs(timesheets) do
     local week_num = week_utils.get_week_number(timesheet.date)
     if week_num then
@@ -21,12 +21,12 @@ function week.group_timesheets_by_week(timesheets)
           date_range = week_utils.get_week_date_range(week_num)
         }
       end
-      
+
       table.insert(timesheets_by_week[week_num].dates, timesheet.date)
       table.insert(timesheets_by_week[week_num].timesheets, timesheet)
     end
   end
-  
+
   return timesheets_by_week
 end
 
@@ -50,7 +50,7 @@ end
 local function build_week_result(week_num, week_data, week_summary, daily_totals)
   local week_total_minutes = summary_utils.calculate_total_minutes(week_summary)
   local week_summary_array = summary_utils.sort_summary(week_summary)
-  
+
   return {
     week = week_num,
     dates = week_data.dates,

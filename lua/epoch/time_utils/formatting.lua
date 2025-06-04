@@ -8,7 +8,7 @@ function formatting.format_duration(minutes)
   if not minutes or minutes < 0 then
     minutes = 0
   end
-  
+
   local hours = math.floor(minutes / 60)
   local mins = math.floor(minutes % 60)
   return string.format("%02d:%02d", hours, mins)

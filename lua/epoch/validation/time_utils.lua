@@ -8,12 +8,12 @@ local function parse_time_string(time_str)
   if not time_str or time_str == "" then
     return nil
   end
-  
+
   local hour, minute, period = time_str:match("^(%d+):(%d+)%s*([AP]M)$")
   if not hour or not minute or not period then
     return nil
   end
-  
+
   return tonumber(hour), tonumber(minute), period
 end
 
@@ -35,11 +35,11 @@ end
 function time_utils.time_value(time_str)
   local hour, minute, period = parse_time_string(time_str)
   if not hour then return nil end
-  
+
   if not validate_time_ranges(hour, minute) then
     return nil
   end
-  
+
   local hour_24 = convert_to_24_hour(hour, period)
   return hour_24 * 60 + minute
 end

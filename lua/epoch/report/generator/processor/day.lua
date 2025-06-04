@@ -18,11 +18,11 @@ end
 -- Update summary with interval data
 local function update_summary(summary, interval, minutes)
   local key = interval.client .. "|" .. interval.project .. "|" .. interval.task
-  
+
   if not summary[key] then
     summary[key] = create_summary_entry(interval)
   end
-  
+
   summary[key].minutes = summary[key].minutes + minutes
 end
 
@@ -42,13 +42,13 @@ end
 -- Process intervals from a single timesheet
 function day.process_timesheet_intervals(timesheet, week_summary, all_summary)
   local day_total = 0
-  
+
   for _, interval in ipairs(timesheet.intervals) do
     if is_complete_interval(interval) then
       day_total = day_total + process_interval(interval, timesheet.date, week_summary, all_summary)
     end
   end
-  
+
   return day_total
 end
 

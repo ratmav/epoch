@@ -21,8 +21,8 @@ end
 function row_builder.format_data_rows(summary, max_client_len, max_project_len, max_task_len, result)
   for _, entry in ipairs(summary) do
     local formatted_time = time_utils.format_duration(entry.minutes)
-    local row = string.format("%-" .. max_client_len .. "s  %-" .. max_project_len .. "s  %-" .. max_task_len .. "s  %s",
-      entry.client, entry.project, entry.task, formatted_time)
+    local format_str = "%-" .. max_client_len .. "s  %-" .. max_project_len .. "s  %-" .. max_task_len .. "s  %s"
+    local row = string.format(format_str, entry.client, entry.project, entry.task, formatted_time)
     table.insert(result, row)
   end
 end
@@ -32,8 +32,8 @@ function row_builder.format_total_row(total_mins, max_client_len, max_project_le
   if total_mins and total_mins > 0 then
     table.insert(result, separator)
     local total_formatted = time_utils.format_duration(total_mins)
-    local total_row = string.format("%-" .. max_client_len .. "s  %-" .. (max_project_len + max_task_len + 2) .. "s  %s",
-      "TOTAL", "", total_formatted)
+    local total_format_str = "%-" .. max_client_len .. "s  %-" .. (max_project_len + max_task_len + 2) .. "s  %s"
+    local total_row = string.format(total_format_str, "TOTAL", "", total_formatted)
     table.insert(result, total_row)
   end
 end

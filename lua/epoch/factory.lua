@@ -6,7 +6,7 @@ local factory = {}
 -- Build report data structure with configurable parameters
 function factory.build_report(opts)
   opts = opts or {}
-  
+
   return {
     timesheets = opts.timesheets or {},
     summary = opts.summary or {},
@@ -16,10 +16,10 @@ function factory.build_report(opts)
   }
 end
 
--- Build timesheet structure with configurable parameters  
+-- Build timesheet structure with configurable parameters
 function factory.build_timesheet(opts)
   opts = opts or {}
-  
+
   return {
     date = opts.date or os.date("%Y-%m-%d"),
     intervals = opts.intervals or {},
@@ -30,7 +30,7 @@ end
 -- Build interval structure with configurable parameters
 function factory.build_interval(opts)
   opts = opts or {}
-  
+
   return {
     client = opts.client or "",
     project = opts.project or "",

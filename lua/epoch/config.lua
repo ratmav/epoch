@@ -18,10 +18,10 @@ config.values = vim.deepcopy(defaults)
 -- setup function to initialize the plugin
 function config.setup(opts)
   config.values = vim.tbl_deep_extend('force', defaults, opts or {})
-  
+
   -- ensure data directory exists
   vim.fn.mkdir(config.values.data_dir, 'p')
-  
+
   -- set the data directory in storage module
   require('epoch.storage').set_data_dir(config.values.data_dir)
 end

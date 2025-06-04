@@ -12,12 +12,12 @@ describe("storage bulk_operations", function()
     vim.fn.mkdir("/tmp/epoch_test_data", "p")
     vim.fn.system("rm -f /tmp/epoch_test_data/*.lua")
   end)
-  
+
   -- Clean up after tests
   after_each(function()
     vim.fn.system("rm -rf /tmp/epoch_test_data")
   end)
-  
+
   describe("delete_all_timesheets", function()
     it("deletes all timesheet files", function()
       local dates = fixtures.get('time.date_arrays.storage_test_dates')
@@ -26,20 +26,20 @@ describe("storage bulk_operations", function()
         timesheet.date = date
         persistence.save_timesheet(timesheet)
       end
-      
+
       local before = discovery.get_all_timesheet_files()
       assert.equals(#dates, #before)
-      
+
       local count = bulk_operations.delete_all_timesheets()
       assert.equals(#dates, count)
-      
+
       local after = discovery.get_all_timesheet_files()
       assert.same({}, after)
     end)
-    
+
     it("returns 0 when no files exist", function()
       vim.fn.system("rm -f /tmp/epoch_test_data/*.lua")
-      
+
       local count = bulk_operations.delete_all_timesheets()
       assert.equals(0, count)
     end)

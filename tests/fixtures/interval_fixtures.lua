@@ -12,7 +12,7 @@ return {
       stop = "10:30 AM",
       notes = {}
     },
-    
+
     backend = {
       client = "acme-corp",
       project = "website-redesign",
@@ -21,7 +21,7 @@ return {
       stop = "12:15 PM",
       notes = {}
     },
-    
+
     personal = {
       client = "personal",
       project = "admin",
@@ -30,7 +30,7 @@ return {
       stop = "09:15 AM",
       notes = {}
     },
-    
+
     with_notes = {
       client = "acme-corp",
       project = "website-redesign",
@@ -47,7 +47,7 @@ return {
       client = "test-client",
       project = "test-project"
     },
-    
+
     complete = {
       client = "client",
       project = "project",
@@ -55,7 +55,7 @@ return {
       start = "10:00 AM"
     }
   },
-  
+
   -- Invalid intervals
   invalid = {
     missing_client = {
@@ -66,7 +66,7 @@ return {
       stop = "10:30 AM",
       notes = {}
     },
-    
+
     missing_project = {
       client = "acme-corp",
       project = nil,
@@ -75,7 +75,7 @@ return {
       stop = "10:30 AM",
       notes = {}
     },
-    
+
     missing_task = {
       client = "acme-corp",
       project = "website-redesign",
@@ -84,7 +84,7 @@ return {
       stop = "10:30 AM",
       notes = {}
     },
-    
+
     missing_notes = {
       client = "acme-corp",
       project = "website-redesign",
@@ -93,7 +93,7 @@ return {
       stop = "10:30 AM",
       notes = nil
     },
-    
+
     invalid_notes_type = {
       client = "acme-corp",
       project = "website-redesign",
@@ -102,7 +102,7 @@ return {
       stop = "10:30 AM",
       notes = "This should be an array, not a string"
     },
-    
+
     invalid_notes_entries = {
       client = "acme-corp",
       project = "website-redesign",
@@ -111,7 +111,7 @@ return {
       stop = "10:30 AM",
       notes = {1, 2, 3}  -- Numbers instead of strings
     },
-    
+
     invalid_time = {
       client = "acme-corp",
       project = "website-redesign",
@@ -120,7 +120,7 @@ return {
       stop = "10:30 AM",
       notes = {}
     },
-    
+
     unclosed = {
       client = "acme-corp",
       project = "website-redesign",
@@ -168,7 +168,7 @@ return {
       }
     }
   },
-  
+
   -- Example intervals for specific test scenarios
   examples = {
     morning_work = {
@@ -179,7 +179,7 @@ return {
       stop = "09:15 AM",
       notes = {}
     },
-    
+
     evening_work = {
       client = "side-project",
       project = "website",
@@ -189,7 +189,7 @@ return {
       notes = {}
     }
   },
-  
+
   -- Test data for serializer testing
   serializer = {
     no_stop_time = {

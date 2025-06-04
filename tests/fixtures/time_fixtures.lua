@@ -20,7 +20,7 @@ return {
       invalid_minute = "09:60 AM"
     }
   },
-  
+
   -- sample date strings (YYYY-MM-DD)
   dates = {
     valid = {
@@ -34,7 +34,7 @@ return {
       invalid_day = "2025-05-32"
     }
   },
-  
+
   -- sample durations (in minutes)
   durations = {
     thirty_min = 30,
@@ -43,7 +43,7 @@ return {
     two_hours = 120,
     eight_hours = 480
   },
-  
+
   -- fixed timestamps for testing (avoiding os.time() for deterministic tests)
   timestamps = {
     base_time = 1748930760,  -- Fixed base timestamp
@@ -56,26 +56,26 @@ return {
   validation = {
     valid_formats = {
       "9:00 AM",
-      "12:00 PM", 
+      "12:00 PM",
       "11:59 PM",
       "12:00 AM",
       "6:30 PM"
     },
-    
+
     invalid_formats = {
       "25:00 AM",
       "12:60 PM",
-      "0:30 AM", 
+      "0:30 AM",
       "13:00 PM",
       "9:00",
       "9 AM",
       "",
       nil
     },
-    
+
     invalid_spacing_case = {
       "9:00AM",
-      "9:00 am", 
+      "9:00 am",
       "9:00  AM"
     }
   },
@@ -90,14 +90,14 @@ return {
       {minutes = 135, expected = "02:15"},
       {minutes = 1440, expected = "24:00"}
     },
-    
+
     invalid_inputs = {
       {input = nil, expected = "00:00"},
       {input = -30, expected = "00:00"}
     }
   },
 
-  -- Timestamp formatting test data  
+  -- Timestamp formatting test data
   format_timestamps = {
     morning = os.time({year=2025, month=1, day=1, hour=9, min=30}),
     afternoon = os.time({year=2025, month=1, day=1, hour=14, min=45}),
@@ -111,35 +111,35 @@ return {
       {time = "9:30 AM", date = "2025-01-01", expected_hour = 9, expected_min = 30},
       {time = "2:45 PM", date = "2025-01-01", expected_hour = 14, expected_min = 45}
     },
-    
+
     twelve_hour_edge_cases = {
       {time = "12:00 AM", date = "2025-01-01", expected_hour = 0, expected_min = 0},
       {time = "12:00 PM", date = "2025-01-01", expected_hour = 12, expected_min = 0}
     },
-    
+
     invalid_time_formats = {
       "25:00 AM",
       "invalid"
     },
-    
+
     invalid_date_formats = {
       "invalid-date",
       "not-a-date"
     },
-    
+
     parse_time_test = {
       time = "9:30 AM",
       expected_hour = 9,
       expected_min = 30
     },
-    
+
     parse_time_invalid = {
       "25:00 AM",
       "invalid",
       nil
     }
   },
-  
+
   -- Common date arrays for testing
   date_arrays = {
     storage_test_dates = {"2025-05-10", "2025-05-11", "2025-05-12"},

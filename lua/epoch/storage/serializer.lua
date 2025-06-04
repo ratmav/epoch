@@ -26,7 +26,7 @@ end
 serialize_table = function(tbl, indent)
   indent = indent or 0
   local spaces = string.rep("  ", indent)
-  
+
   local result = serialize_table_content(tbl, spaces, indent)
   result = result .. spaces .. "}"
   return result

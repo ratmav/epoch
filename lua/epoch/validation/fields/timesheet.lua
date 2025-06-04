@@ -19,11 +19,11 @@ local function validate_timesheet_fields(current_timesheet)
   if not current_timesheet.date then
     return false, "missing date field"
   end
-  
+
   if type(current_timesheet.intervals) ~= "table" then
     return false, "intervals must be a table"
   end
-  
+
   return true
 end
 
@@ -47,10 +47,10 @@ end
 function timesheet.validate(current_timesheet)
   local ok, err = validate_timesheet_type(current_timesheet)
   if not ok then return false, err end
-  
+
   ok, err = validate_timesheet_fields(current_timesheet)
   if not ok then return false, err end
-  
+
   return validate_all_intervals(current_timesheet)
 end
 

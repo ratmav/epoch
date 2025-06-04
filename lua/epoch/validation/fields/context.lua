@@ -12,13 +12,13 @@ end
 local function collect_interval_parts(interval)
   local parts = {}
   local fields = {"client", "project", "task", "start"}
-  
+
   for _, field in ipairs(fields) do
     if interval[field] then
       table.insert(parts, interval[field])
     end
   end
-  
+
   return parts
 end
 
@@ -35,7 +35,7 @@ function context.get_interval_context(interval)
   if not validate_interval_input(interval) then
     return "unknown interval"
   end
-  
+
   local parts = collect_interval_parts(interval)
   return format_context_parts(parts)
 end

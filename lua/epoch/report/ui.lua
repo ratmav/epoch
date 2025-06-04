@@ -16,7 +16,7 @@ end
 local function create_report_window(content)
   window.create({
     id = "report",
-    title = "epoch - report", 
+    title = "epoch - report",
     width_percent = 0.5,
     height_percent = 0.6,
     filetype = "markdown",

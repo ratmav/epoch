@@ -108,7 +108,7 @@ return {
         {
           client = "test-client",
           project = "test-project",
-          task = "test-task", 
+          task = "test-task",
           start = "09:00 AM",
           stop = "",  -- Unclosed for timing conflict testing
           notes = {}
@@ -117,7 +117,7 @@ return {
       daily_total = "00:00"
     }
   },
-  
+
   -- Invalid timesheets
   invalid = {
     missing_date = {
@@ -134,13 +134,13 @@ return {
       },
       daily_total = "01:30"
     },
-    
+
     missing_intervals = {
       date = "2025-05-28",
       intervals = nil,
       daily_total = "00:00"
     },
-    
+
     invalid_interval = {
       date = "2025-05-28",
       intervals = {
@@ -180,7 +180,7 @@ return {
     }
   },
 
-  -- Storage test timesheets  
+  -- Storage test timesheets
   storage = {
     single_interval = {
       date = "2025-01-01",
@@ -189,16 +189,16 @@ return {
       },
       daily_total = "00:00"
     },
-    
+
     mixed_intervals = {
-      date = "2025-01-01", 
+      date = "2025-01-01",
       intervals = {
         {client = "test", project = "test", task = "test", start = "9:00 AM"},
         {client = "test", project = "test", task = "test"}
       },
       daily_total = "00:00"
     },
-    
+
     incomplete_interval = {
       intervals = {
         {client = "test"}  -- Missing required fields

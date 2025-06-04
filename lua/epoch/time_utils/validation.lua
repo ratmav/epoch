@@ -13,10 +13,10 @@ end
 
 -- Validate time component ranges
 local function validate_time_components(time_str)
-  local hour, min, period = time_str:match("(%d+):(%d+)%s+([AP]M)")
+  local hour, min = time_str:match("(%d+):(%d+)%s+[AP]M")
   hour = tonumber(hour)
   min = tonumber(min)
-  
+
   return hour >= 1 and hour <= 12 and min >= 0 and min <= 59
 end
 
@@ -25,7 +25,7 @@ function validation.is_valid_time_format(time_str)
   if not validate_time_pattern(time_str) then
     return false
   end
-  
+
   return validate_time_components(time_str)
 end
 

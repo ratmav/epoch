@@ -10,11 +10,11 @@ describe("report ui", function()
       local original_is_open = window.is_open
       local original_create = window.create
       local create_called = false
-      
+
       window.is_open = function(id)
         return false
       end
-      
+
       window.create = function(config)
         create_called = true
         local expected = fixtures.get('reports.ui_mocks.window_config_expectations')
@@ -26,36 +26,36 @@ describe("report ui", function()
         assert.is_false(config.modifiable)
         assert.is_string(config.content)
       end
-      
+
       ui.toggle_report()
-      
+
       assert.is_true(create_called)
-      
+
       -- Restore original functions
       window.is_open = original_is_open
       window.create = original_create
     end)
-    
+
     it("closes window when already open", function()
       -- Mock window.is_open to return true
       local original_is_open = window.is_open
       local original_close = window.close
       local close_called = false
-      
+
       window.is_open = function(id)
         return true
       end
-      
+
       window.close = function(id)
         close_called = true
         local expected_id = fixtures.get('reports.ui_mocks.window_close_id')
         assert.equals(expected_id, id)
       end
-      
+
       ui.toggle_report()
-      
+
       assert.is_true(close_called)
-      
+
       -- Restore original functions
       window.is_open = original_is_open
       window.close = original_close

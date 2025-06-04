@@ -13,10 +13,10 @@ local commands = require('epoch.commands')
 function epoch.setup(opts)
   -- initialize configuration
   config.setup(opts)
-  
+
   -- register commands
   commands.register()
-  
+
   -- setup ui components
   ui.setup()
 end

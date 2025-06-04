@@ -13,11 +13,11 @@ end
 local function get_interval_times(interval, date)
   local start_time = time_utils.time_to_seconds(interval.start, date)
   local stop_time = time_utils.time_to_seconds(interval.stop, date)
-  
+
   if not start_time or not stop_time then
     return nil, nil
   end
-  
+
   return start_time, stop_time
 end
 
@@ -26,12 +26,12 @@ function interval_calculation.calculate_interval_minutes(interval, date)
   if not is_complete_interval(interval) then
     return 0
   end
-  
+
   local start_time, stop_time = get_interval_times(interval, date)
   if not start_time then
     return 0
   end
-  
+
   local diff_seconds = stop_time - start_time
   return math.max(0, math.floor(diff_seconds / 60))
 end

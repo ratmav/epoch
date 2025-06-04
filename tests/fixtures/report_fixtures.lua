@@ -37,7 +37,7 @@ report_fixtures.input = {
         }
       }
     },
-    
+
     -- May week 1 - Week 18
     {
       date = "2025-05-05", -- Monday
@@ -70,7 +70,7 @@ report_fixtures.input = {
         }
       }
     },
-    
+
     -- May week 2 - Week 19
     {
       date = "2025-05-12", -- Monday
@@ -98,10 +98,10 @@ report_fixtures.input = {
 report_fixtures.expected_structure = {
   -- We expect 3 weeks in the data
   week_count = 3,
-  
+
   -- Latest week should be first
   first_week = "2025-19", -- Week 19 (May 12-18)
-  
+
   -- Check client distribution
   clients = {
     "acme-corp",
@@ -109,7 +109,7 @@ report_fixtures.expected_structure = {
     "client-y",
     "personal"
   },
-  
+
   -- Each week should have its own dates
   weeks = {
     {
@@ -143,7 +143,7 @@ report_fixtures.expected_structure = {
       total_minutes = 135     -- 2.25 hours
     }
   },
-  
+
   -- Overall totals
   total_minutes = 765 -- 12.75 hours
 }
@@ -243,34 +243,34 @@ TOTAL                                        13:45]]
 report_fixtures.expected_patterns = {
   -- Header
   "Period: %d%d%d%d%-%d%d%-%d%d to %d%d%d%d%-%d%d%-%d%d",
-  
+
   -- Latest week first (Week 19)
   "## Week of 2025%-05%-11 to 2025%-05%-17",
-  
+
   -- Week 18
   "## Week of 2025%-05%-04 to 2025%-05%-10",
-  
+
   -- Week 17
   "## Week of 2025%-04%-27 to 2025%-05%-03",
-  
+
   -- Section headers
   "### By Day",
   "### By Client",
   "## Overall By Week",
   "## Overall By Client",
-  
+
   -- Client names (in any order)
   "acme%-corp",
   "client%-x",
   "client%-y",
   "personal",
-  
+
   -- Project names
   "website%-redesign",
   "mobile%-app",
   "api%-service",
   "admin",
-  
+
   -- Task names
   "planning",
   "frontend%-planning",
@@ -279,12 +279,12 @@ report_fixtures.expected_patterns = {
   "development",
   "documentation",
   "email",
-  
+
   -- Table headers
   "Date%s+Hours",
   "Client%s+Project%s+Task%s+Hours",
   "Week%s+Hours",
-  
+
   -- Footer totals
   "TOTAL%s+13:45"
 }
@@ -293,7 +293,7 @@ report_fixtures.expected_patterns = {
 report_fixtures.test_intervals = {
   simple = {
     client = "test",
-    project = "test", 
+    project = "test",
     task = "test",
     start = "9:00 AM",
     stop = "10:30 AM"
@@ -306,12 +306,12 @@ report_fixtures.test_timesheets = {
     intervals = {},
     daily_total = "00:00"
   },
-  
+
   basic_with_interval = {
     intervals = {{client = "test", project = "test", task = "test", start = "9:00 AM"}},
     daily_total = "08:00"
   },
-  
+
   basic_with_interval_2 = {
     intervals = {{client = "test", project = "test", task = "test", start = "10:00 AM"}},
     daily_total = "08:00"
@@ -327,17 +327,17 @@ report_fixtures.test_summaries = {
     ["alpha|alpha|zebra"] = {client = "alpha", project = "alpha", task = "zebra", minutes = 60},
     ["alpha|alpha|alpha"] = {client = "alpha", project = "alpha", task = "alpha", minutes = 30}
   },
-  
+
   single_entry = {
     ["client|project|task"] = {client = "client", project = "project", task = "task", minutes = 480}
   },
-  
+
   minutes_calculation = {
     ["entry1"] = {minutes = 480},
     ["entry2"] = {minutes = 240},
     ["entry3"] = {minutes = 120}
   },
-  
+
   single_minutes = {
     ["entry1"] = {minutes = 480}
   }
@@ -357,7 +357,7 @@ report_fixtures.day_processor_timesheets = {
       }
     }
   },
-  
+
   incomplete_interval = {
     date = "2025-01-01",
     intervals = {
@@ -370,7 +370,7 @@ report_fixtures.day_processor_timesheets = {
       }
     }
   },
-  
+
   multiple_intervals = {
     date = "2025-01-01",
     intervals = {
@@ -390,7 +390,7 @@ report_fixtures.day_processor_timesheets = {
       }
     }
   },
-  
+
   no_stop_time = {
     date = "2025-01-01",
     intervals = {
@@ -419,7 +419,7 @@ report_fixtures.main_report_data = {
 -- Test data for main formatter testing
 report_fixtures.formatter_data = {
   empty_report_builder_data = {weeks = {}, summary = {}, total_minutes = 0},
-  
+
   report_with_weeks = {
     weeks = {
       {
@@ -439,19 +439,19 @@ report_fixtures.formatter_data = {
 report_fixtures.week_utils_data = {
   complete_interval = {
     client = "test",
-    project = "test", 
+    project = "test",
     task = "test",
     start = "9:00 AM",
     stop = "10:30 AM"
   },
-  
+
   incomplete_interval = {
     client = "test",
     project = "test",
-    task = "test", 
+    task = "test",
     start = "9:00 AM"
   },
-  
+
   empty_stop_interval = {
     client = "test",
     project = "test",
@@ -459,7 +459,7 @@ report_fixtures.week_utils_data = {
     start = "9:00 AM",
     stop = ""
   },
-  
+
   invalid_time_interval = {
     client = "test",
     project = "test",
@@ -467,7 +467,7 @@ report_fixtures.week_utils_data = {
     start = "invalid",
     stop = "10:30 AM"
   },
-  
+
   negative_duration_interval = {
     client = "test",
     project = "test",
@@ -475,7 +475,7 @@ report_fixtures.week_utils_data = {
     start = "10:30 AM",
     stop = "9:00 AM"
   },
-  
+
   test_date = "2025-01-01",
   test_week_strings = {
     valid_1 = "2025-01",
@@ -494,7 +494,7 @@ report_fixtures.ui_mocks = {
     filetype = "markdown",
     modifiable = false
   },
-  
+
   window_close_id = "report"
 }
 
@@ -504,20 +504,20 @@ report_fixtures.column_calculator_data = {
     {client = "very-long-client-name", project = "short", task = "medium-task", minutes = 480},
     {client = "short", project = "very-long-project-name", task = "task", minutes = 240}
   },
-  
+
   short_names_summary = {
     {client = "a", project = "b", task = "c", minutes = 480}
   },
-  
+
   two_column_rows = {
     {"2025-01-01", "08:00"},
     {"very-long-date-string", "10:00"}
   },
-  
+
   simple_two_column_rows = {
     {"2025-01-01", "08:00"}
   },
-  
+
   headers = {
     date = "Date",
     long_header = "Very Long Header"
@@ -531,13 +531,13 @@ report_fixtures.row_builder_data = {
     project = 12,
     task = 8
   },
-  
+
   single_summary = {
     {client = "acme", project = "web", task = "dev", minutes = 480}
   },
-  
+
   separator_line = "----------",
-  
+
   test_total_minutes = 480
 }
 
@@ -549,7 +549,7 @@ report_fixtures.report_builder_data = {
     summary = {},
     total_minutes = 0
   },
-  
+
   report_with_weeks = {
     weeks = {
       {
@@ -564,7 +564,7 @@ report_fixtures.report_builder_data = {
     summary = {},
     total_minutes = 480
   },
-  
+
   report_for_overall = {
     weeks = {
       {week = "2025-01", total_minutes = 480, summary = {}}
@@ -572,7 +572,7 @@ report_fixtures.report_builder_data = {
     summary = {},
     total_minutes = 480
   },
-  
+
   empty_report_data = {
     date_range = {first = "2025-01-01", last = "2025-01-07"},
     summary = {},
@@ -592,14 +592,14 @@ report_fixtures.overall_data = {
     },
     total_minutes = 480
   },
-  
+
   simple_weeks = {
     weeks = {
       {week = "2025-01", total_minutes = 480}
     },
     total_minutes = 480
   },
-  
+
   client_summary = {
     summary = {
       {client = "acme", project = "web", task = "dev", minutes = 480}
@@ -620,7 +620,7 @@ report_fixtures.week_formatter_data = {
       {client = "acme", project = "web", task = "dev", minutes = 480}
     }
   },
-  
+
   minimal_week = {
     week = "2025-01",
     daily_totals = {},
@@ -628,7 +628,7 @@ report_fixtures.week_formatter_data = {
     total_minutes = 0,
     summary = {}
   },
-  
+
   week_with_daily = {
     week = "2025-01",
     daily_totals = {["2025-01-01"] = 480},
@@ -636,7 +636,7 @@ report_fixtures.week_formatter_data = {
     total_minutes = 480,
     summary = {}
   },
-  
+
   week_with_summary = {
     week = "2025-01",
     daily_totals = {},
@@ -656,7 +656,7 @@ report_fixtures.table_data = {
     },
     total_mins = 480
   },
-  
+
   two_column_headers = {"Date", "Hours"},
   two_column_rows = {{"2025-01-01", "08:00"}},
   two_column_total_label = "TOTAL",
@@ -673,7 +673,7 @@ report_fixtures.daily_totals_data = {
     dates = {"2025-01-01", "2025-01-02"},
     week_total_minutes = 1000
   },
-  
+
   unsorted_dates = {
     daily_totals = {
       ["2025-01-02"] = 520,
@@ -682,7 +682,7 @@ report_fixtures.daily_totals_data = {
     dates = {"2025-01-02", "2025-01-01"},
     week_total_minutes = 1000
   },
-  
+
   single_day = {
     daily_totals = {
       ["2025-01-01"] = 480
@@ -707,7 +707,7 @@ report_fixtures.generator_timesheets = {
     },
     daily_total = "01:30"
   },
-  
+
   week_15_timesheet = {
     date = "2025-01-15",
     intervals = {
@@ -715,7 +715,7 @@ report_fixtures.generator_timesheets = {
     },
     daily_total = "01:30"
   },
-  
+
   week_01_timesheet = {
     date = "2025-01-01",
     intervals = {
@@ -723,7 +723,7 @@ report_fixtures.generator_timesheets = {
     },
     daily_total = "01:30"
   },
-  
+
   first_date_timesheet = {
     date = "2025-01-01",
     intervals = {
@@ -731,7 +731,7 @@ report_fixtures.generator_timesheets = {
     },
     daily_total = "01:30"
   },
-  
+
   last_date_timesheet = {
     date = "2025-01-03",
     intervals = {
@@ -748,13 +748,13 @@ report_fixtures.week_processor_data = {
     {date = "2025-01-02", intervals = {}},
     {date = "2025-01-08", intervals = {}}
   },
-  
+
   single_timesheet = {
     {date = "2025-01-01", intervals = {}}
   },
-  
+
   unsorted_dates = {"2025-01-03", "2025-01-01", "2025-01-02"},
-  
+
   week_data_with_interval = {
     dates = {"2025-01-01"},
     timesheets = {
@@ -773,13 +773,13 @@ report_fixtures.week_processor_data = {
     },
     date_range = {first = "2025-01-01", last = "2025-01-07"}
   },
-  
+
   week_data_for_sorting = {
     dates = {"2025-01-03", "2025-01-01", "2025-01-02"},
     timesheets = {},
     date_range = {first = "2025-01-01", last = "2025-01-07"}
   },
-  
+
   week_data_for_summary = {
     dates = {"2025-01-01"},
     timesheets = {

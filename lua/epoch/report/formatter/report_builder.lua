@@ -9,7 +9,7 @@ local report_builder = {}
 -- Add period header to report lines
 local function add_period_header(lines, report_data)
   if report_data.date_range then
-    table.insert(lines, string.format("Period: %s to %s", 
+    table.insert(lines, string.format("Period: %s to %s",
       report_data.date_range.first, report_data.date_range.last))
     table.insert(lines, "")
   end
@@ -32,7 +32,7 @@ local function add_overall_summaries(lines, report_data)
   for _, line in ipairs(week_summary_lines) do
     table.insert(lines, line)
   end
-  
+
   -- Overall by client
   local client_summary_lines = overall.format_overall_clients_section(report_data.summary, report_data.total_minutes)
   for _, line in ipairs(client_summary_lines) do
@@ -45,11 +45,11 @@ function report_builder.build_report_lines(report_data)
   local lines = {}
   add_period_header(lines, report_data)
   add_week_sections(lines, report_data.weeks)
-  
+
   if #report_data.weeks > 0 then
     add_overall_summaries(lines, report_data)
   end
-  
+
   return lines
 end
 
@@ -57,12 +57,12 @@ end
 function report_builder.format_empty_report(report_data)
   local lines = {}
   add_period_header(lines, report_data)
-  
+
   local empty_lines = overall.format_overall_clients_section(report_data.summary, report_data.total_minutes)
   for _, line in ipairs(empty_lines) do
     table.insert(lines, line)
   end
-  
+
   return table.concat(lines, "\n")
 end
 

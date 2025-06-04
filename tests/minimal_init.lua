@@ -12,7 +12,7 @@ local function find_plenary_path()
     vim.fn.stdpath('config') .. '/pack',
     vim.fn.stdpath('config') .. '/plugged'
   }
-  
+
   for _, base_path in ipairs(plugin_paths) do
     -- try to find plenary recursively in common plugin directories
     local plenary_path = vim.fn.glob(base_path .. '/**/plenary.nvim')
@@ -21,13 +21,13 @@ local function find_plenary_path()
       return plenary_path
     end
   end
-  
+
   -- last resort: ask vim to find it in runtimepath
   local rtp_plenary = vim.fn.finddir('plenary.nvim', vim.o.runtimepath)
   if rtp_plenary ~= "" then
     return vim.fn.fnamemodify(rtp_plenary, ':p')
   end
-  
+
   return ""
 end
 

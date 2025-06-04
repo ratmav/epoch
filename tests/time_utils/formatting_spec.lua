@@ -10,7 +10,7 @@ describe("time_utils formatting", function()
         assert.equals(test_case.expected, formatting.format_duration(test_case.minutes))
       end
     end)
-    
+
     it("handles invalid inputs", function()
       local invalid_cases = fixtures.get('time.duration.invalid_inputs')
       for _, test_case in ipairs(invalid_cases) do
@@ -18,11 +18,11 @@ describe("time_utils formatting", function()
       end
     end)
   end)
-  
+
   describe("format_time", function()
     it("formats timestamp as h:MM AM/PM", function()
       local timestamps = fixtures.get('time.format_timestamps')
-      
+
       assert.equals("09:30 AM", formatting.format_time(timestamps.morning))
       assert.equals("02:45 PM", formatting.format_time(timestamps.afternoon))
       assert.equals("12:00 AM", formatting.format_time(timestamps.midnight))

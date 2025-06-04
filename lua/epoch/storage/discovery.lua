@@ -35,7 +35,7 @@ end
 function discovery.get_all_timesheet_files()
   local data_dir = validate_data_directory()
   if not data_dir then return {} end
-  
+
   local files = discover_lua_files(data_dir)
   return filter_timesheet_files(files)
 end

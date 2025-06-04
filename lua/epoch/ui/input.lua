@@ -16,21 +16,21 @@ end
 local function handle_interval_creation(client, project, task, callback)
   local timesheet = storage.load_timesheet()
   local success, err, updated_timesheet = workflow.add_interval(client, project, task, timesheet)
-  
+
   if not success then
     vim.notify("epoch: " .. err, vim.log.levels.ERROR)
     return
   end
-  
+
   storage.save_timesheet(updated_timesheet)
   vim.cmd("redraw!")
   vim.notify("epoch: time tracking started for " .. client .. "/" .. project .. "/" .. task, vim.log.levels.INFO)
-  
+
   if window.is_open("timesheet") then
     local content = storage.serialize_timesheet(updated_timesheet)
     window.set_content("timesheet", content)
   end
-  
+
   if callback and type(callback) == "function" then
     callback()
   end

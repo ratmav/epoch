@@ -11,7 +11,7 @@ serializer_fixtures.arrays = {
   single_item = {"a"}
 }
 
--- Non-array test data  
+-- Non-array test data
 serializer_fixtures.non_arrays = {
   object = {a = 1},
   sparse = {[1] = "a", [3] = "c"},
@@ -23,7 +23,7 @@ serializer_fixtures.non_arrays = {
 -- Value formatting test data
 serializer_fixtures.values = {
   string = "hello",
-  long_string = "test string", 
+  long_string = "test string",
   number = 123,
   float = 45.67,
   boolean_true = true,
@@ -35,7 +35,7 @@ serializer_fixtures.values = {
 serializer_fixtures.tables = {
   sorted_keys = {
     zebra = "last",
-    alpha = "first", 
+    alpha = "first",
     beta = "second"
   },
   numeric_keys = {
@@ -47,7 +47,7 @@ serializer_fixtures.tables = {
     string_key = "value1",
     another_key = "value2"
   },
-  
+
   numeric_keys_only = {
     [42] = "value2",
     [1] = "value1"

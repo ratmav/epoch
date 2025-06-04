@@ -19,13 +19,13 @@ local function get_and_validate_content()
     vim.notify("epoch: cannot save timesheet - buffer is not valid", vim.log.levels.ERROR)
     return nil
   end
-  
+
   local timesheet_data, err = timesheet.validate_content(content)
   if not timesheet_data then
     vim.notify("epoch: cannot save timesheet - " .. err, vim.log.levels.ERROR)
     return nil
   end
-  
+
   return timesheet_data
 end
 
@@ -36,7 +36,7 @@ local function save_timesheet_data(timesheet_data)
     vim.notify("epoch: failed to save - " .. tostring(save_err), vim.log.levels.ERROR)
     return false
   end
-  
+
   vim.notify("epoch: timesheet saved", vim.log.levels.INFO)
   return true
 end
@@ -46,7 +46,7 @@ function timesheet.validate_and_save_from_buffer()
   if not timesheet_data then
     return false
   end
-  
+
   return save_timesheet_data(timesheet_data)
 end
 

@@ -28,11 +28,11 @@ function persistence.save_timesheet(timesheet)
   if not timesheet or not timesheet.date then
     return false, "invalid timesheet data"
   end
-  
+
   paths.ensure_data_dir()
   local file_path = paths.get_timesheet_path(timesheet.date)
   local content = serializer.serialize_timesheet(timesheet)
-  
+
   local success, err = pcall(function()
     local file = io.open(file_path, 'w')
     if not file then
@@ -41,7 +41,7 @@ function persistence.save_timesheet(timesheet)
     file:write(content)
     file:close()
   end)
-  
+
   return success, err
 end
 
@@ -49,11 +49,11 @@ end
 function persistence.load_timesheet(date)
   date = date or paths.get_today()
   local file_path = paths.get_timesheet_path(date)
-  
+
   if vim.fn.filereadable(file_path) == 0 then
     return create_default_timesheet(date)
   end
-  
+
   return load_timesheet_file(file_path)
 end
 

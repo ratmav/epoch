@@ -11,12 +11,12 @@ local function parse_lua_content(content)
   if not chunk then
     return nil, "lua syntax error: " .. tostring(err)
   end
-  
+
   local ok, timesheet_data = pcall(chunk)
   if not ok then
     return nil, "execution error: " .. tostring(timesheet_data)
   end
-  
+
   return timesheet_data, nil
 end
 
@@ -25,12 +25,12 @@ local function validate_parsed_data(timesheet_data)
   if type(timesheet_data) ~= "table" then
     return nil, "invalid timesheet format (not a table)"
   end
-  
+
   local valid, validation_err = validation.validate_timesheet(timesheet_data)
   if not valid then
     return nil, validation_err
   end
-  
+
   return timesheet_data, nil
 end
 
@@ -40,7 +40,7 @@ function timesheet_logic.validate_content(content)
   if not timesheet_data then
     return nil, parse_err
   end
-  
+
   return validate_parsed_data(timesheet_data)
 end
 

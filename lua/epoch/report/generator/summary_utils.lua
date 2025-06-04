@@ -9,7 +9,7 @@ function summary_utils.sort_summary(summary_dict)
   for _, entry in pairs(summary_dict) do
     table.insert(summary_array, entry)
   end
-  
+
   table.sort(summary_array, function(a, b)
     if a.client ~= b.client then
       return a.client < b.client
@@ -19,7 +19,7 @@ function summary_utils.sort_summary(summary_dict)
       return a.task < b.task
     end
   end)
-  
+
   return summary_array
 end
 

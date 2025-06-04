@@ -8,7 +8,7 @@ TEST_DIR := ./tests
 # for better semantics
 NVIM_FLAGS := NVIM_INSTALL_MODE=1
 
-.PHONY: test clean data laconic coverage lint check help
+.PHONY: test clean data laconic coverage lint help
 
 # Default target shows help
 .DEFAULT_GOAL := help
@@ -55,9 +55,6 @@ test-old:
 		-c "lua require('plenary.test_harness').test_directory('$(TEST_DIR)', {minimal_init = '$(TEST_DIR)/minimal_init.lua'})" \
 		-c "quit"
 
-# Run all checks (tests, laconic, coverage, lint)
-check: test laconic coverage lint
-	@echo "✅ All checks completed successfully!"
 
 # Clean generated files and timesheet data
 clean:
@@ -82,6 +79,5 @@ help:
 	@echo "  make laconic         - Check laconic compliance (file/function length)"
 	@echo "  make coverage        - Check test coverage"
 	@echo "  make lint            - Lint Lua code with luacheck"
-	@echo "  make check           - Run all checks (tests, laconic, coverage, lint)"
 	@echo "  make data            - Create sample timesheet data for manual testing"
 	@echo "  make clean           - Clean temporary files and timesheet data"

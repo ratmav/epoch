@@ -27,8 +27,9 @@ local function validate_time_fields(current_interval)
   if not time_utils.is_valid_time_format(current_interval.start) then
     return false, string.format("start time '%s' must be in format 'HH:MM AM/PM'", current_interval.start)
   end
-  if current_interval.stop and current_interval.stop ~= "" and not time_utils.is_valid_time_format(current_interval.stop) then
-    return false, string.format("stop time '%s' must be in format 'HH:MM AM/PM'", current_interval.stop)
+  local stop_time = current_interval.stop
+  if stop_time and stop_time ~= "" and not time_utils.is_valid_time_format(stop_time) then
+    return false, string.format("stop time '%s' must be in format 'HH:MM AM/PM'", stop_time)
   end
   return true
 end
@@ -54,13 +55,13 @@ function interval.validate(current_interval)
   if type(current_interval) ~= "table" then
     return false, "interval must be a table"
   end
-  
+
   local ok, err = validate_required_fields(current_interval)
   if not ok then return false, err end
-  
+
   ok, err = validate_time_fields(current_interval)
   if not ok then return false, err end
-  
+
   return validate_notes_field(current_interval)
 end
 

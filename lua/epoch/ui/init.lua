@@ -12,8 +12,8 @@ local input = require('epoch.ui.input')
 -- Ensure timesheet file exists, create if needed
 local function ensure_timesheet_exists(timesheet_path)
   if vim.fn.filereadable(timesheet_path) == 0 then
-    local timesheet = storage.create_default_timesheet()
-    storage.save_timesheet(timesheet)
+    local timesheet_data = storage.create_default_timesheet()
+    storage.save_timesheet(timesheet_data)
   end
 end
 
@@ -55,7 +55,7 @@ end
 -- Handle timesheet opening logic
 local function handle_timesheet_open()
   local path = storage.get_timesheet_path()
-  
+
   if vim.fn.filereadable(path) == 0 then
     ui.add_interval_and_edit()
   else
