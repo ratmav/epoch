@@ -23,7 +23,7 @@ describe("report generator processor week", function()
 
       local result = week.group_timesheets_by_week(timesheets)
 
-      for week_num, week_data in pairs(result) do
+      for _, week_data in pairs(result) do
         assert.is_table(week_data.dates)
         assert.is_table(week_data.timesheets)
         assert.truthy(week_data.date_range)

@@ -1,5 +1,47 @@
 # TODO
 
+## 0. Refactor tooling scripts (coverage.lua, laconic.lua)
+
+Both `scripts/coverage.lua` and `scripts/laconic.lua` have duplicate code and C-isms that need addressing:
+
+**DRY Issues:**
+- `get_lua_files()` function is identical in both scripts
+- `printf(fmt, ...)` helper is identical in both scripts  
+- Exit pattern `local exit_code = check_X(); os.exit(exit_code)` is duplicated
+- Report formatting patterns (headers, status icons, summary sections) are similar
+
+**Code Quality Issues:**
+- `printf` is a C-ism, should use idiomatic Lua
+- `printf` is defined after use, causing lint warnings about undefined variables
+
+**Strategic Approach:**
+Create `scripts/lib.lua` shared utility module with:
+```lua
+local lib = {}
+function lib.get_lua_files() -- extract duplicate
+function lib.print_formatted(fmt, ...) -- replace printf, better name
+function lib.print_section_header(title, icon) -- template headers
+function lib.determine_status(success, has_warnings) -- standardize status logic
+function lib.exit_with_status(success) -- standardize exit pattern
+return lib
+```
+
+**Implementation:**
+1. Create `scripts/lib.lua` with extracted functions
+2. For each script: copy to `.new` file, modify new file to use lib, compare outputs
+3. Once outputs match: replace original with new version, remove `.new` file
+4. Run full lint check to ensure issues resolved
+
+**Testing Approach:**
+- Write `scripts/lib.lua` with shared functions
+- Copy `coverage.lua` → `coverage.new.lua`, modify to use lib
+- Run both: `lua coverage.lua > old.txt` and `lua coverage.new.lua > new.txt`
+- Compare: `diff old.txt new.txt` (should be identical)
+- If identical: `rm coverage.lua && mv coverage.new.lua coverage.lua`
+- Repeat for `laconic.lua`
+
+**Future:** This prepares the tooling for potential extraction into separate package(s).
+
 ## 1. Refactor to meet coding standards
 
 1. `make test` must pass

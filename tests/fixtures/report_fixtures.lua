@@ -1,10 +1,6 @@
 -- report_fixtures.lua
 -- test fixtures for report functionality
 
-local interval_fixtures = require('tests.fixtures.interval_fixtures')
-local time_fixtures = require('tests.fixtures.time_fixtures')
-local timesheet_fixtures = require('tests.fixtures.timesheet_fixtures')
-
 local report_fixtures = {}
 
 -- Create a set of timesheets for testing report generation

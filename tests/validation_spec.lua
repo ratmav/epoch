@@ -55,7 +55,7 @@ describe("validation", function()
     end)
 
     it("validates intervals with proper notes array", function()
-      local is_valid, err = validation.validate_interval(fixtures.get('intervals.valid.with_notes'))
+      local is_valid, _ = validation.validate_interval(fixtures.get('intervals.valid.with_notes'))
       assert.is_true(is_valid)
     end)
 

@@ -46,8 +46,8 @@ describe("ui timesheet", function()
     it("should update daily total using provided calculation function", function()
       local timesheet_data = fixtures.get("timesheets.valid.with_intervals")
 
-      -- Mock calculation function that returns a fixed value
-      local calc_fn = function(ts) return "02:30" end
+      -- update_daily_total sends a timesheet, which is unused
+      local calc_fn = function(_) return "02:30" end
 
       local updated = timesheet.update_daily_total(timesheet_data, calc_fn)
 

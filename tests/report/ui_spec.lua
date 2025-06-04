@@ -11,7 +11,8 @@ describe("report ui", function()
       local original_create = window.create
       local create_called = false
 
-      window.is_open = function(id)
+      -- id passed by toggle_report but not used in mock
+      window.is_open = function(_)
         return false
       end
 
@@ -42,7 +43,8 @@ describe("report ui", function()
       local original_close = window.close
       local close_called = false
 
-      window.is_open = function(id)
+      -- id passed by toggle_report but not used in mock
+      window.is_open = function(_)
         return true
       end
 

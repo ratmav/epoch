@@ -5,9 +5,6 @@ describe("ui modules", function()
   -- Load modules
   local timesheet_ops = require('epoch.ui.timesheet')
   local interval_ops = require('epoch.ui.interval')
-  local workflow = require('epoch.ui.workflow')
-  local validation = require('epoch.validation')
-  local time_utils = require('epoch.time_utils')
 
 
   describe("timesheet validation", function()
