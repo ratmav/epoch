@@ -1,11 +1,27 @@
 # Manual Test Plan for Epoch Time Tracking Plugin
 
+## Test Run Record
+
+**Test Run Date:** ___________  
+**Tester:** ___________  
+**Plugin Version/Commit:** ___________  
+**Neovim Version:** ___________  
+
+**Overall Results:**
+- [ ] All tests passed
+- [ ] Some tests failed (document below)
+- [ ] Testing incomplete
+
+**Failed Tests:** ___________
+
+---
+
 ## Test Environment Setup
 
 **Prerequisites:**
 - Neovim with plenary.nvim installed
 - Epoch plugin loaded
-- Fresh test environment (consider backing up existing `~/.local/share/nvim/epoch/` data)
+- Fresh test environment (consider backing up existing data directory)
 
 ---
 
@@ -186,7 +202,8 @@
 
 ### Test 8.1: File Storage Location
 - [ ] Create an interval
-- [ ] Check file exists: `~/.local/share/nvim/epoch/YYYY-MM-DD.lua`
+- [ ] Run `:lua print(vim.fn.stdpath('data') .. '/epoch')` to see data directory
+- [ ] Check file exists in that directory: `YYYY-MM-DD.lua`
 
 **Expected:** File exists and contains valid Lua table
 
