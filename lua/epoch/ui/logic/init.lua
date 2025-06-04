@@ -1,5 +1,6 @@
 -- epoch/ui/logic/init.lua
 -- Pure logic functions for UI operations (testable)
+-- coverage: no test
 --
 -- This module contains business logic extracted from UI modules
 -- that can be tested independently of Neovim's UI APIs.
