@@ -36,12 +36,7 @@ end
 
 -- Data creation functions
 function storage.create_default_timesheet(date)
-  date = date or paths.get_today()
-  return {
-    date = date,
-    intervals = {},
-    daily_total = "00:00"
-  }
+  return persistence.create_default_timesheet(date)
 end
 
 -- File operations

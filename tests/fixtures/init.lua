@@ -2,6 +2,7 @@
 -- Central fixture registry that automatically returns deep copies
 
 local fixtures = {}
+local resolver = require('tests.fixtures.resolver')
 
 -- Load all fixture modules
 local interval_fixtures = require('tests.fixtures.interval_fixtures')
@@ -21,18 +22,7 @@ local registry = {
 
 -- Get a deep copy of any fixture
 function fixtures.get(fixture_path)
-  -- Parse path like "timesheets.valid.with_intervals"
-  local parts = vim.split(fixture_path, ".", { plain = true })
-
-  local current = registry
-  for _, part in ipairs(parts) do
-    current = current[part]
-    if not current then
-      error("Fixture not found: " .. fixture_path)
-    end
-  end
-
-  return vim.deepcopy(current)
+  return resolver.get_fixture(registry, fixture_path)
 end
 
 return fixtures

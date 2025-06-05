@@ -51,4 +51,17 @@ function timesheet_logic.update_daily_total(timesheet_data, calculate_fn)
   return updated
 end
 
+-- Ensure timesheet file exists, create if needed
+function timesheet_logic.ensure_timesheet_exists(timesheet_path, storage)
+  if vim.fn.filereadable(timesheet_path) == 0 then
+    local timesheet_data = storage.create_default_timesheet()
+    storage.save_timesheet(timesheet_data)
+  end
+end
+
+-- Load timesheet content from file
+function timesheet_logic.load_timesheet_content(timesheet_path)
+  return table.concat(vim.fn.readfile(timesheet_path), '\n')
+end
+
 return timesheet_logic

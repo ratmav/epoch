@@ -57,4 +57,9 @@ function persistence.load_timesheet(date)
   return load_timesheet_file(file_path)
 end
 
+-- Create default timesheet for given date (public API)
+function persistence.create_default_timesheet(date)
+  return create_default_timesheet(date or paths.get_today())
+end
+
 return persistence

@@ -1,5 +1,35 @@
 # Claude
 
+## Development Workflow
+
+```mermaid
+graph TD
+    A[Start Development] --> B[make test]
+    B -->|✅ Pass| C[make coverage]
+    B -->|❌ Fail| B
+    C -->|✅ Pass| D[make laconic]
+    C -->|❌ Fail| E[Fix coverage issues]
+    E --> B
+    D -->|✅ Pass| F[make lint]
+    D -->|❌ Fail| G[Fix laconic violations]
+    G --> B
+    F -->|✅ Pass| H[Ready to commit]
+    F -->|❌ Fail| I[Fix lint issues]
+    I --> B
+    
+    style H fill:#90EE90
+    style B fill:#E6F3FF
+    style C fill:#E6F3FF
+    style D fill:#E6F3FF
+    style F fill:#E6F3FF
+```
+
+**Strict Requirements:**
+1. `make test` must pass
+2. `make coverage` must pass (no `make test` regressions)
+3. `make laconic` must pass (no `make test` or `make coverage` regressions)  
+4. `make lint` must pass (no `make test`, `make coverage`, or `make laconic` regressions)
+
 ## Coding Standards
 
 - Functional programming style preferred
