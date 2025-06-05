@@ -3,14 +3,63 @@
 -- Laconic compliance checker for epoch project
 -- Checks file length and function length compliance only
 
-local function get_lua_files()
+-- TODO: remove this line after testing - makefile handles path
+package.path = 'scripts/lib/?.lua;scripts/lib/?/init.lua;lua/?.lua;lua/?/init.lua;/home/ratmav/.luarocks/share/lua/5.1/?.lua;' .. package.path
+package.cpath = '/home/ratmav/.luarocks/lib/lua/5.1/?.so;' .. package.cpath
+local lib = require('init')
+
+local function path_exists(path)
+    -- Check if it's a directory first
+    local result = os.execute('test -d "' .. path .. '"')
+    if result == 0 then
+        return true, 'directory'
+    end
+    
+    -- Then check if it's a file
+    local file = io.open(path, 'r')
+    if file then
+        file:close()
+        return true, 'file'
+    end
+    
+    return false, nil
+end
+
+local function validate_path(path)
+    if not path then
+        error("Path argument is required")
+    end
+    
+    local exists, type = path_exists(path)
+    if not exists then
+        error("Path does not exist: " .. path)
+    end
+    
+    return type
+end
+
+local function find_lua_files(path)
     local files = {}
-    local handle = io.popen('find lua/epoch -name "*.lua" -type f')
+    local handle = io.popen('find "' .. path .. '" -name "*.lua" -type f')
     for line in handle:lines() do
         table.insert(files, line)
     end
     handle:close()
     return files
+end
+
+local function get_lua_files(path)
+    local path_type = validate_path(path)
+    
+    if path_type == 'file' then
+        if path:match('%.lua$') then
+            return {path}
+        else
+            error("File is not a Lua file: " .. path)
+        end
+    end
+    
+    return find_lua_files(path)
 end
 
 local function count_lines(filepath)
@@ -144,8 +193,8 @@ local function extract_functions(filepath)
     return functions
 end
 
-local function check_compliance()
-    local files = get_lua_files()
+local function check_compliance(path)
+    local files = get_lua_files(path)
     local violations = {
         file_length = {},
         function_length = {}
@@ -159,10 +208,6 @@ local function check_compliance()
         functions_under_15 = 0,
         functions_over_15 = 0
     }
-    
-    print("🎯 EPOCH LACONIC CHECK")
-    print("=======================")
-    print()
     
     for _, filepath in ipairs(files) do
         local line_count = count_lines(filepath)
@@ -206,67 +251,64 @@ local function check_compliance()
         end
     end
     
-    -- Print statistics
-    print("📊 STATISTICS")
-    print("=============")
-    printf("Total files analyzed: %d", stats.total_files)
-    printf("Files under 100 lines: %d (%.1f%%)", 
-           stats.files_under_100, 
-           (stats.files_under_100 / stats.total_files) * 100)
-    printf("Files 100-150 lines: %d (%.1f%%)", 
-           stats.files_100_150, 
-           (stats.files_100_150 / stats.total_files) * 100)
-    printf("Files over 150 lines: %d (%.1f%%)", 
-           stats.files_over_150, 
-           (stats.files_over_150 / stats.total_files) * 100)
-    print()
-    printf("Total functions analyzed: %d", stats.total_functions)
-    printf("Functions under 15 lines: %d (%.1f%%)", 
-           stats.functions_under_15, 
-           (stats.functions_under_15 / stats.total_functions) * 100)
-    printf("Functions over 15 lines: %d (%.1f%%)", 
-           stats.functions_over_15, 
-           (stats.functions_over_15 / stats.total_functions) * 100)
-    print()
+    -- Prepare template data
+    local template_data = {
+        total_files = stats.total_files,
+        files_under_100 = stats.files_under_100,
+        files_under_100_percent = string.format("%.1f", (stats.files_under_100 / stats.total_files) * 100),
+        files_100_150 = stats.files_100_150,
+        files_100_150_percent = string.format("%.1f", (stats.files_100_150 / stats.total_files) * 100),
+        files_over_150 = stats.files_over_150,
+        files_over_150_percent = string.format("%.1f", (stats.files_over_150 / stats.total_files) * 100),
+        total_functions = stats.total_functions,
+        functions_under_15 = stats.functions_under_15,
+        functions_under_15_percent = string.format("%.1f", (stats.functions_under_15 / stats.total_functions) * 100),
+        functions_over_15 = stats.functions_over_15,
+        functions_over_15_percent = string.format("%.1f", (stats.functions_over_15 / stats.total_functions) * 100),
+        has_long_files = #violations.file_length > 0,
+        has_long_functions = #violations.function_length > 0
+    }
     
-    -- Print violations
-    if #violations.file_length > 0 then
-        print("❌ FILE LENGTH VIOLATIONS")
-        print("=========================")
+    -- Prepare long files list
+    if template_data.has_long_files then
+        template_data.long_files_list = {}
         for _, violation in ipairs(violations.file_length) do
             local icon = violation.severity == "CRITICAL" and "🔴" or "🟡"
-            printf("%s %s - %d lines (%s)", 
-                   icon, violation.file, violation.lines, violation.severity)
+            table.insert(template_data.long_files_list, {
+                status = icon,
+                file = violation.file,
+                lines = violation.lines,
+                compliance = violation.severity
+            })
         end
-        print()
     end
     
-    if #violations.function_length > 0 then
-        print("❌ FUNCTION LENGTH VIOLATIONS")
-        print("=============================")
+    -- Prepare long functions list 
+    if template_data.has_long_functions then
+        template_data.long_functions_list = {}
         for _, violation in ipairs(violations.function_length) do
-            printf("🔴 %s:%d - %s() - %d lines", 
-                   violation.file, violation.start_line, violation.name, violation.lines)
+            table.insert(template_data.long_functions_list, {
+                file = violation.file,
+                line_number = violation.start_line,
+                function_name = violation.name,
+                lines = violation.lines
+            })
         end
-        print()
     end
     
-    -- Summary
+    -- Summary status
     local file_compliant = stats.files_over_150 == 0
     local file_has_warnings = stats.files_100_150 > 0
     local function_compliant = stats.functions_over_15 == 0
     local fully_compliant = file_compliant and function_compliant
     
-    print("🎯 LACONIC SUMMARY")
-    print("==================")
+    template_data.file_status = file_compliant and (file_has_warnings and "⚠️ WARN" or "✅ PASS") or "❌ FAIL"
+    template_data.function_status = function_compliant and "✅ PASS" or "❌ FAIL"
+    template_data.overall_status = fully_compliant and (file_has_warnings and "⚠️ WARN" or "✅ PASS") or "❌ FAIL"
     
-    local file_status = file_compliant and (file_has_warnings and "⚠️ WARN" or "✅ PASS") or "❌ FAIL"
-    local function_status = function_compliant and "✅ PASS" or "❌ FAIL"
-    local overall_status = fully_compliant and (file_has_warnings and "⚠️ WARN" or "✅ PASS") or "❌ FAIL"
-    
-    printf("File length compliance: %s", file_status)
-    printf("Function length compliance: %s", function_status)
-    printf("Overall compliance: %s", overall_status)
+    -- Render and print report
+    local report = lib.render_template('laconic_report.template', template_data)
+    print(report)
     
     -- Exit with appropriate code
     return fully_compliant and 0 or 1
@@ -277,6 +319,14 @@ function printf(fmt, ...)
     print(string.format(fmt, ...))
 end
 
+-- Check if path argument is provided
+local path = ...
+if not path then
+    print("Error: Path argument is required")
+    print("Usage: lua laconic.lua <path>")
+    os.exit(1)
+end
+
 -- Run the check
-local exit_code = check_compliance()
+local exit_code = check_compliance(path)
 os.exit(exit_code)

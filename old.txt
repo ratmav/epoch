@@ -1,0 +1,35 @@
+🧪 EPOCH TEST COVERAGE
+=====================
+
+Test files found: 52
+Total files: 65
+Testable files: 46
+Files with tests: 46 (100.0%)
+Files without tests: 0 (0.0%)
+Files excluded from testing: 19
+
+🚫 FILES EXCLUDED FROM TESTING
+==============================
+📄 lua/epoch/report/init.lua
+📄 lua/epoch/init.lua
+📄 lua/epoch/config.lua
+📄 lua/epoch/commands.lua
+📄 lua/epoch/storage/init.lua
+📄 lua/epoch/ui/init.lua
+📄 lua/epoch/ui/window.lua
+📄 lua/epoch/ui/interval.lua
+📄 lua/epoch/ui/window/highlights.lua
+📄 lua/epoch/ui/window/buffer.lua
+📄 lua/epoch/ui/window/creation.lua
+📄 lua/epoch/ui/window/config.lua
+📄 lua/epoch/ui/window/lifecycle.lua
+📄 lua/epoch/ui/window/cleanup.lua
+📄 lua/epoch/ui/window/state.lua
+📄 lua/epoch/ui/input.lua
+📄 lua/epoch/ui/logic/init.lua
+📄 lua/epoch/ui/confirmations.lua
+📄 lua/epoch/validation/init.lua
+
+🧪 COVERAGE SUMMARY
+==================
+Test coverage: ✅ PASS (100.0%)

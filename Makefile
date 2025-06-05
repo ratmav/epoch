@@ -36,13 +36,17 @@ data:
 		-c "lua dofile('$(PWD)/tests/scripts/create_test_data.lua')" \
 		-c "quit"
 
+# Helper to check for luarocks and set environment
+check-luarocks:
+	@command -v luarocks >/dev/null 2>&1 || { echo "Error: luarocks is required for development tools. Install luarocks first." >&2; exit 1; }
+
 # Check laconic compliance (file/function length)
-laconic:
-	@lua scripts/laconic.lua
+laconic: check-luarocks
+	@eval "$$(luarocks path)" && lua scripts/laconic.lua lua/epoch
 
 # Check test coverage
-coverage:
-	@lua scripts/coverage.lua
+coverage: check-luarocks
+	@eval "$$(luarocks path)" && lua scripts/coverage.lua
 
 # Lint Lua code with luacheck
 lint:

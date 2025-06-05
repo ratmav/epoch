@@ -1,0 +1,25 @@
+🧪 EPOCH TEST COVERAGE
+=====================
+
+Test files found: $test_files
+Total files: $total_files
+Testable files: $testable_files
+Files with tests: $tested_files ($coverage_percent%)
+Files without tests: $untested_files ($uncovered_percent%)
+@if(has_excluded)<{{Files excluded from testing: $excluded_count}}>
+
+@if(has_untested)<{{📋 UNTESTED FILES
+=================
+@map{ item=untested_list, _separator="
+" }:{{$item}}
+}}>
+
+@if(has_excluded)<{{🚫 FILES EXCLUDED FROM TESTING
+==============================
+@map{ item=excluded_list, _separator="
+" }:{{$item}}
+}}>
+
+🧪 COVERAGE SUMMARY
+==================
+Test coverage: $status ($coverage_percent%)

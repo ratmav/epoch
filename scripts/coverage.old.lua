@@ -3,10 +3,15 @@
 -- Test coverage checker for epoch project
 -- Analyzes which Lua files have corresponding test files (1:1 mapping only)
 
--- TODO: remove this line after testing - makefile handles path
-package.path = 'scripts/lib/?.lua;scripts/lib/?/init.lua;lua/?.lua;lua/?/init.lua;/home/ratmav/.luarocks/share/lua/5.1/?.lua;' .. package.path
-package.cpath = '/home/ratmav/.luarocks/lib/lua/5.1/?.so;' .. package.cpath
-local lib = require('init')
+local function get_lua_files()
+    local files = {}
+    local handle = io.popen('find lua/epoch -name "*.lua" -type f')
+    for line in handle:lines() do
+        table.insert(files, line)
+    end
+    handle:close()
+    return files
+end
 
 local function get_test_files()
     local files = {}
@@ -90,50 +95,68 @@ local function calculate_test_coverage(lua_files, test_files)
 end
 
 local function check_coverage()
-    local lua_files = lib.get_lua_files()
+    local lua_files = get_lua_files()
     local test_files = get_test_files()
     local coverage_stats = calculate_test_coverage(lua_files, test_files)
     
-    -- Prepare template data
-    local template_data = {
-        test_files = coverage_stats.test_files,
-        total_files = coverage_stats.total_files,
-        testable_files = coverage_stats.testable_files,
-        tested_files = coverage_stats.tested_files,
-        coverage_percent = string.format("%.1f", coverage_stats.coverage_percent),
-        untested_files = #coverage_stats.untested_files,
-        uncovered_percent = string.format("%.1f", 100 - coverage_stats.coverage_percent),
-        excluded_count = #coverage_stats.excluded_files,
-        has_excluded = #coverage_stats.excluded_files > 0,
-        has_untested = coverage_stats.coverage_percent < 100 and #coverage_stats.untested_files > 0,
-        status = coverage_stats.coverage_percent >= 100 and "✅ PASS" or "⚠️ WARN"
-    }
+    print("🧪 EPOCH TEST COVERAGE")
+    print("=====================")
+    print()
     
-    -- Prepare untested files list
-    if template_data.has_untested then
-        template_data.untested_list = {}
+    printf("Test files found: %d", coverage_stats.test_files)
+    printf("Total files: %d", coverage_stats.total_files)
+    printf("Testable files: %d", coverage_stats.testable_files)
+    printf("Files with tests: %d (%.1f%%)", 
+           coverage_stats.tested_files, 
+           coverage_stats.coverage_percent)
+    printf("Files without tests: %d (%.1f%%)", 
+           #coverage_stats.untested_files, 
+           100 - coverage_stats.coverage_percent)
+    if #coverage_stats.excluded_files > 0 then
+        printf("Files excluded from testing: %d", #coverage_stats.excluded_files)
+    end
+    print()
+    
+    -- Show untested files if coverage is below 100%
+    if coverage_stats.coverage_percent < 100 and #coverage_stats.untested_files > 0 then
+        print("📋 UNTESTED FILES")
+        print("=================")
         for _, file in ipairs(coverage_stats.untested_files) do
+            -- Show what test file should exist
             local relative_path = file:match("lua/epoch/(.+)%.lua$")
             local expected_test = "tests/" .. relative_path .. "_spec.lua"
-            table.insert(template_data.untested_list, string.format("📄 %s (missing: %s)", file, expected_test))
+            printf("📄 %s (missing: %s)", file, expected_test)
         end
+        print()
     end
     
-    -- Prepare excluded files list
-    if template_data.has_excluded then
-        template_data.excluded_list = {}
+    -- Show excluded files if any exist
+    if #coverage_stats.excluded_files > 0 then
+        print("🚫 FILES EXCLUDED FROM TESTING")
+        print("==============================")
         for _, file in ipairs(coverage_stats.excluded_files) do
-            table.insert(template_data.excluded_list, string.format("📄 %s", file))
+            printf("📄 %s", file)
         end
+        print()
     end
     
-    -- Render and print report
-    local report = lib.render_template('coverage_report.template', template_data)
-    print(report)
+    -- Summary
+    local test_coverage_good = coverage_stats.coverage_percent >= 100
+    local coverage_status = test_coverage_good and "✅ PASS" or "⚠️ WARN"
     
-    return coverage_stats.coverage_percent >= 100
+    print("🧪 COVERAGE SUMMARY")
+    print("==================")
+    printf("Test coverage: %s (%.1f%%)", coverage_status, coverage_stats.coverage_percent)
+    
+    -- Exit with appropriate code
+    return test_coverage_good and 0 or 1
+end
+
+-- Helper function for formatted printing
+function printf(fmt, ...)
+    print(string.format(fmt, ...))
 end
 
 -- Run the check
-local success = check_coverage()
-lib.exit_with_status(success)
+local exit_code = check_coverage()
+os.exit(exit_code)
