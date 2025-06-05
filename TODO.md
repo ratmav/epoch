@@ -4,7 +4,12 @@
 
 - Create tests for config.lua, commands.lua, and ui/interval.lua which have testable logic
 
-## 2. User Experience & Documentation
+## 2. Standards
+
+- confirm we pass tests, coverage, and laconic checks
+- we have linting failures. fix them. maintain discipline w.r.t. coding standards in CLAUDE.md at all times.
+
+## 3. User Experience & Documentation
 
 - Confirm we use the day's existing timesheet, don't create new ones without confirmation dialog
 - Complete manual test plan execution (tests/MANUAL_TEST_PLAN.md)
@@ -13,7 +18,7 @@
 - Update documentation, including README and plugin .txt documentation
 - GitHub action to lint, check formatting, and test new pull requests
 
-## 4. Future Features (post v0.1.0)
+## New Features
 
 - Add support for :EpochEdit <date/> to open the timesheet for a specific date
   - No date opens today's timesheet by default
