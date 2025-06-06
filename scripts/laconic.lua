@@ -3,9 +3,6 @@
 -- Laconic compliance checker for epoch project
 -- Checks file length and function length compliance only
 
--- TODO: remove this line after testing - makefile handles path
-package.path = 'scripts/lib/?.lua;scripts/lib/?/init.lua;lua/?.lua;lua/?/init.lua;/home/ratmav/.luarocks/share/lua/5.1/?.lua;' .. package.path
-package.cpath = '/home/ratmav/.luarocks/lib/lua/5.1/?.so;' .. package.cpath
 local lib = require('init')
 
 local function path_exists(path)
@@ -14,14 +11,14 @@ local function path_exists(path)
     if result == 0 then
         return true, 'directory'
     end
-    
+
     -- Then check if it's a file
     local file = io.open(path, 'r')
     if file then
         file:close()
         return true, 'file'
     end
-    
+
     return false, nil
 end
 
@@ -29,12 +26,12 @@ local function validate_path(path)
     if not path then
         error("Path argument is required")
     end
-    
+
     local exists, type = path_exists(path)
     if not exists then
         error("Path does not exist: " .. path)
     end
-    
+
     return type
 end
 
@@ -50,7 +47,7 @@ end
 
 local function get_lua_files(path)
     local path_type = validate_path(path)
-    
+
     if path_type == 'file' then
         if path:match('%.lua$') then
             return {path}
@@ -58,7 +55,7 @@ local function get_lua_files(path)
             error("File is not a Lua file: " .. path)
         end
     end
-    
+
     return find_lua_files(path)
 end
 
@@ -68,7 +65,7 @@ local function count_lines(filepath)
     if not file then
         return 0
     end
-    
+
     for _ in file:lines() do
         count = count + 1
     end
@@ -83,31 +80,31 @@ local function extract_functions(filepath)
     if not file then
         return functions
     end
-    
+
     local lines = {}
     for line in file:lines() do
         table.insert(lines, line)
     end
     file:close()
-    
+
     local i = 1
     while i <= #lines do
         local line = lines[i]
-        
+
         -- Skip comments and empty lines
         local trimmed = line:match("^%s*(.-)%s*$")
         if not (trimmed:match("^%-%-") or trimmed == "") then
-        
+
         -- Check for function definition patterns
         local func_name = nil
         local is_function_line = false
-        
+
         -- Pattern 1: function module.name(...)
         func_name = line:match("^%s*function%s+([%w_.]+)%s*%(")
         if func_name then
             is_function_line = true
         end
-        
+
         -- Pattern 2: local function name(...)
         if not func_name then
             func_name = line:match("^%s*local%s+function%s+([%w_]+)%s*%(")
@@ -115,7 +112,7 @@ local function extract_functions(filepath)
                 is_function_line = true
             end
         end
-        
+
         -- Pattern 3: name = function(...)
         if not func_name then
             func_name = line:match("^%s*([%w_.]+)%s*=%s*function%s*%(")
@@ -123,17 +120,17 @@ local function extract_functions(filepath)
                 is_function_line = true
             end
         end
-        
+
         if is_function_line and func_name then
             local function_start = i
             local depth = 1  -- We're inside the function now
             local j = i + 1
-            
+
             -- Find the matching 'end' for this function
             while j <= #lines and depth > 0 do
                 local current_line = lines[j]
                 local trimmed_current = current_line:match("^%s*(.-)%s*$")
-                
+
                 -- Skip comments
                 if not trimmed_current:match("^%-%-") then
                     -- Count block-starting keywords
@@ -158,7 +155,7 @@ local function extract_functions(filepath)
                             depth = depth + 1
                         end
                     end
-                    
+
                     -- Count block-ending keywords
                     for word in trimmed_current:gmatch("%f[%w_]end%f[%W]") do
                         depth = depth - 1
@@ -167,10 +164,10 @@ local function extract_functions(filepath)
                         depth = depth - 1
                     end
                 end
-                
+
                 j = j + 1
             end
-            
+
             -- If we found the end, record the function
             if depth == 0 then
                 local func_lines = j - function_start
@@ -185,11 +182,11 @@ local function extract_functions(filepath)
                 i = i + 1
             end
         end
-        
+
         end -- end of if not comment/empty
         i = i + 1
     end
-    
+
     return functions
 end
 
@@ -208,11 +205,11 @@ local function check_compliance(path)
         functions_under_15 = 0,
         functions_over_15 = 0
     }
-    
+
     for _, filepath in ipairs(files) do
         local line_count = count_lines(filepath)
         stats.total_files = stats.total_files + 1
-        
+
         -- File length compliance
         if line_count > 150 then
             table.insert(violations.file_length, {
@@ -231,12 +228,12 @@ local function check_compliance(path)
         else
             stats.files_under_100 = stats.files_under_100 + 1
         end
-        
+
         -- Function length compliance
         local functions = extract_functions(filepath)
         for _, func in ipairs(functions) do
             stats.total_functions = stats.total_functions + 1
-            
+
             if func.lines > 15 then
                 table.insert(violations.function_length, {
                     file = filepath,
@@ -250,7 +247,7 @@ local function check_compliance(path)
             end
         end
     end
-    
+
     -- Prepare template data
     local template_data = {
         total_files = stats.total_files,
@@ -268,7 +265,7 @@ local function check_compliance(path)
         has_long_files = #violations.file_length > 0,
         has_long_functions = #violations.function_length > 0
     }
-    
+
     -- Prepare long files list
     if template_data.has_long_files then
         template_data.long_files_list = {}
@@ -282,8 +279,8 @@ local function check_compliance(path)
             })
         end
     end
-    
-    -- Prepare long functions list 
+
+    -- Prepare long functions list
     if template_data.has_long_functions then
         template_data.long_functions_list = {}
         for _, violation in ipairs(violations.function_length) do
@@ -295,21 +292,21 @@ local function check_compliance(path)
             })
         end
     end
-    
+
     -- Summary status
     local file_compliant = stats.files_over_150 == 0
     local file_has_warnings = stats.files_100_150 > 0
     local function_compliant = stats.functions_over_15 == 0
     local fully_compliant = file_compliant and function_compliant
-    
+
     template_data.file_status = file_compliant and (file_has_warnings and "⚠️ WARN" or "✅ PASS") or "❌ FAIL"
     template_data.function_status = function_compliant and "✅ PASS" or "❌ FAIL"
     template_data.overall_status = fully_compliant and (file_has_warnings and "⚠️ WARN" or "✅ PASS") or "❌ FAIL"
-    
+
     -- Render and print report
     local report = lib.render_template('laconic_report.template', template_data)
     print(report)
-    
+
     -- Exit with appropriate code
     return fully_compliant and 0 or 1
 end

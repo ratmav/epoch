@@ -24,11 +24,11 @@ end
 function resolver.get_fixture(registry, fixture_path)
   local path_parts = parse_fixture_path(fixture_path)
   local fixture = navigate_registry(registry, path_parts)
-  
+
   if not fixture then
     error("Fixture not found: " .. fixture_path)
   end
-  
+
   return vim.deepcopy(fixture)
 end
 

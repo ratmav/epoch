@@ -22,3 +22,7 @@
 
 - Add support for :EpochEdit <date/> to open the timesheet for a specific date
   - No date opens today's timesheet by default
+
+## Infrastructure
+
+- Change 'NVIM_INSTALL_MODE' to 'NVIM_HEADLESS_MODE' in dotfiles for better semantics

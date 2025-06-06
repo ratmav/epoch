@@ -3,9 +3,6 @@
 -- Test coverage checker for epoch project
 -- Analyzes which Lua files have corresponding test files (1:1 mapping only)
 
--- TODO: remove this line after testing - makefile handles path
-package.path = 'scripts/lib/?.lua;scripts/lib/?/init.lua;lua/?.lua;lua/?/init.lua;/home/ratmav/.luarocks/share/lua/5.1/?.lua;' .. package.path
-package.cpath = '/home/ratmav/.luarocks/lib/lua/5.1/?.so;' .. package.cpath
 local lib = require('init')
 
 local function get_test_files()
@@ -23,7 +20,7 @@ local function has_no_test_comment(filepath)
     if not file then
         return false
     end
-    
+
     -- Check first 10 lines for the magic comment
     local line_count = 0
     for line in file:lines() do
@@ -31,14 +28,14 @@ local function has_no_test_comment(filepath)
         if line_count > 10 then
             break
         end
-        
+
         -- Look for the magic comment pattern
         if line:match("^%s*%-%-%s*coverage:%s*no%s*tests?%s*$") then
             file:close()
             return true
         end
     end
-    
+
     file:close()
     return false
 end
@@ -52,7 +49,7 @@ local function calculate_test_coverage(lua_files, test_files)
         excluded_files = {},
         test_files = #test_files
     }
-    
+
     -- Create a set of test file paths for exact 1:1 mapping
     local test_paths = {}
     for _, test_file in ipairs(test_files) do
@@ -63,7 +60,7 @@ local function calculate_test_coverage(lua_files, test_files)
             test_paths[relative_test_path] = true
         end
     end
-    
+
     -- Check each lua file for exact corresponding test
     for _, lua_file in ipairs(lua_files) do
         local relative_path = lua_file:match("lua/epoch/(.+)%.lua$")
@@ -73,7 +70,7 @@ local function calculate_test_coverage(lua_files, test_files)
                 table.insert(coverage_stats.excluded_files, lua_file)
             else
                 coverage_stats.testable_files = coverage_stats.testable_files + 1
-                
+
                 -- Only check for exact 1:1 match
                 if test_paths[relative_path] then
                     coverage_stats.tested_files = coverage_stats.tested_files + 1
@@ -83,8 +80,8 @@ local function calculate_test_coverage(lua_files, test_files)
             end
         end
     end
-    
-    coverage_stats.coverage_percent = coverage_stats.testable_files > 0 and 
+
+    coverage_stats.coverage_percent = coverage_stats.testable_files > 0 and
         (coverage_stats.tested_files / coverage_stats.testable_files) * 100 or 0
     return coverage_stats
 end
@@ -93,7 +90,7 @@ local function check_coverage()
     local lua_files = lib.get_lua_files()
     local test_files = get_test_files()
     local coverage_stats = calculate_test_coverage(lua_files, test_files)
-    
+
     -- Prepare template data
     local template_data = {
         test_files = coverage_stats.test_files,
@@ -108,7 +105,7 @@ local function check_coverage()
         has_untested = coverage_stats.coverage_percent < 100 and #coverage_stats.untested_files > 0,
         status = coverage_stats.coverage_percent >= 100 and "✅ PASS" or "⚠️ WARN"
     }
-    
+
     -- Prepare untested files list
     if template_data.has_untested then
         template_data.untested_list = {}
@@ -118,7 +115,7 @@ local function check_coverage()
             table.insert(template_data.untested_list, string.format("📄 %s (missing: %s)", file, expected_test))
         end
     end
-    
+
     -- Prepare excluded files list
     if template_data.has_excluded then
         template_data.excluded_list = {}
@@ -126,11 +123,11 @@ local function check_coverage()
             table.insert(template_data.excluded_list, string.format("📄 %s", file))
         end
     end
-    
+
     -- Render and print report
     local report = lib.render_template('coverage_report.template', template_data)
     print(report)
-    
+
     return coverage_stats.coverage_percent >= 100
 end
 

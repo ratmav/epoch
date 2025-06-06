@@ -4,11 +4,12 @@
 LUA_DIR := ./lua
 TEST_DIR := ./tests
 
-# TODO: Change 'NVIM_INSTALL_MODE' to 'NVIM_HEADLESS_MODE' in your dotfiles
-# for better semantics
 NVIM_FLAGS := NVIM_INSTALL_MODE=1
 
-.PHONY: test clean data laconic coverage lint help
+# Lua path for script execution
+SCRIPT_LUA_PATH := LUA_PATH="$(PWD)/scripts/lib/?.lua;$(PWD)/scripts/lib/?/init.lua;$(PWD)/lua/?.lua;$(PWD)/lua/?/init.lua;$$LUA_PATH"
+
+.PHONY: test clean data laconic coverage wisp lint help
 
 # Default target shows help
 .DEFAULT_GOAL := help
@@ -42,11 +43,15 @@ check-luarocks:
 
 # Check laconic compliance (file/function length)
 laconic: check-luarocks
-	@eval "$$(luarocks path)" && lua scripts/laconic.lua lua/epoch
+	@eval "$$(luarocks path)" && $(SCRIPT_LUA_PATH) lua scripts/laconic.lua lua/epoch
 
 # Check test coverage
 coverage: check-luarocks
-	@eval "$$(luarocks path)" && lua scripts/coverage.lua
+	@eval "$$(luarocks path)" && $(SCRIPT_LUA_PATH) lua scripts/coverage.lua
+
+# Clean whitespace with wisp tool
+wisp: check-luarocks
+	@eval "$$(luarocks path)" && $(SCRIPT_LUA_PATH) lua scripts/wisp.lua
 
 # Lint Lua code with luacheck
 lint:
@@ -82,6 +87,7 @@ help:
 	@echo "  make test SPEC=name  - Run specific test (e.g., make test SPEC=ui_logic)"
 	@echo "  make laconic         - Check laconic compliance (file/function length)"
 	@echo "  make coverage        - Check test coverage"
+	@echo "  make wisp            - Clean whitespace (trailing, empty lines)"
 	@echo "  make lint            - Lint Lua code with luacheck"
 	@echo "  make data            - Create sample timesheet data for manual testing"
 	@echo "  make clean           - Clean temporary files and timesheet data"
