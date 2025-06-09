@@ -11,17 +11,18 @@ reporting.
 COMMANDS                                                       *epoch-commands*
 
                                                               *:EpochEdit*
-:EpochEdit       toggle today's timesheet window. if the window is not visible,
-                 it will be opened. if it's already open, it will be closed.
+:EpochEdit       toggle today's timesheet window. opens a modifiable floating
+                 window containing today's timesheet as a lua table. if no
+                 timesheet exists, starts the interval creation workflow.
 
                                                               *:EpochInterval*
-:EpochInterval   add a new time interval. you will be prompted for:
-                 - client name
-                 - project name
-                 - description
+:EpochInterval   add a new time interval. prompts for client, project, and
+                 task in sequence. automatically closes any open interval
+                 and appends the new interval to today's timesheet.
 
                                                               *:EpochReport*
-:EpochReport     toggle a weekly time report showing your time totals by day.
+:EpochReport     toggle a weekly report window. shows time totals by day
+                 and by client for the current week.
 
                                                               *:EpochClear*
 :EpochClear      delete all timesheet files with confirmation.
@@ -29,25 +30,56 @@ COMMANDS                                                       *epoch-commands*
 ================================================================================
 USAGE                                                             *epoch-usage*
 
-epoch allows you to track time with minimal disruption to your workflow.
-
 basic workflow:
-1. use `:EpochEdit` to open your daily timesheet
-2. use `:EpochInterval` to add time entries
-3. use `:EpochReport` to see your weekly report
+1. `:EpochInterval` - start tracking (prompted for client/project/task)
+2. `:EpochInterval` - switch tasks (auto-closes previous interval)
+3. `:EpochEdit` - open timesheet for manual editing
+4. `:EpochReport` - review weekly totals
 
-the floating windows can be closed with `q` or `<Esc>`.
-timesheet windows are editable, so you can directly modify the lua file.
-changes to the timesheet are automatically saved when you close the window.
-you can also press `w` to save changes without closing the window.
+floating windows close with `q` or `<Esc>`. timesheet windows auto-save on
+close or manually with `:w`.
 
 ================================================================================
-DATA STORAGE                                                   *epoch-storage*
+DATA MODEL                                                        *epoch-data*
 
-epoch stores your timesheets as lua files in:
-- `stdpath('data') .. '/epoch/'` (typically `~/.local/share/nvim/epoch/`)
+timesheets are lua tables stored as `YYYY-MM-DD.lua` files:
 
-each day has its own lua file named with the format `YYYY-MM-DD.lua`.
+```lua
+{
+  date = "2025-01-15",
+  intervals = {
+    {
+      client = "acme-corp",
+      project = "website-redesign",
+      task = "frontend-planning",
+      start = "9:00 AM",
+      stop = "10:30 AM",
+      notes = {}
+    }
+  },
+  daily_total = "01:30"
+}
+```
+
+required fields:
+- date: YYYY-MM-DD format
+- intervals: array of interval tables
+- client, project, task: non-empty strings
+- start: 12-hour time format ("9:00 AM")
+- stop: 12-hour time or empty string (currently running)
+- notes: array of strings
+
+daily_total calculated from completed intervals only.
+
+================================================================================
+STORAGE                                                         *epoch-storage*
+
+files stored in `stdpath('data')/epoch/`:
+- linux: `~/.local/share/nvim/epoch/`
+- macos: `~/Library/Application Support/nvim/epoch/`
+- windows: `%LOCALAPPDATA%\nvim-data\epoch\`
+
+new intervals append to existing timesheets. existing data is preserved.
 
 ================================================================================
 LICENSE                                                       *epoch-license*
