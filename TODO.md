@@ -13,6 +13,8 @@
         - `coverage`
         - `laconic`
         - `lint`
-4. new feature: `:EpochEdit <date/>`
+4. tag as v0.1.0
+5. new feature: `:EpochEdit <date/>`
     - Add support for :EpochEdit <date/> to open the timesheet for a specific date
         - No date opens today's timesheet by default
+    - v0.2.0
