@@ -47,15 +47,10 @@ describe("ui modules", function()
 
   describe("interval operations", function()
     it("should create a valid interval with current time", function()
-      -- Mock os.time to return a fixed value
-      local original_time = os.time
-      local fixed_time = 1620000000 -- Some fixed timestamp
-      os.time = function() return fixed_time end
+      local time_fixtures = require('fixtures.time_fixtures')
+      local fixed_time = time_fixtures.timestamps.base_time
 
-      local interval = interval_ops.create("acme-corp", "website-redesign", "frontend-planning")
-
-      -- Restore original time function
-      os.time = original_time
+      local interval = interval_ops.create("acme-corp", "website-redesign", "frontend-planning", fixed_time)
 
       assert.equals("acme-corp", interval.client)
       assert.equals("website-redesign", interval.project)

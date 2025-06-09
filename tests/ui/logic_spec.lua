@@ -87,7 +87,8 @@ describe("ui logic", function()
 
       it("should successfully add interval with valid inputs", function()
         local timesheet = fixtures.get('timesheets.valid.empty')
-        local success, error_msg, updated_timesheet = workflow_logic.add_interval("client", "project", "task", timesheet)
+        local success, error_msg, updated_timesheet = workflow_logic.add_interval(
+          "client", "project", "task", timesheet)
 
         assert.is_true(success)
         assert.is_nil(error_msg)

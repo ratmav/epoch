@@ -23,16 +23,14 @@ describe("report generator processor week", function()
 
       local result = week.group_timesheets_by_week(timesheets)
 
-      for _, week_data in pairs(result) do
-        assert.is_table(week_data.dates)
-        assert.is_table(week_data.timesheets)
-        assert.truthy(week_data.date_range)
+      local _, week_data = next(result)
+      assert.is_table(week_data.dates)
+      assert.is_table(week_data.timesheets)
+      assert.truthy(week_data.date_range)
 
-        assert.equals(1, #week_data.dates)
-        assert.equals(1, #week_data.timesheets)
-        assert.equals("2025-01-01", week_data.dates[1])
-        break
-      end
+      assert.equals(1, #week_data.dates)
+      assert.equals(1, #week_data.timesheets)
+      assert.equals("2025-01-01", week_data.dates[1])
     end)
 
     it("handles empty timesheet list", function()

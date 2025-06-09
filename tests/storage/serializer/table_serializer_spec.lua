@@ -10,7 +10,8 @@ describe("storage serializer table_serializer", function()
       local result = "{\n"
       local indent = 0
 
-      local output = table_serializer.serialize_regular_keys(serializer_fixtures.tables.sorted_keys, spaces, result, indent)
+      local output = table_serializer.serialize_regular_keys(
+        serializer_fixtures.tables.sorted_keys, spaces, result, indent)
 
       -- Check that keys appear in sorted order
       local alpha_pos = output:find('"alpha"')
@@ -30,7 +31,8 @@ describe("storage serializer table_serializer", function()
       local result = "{\n"
       local indent = 0
 
-      local output = table_serializer.serialize_regular_keys(serializer_fixtures.tables.numeric_keys, spaces, result, indent)
+      local output = table_serializer.serialize_regular_keys(
+        serializer_fixtures.tables.numeric_keys, spaces, result, indent)
 
       assert.truthy(output:match('%[1%]'))
       assert.truthy(output:match('%[2%]'))
@@ -42,7 +44,8 @@ describe("storage serializer table_serializer", function()
       local result = "{\n"
       local indent = 0
 
-      local output = table_serializer.serialize_regular_keys(serializer_fixtures.tables.mixed_keys, spaces, result, indent)
+      local output = table_serializer.serialize_regular_keys(
+        serializer_fixtures.tables.mixed_keys, spaces, result, indent)
 
       assert.truthy(output:match('"string_key"'))
       assert.truthy(output:match('"another_key"'))
@@ -53,7 +56,8 @@ describe("storage serializer table_serializer", function()
       local result = "{\n"
       local indent = 0
 
-      local output = table_serializer.serialize_regular_keys(serializer_fixtures.tables.numeric_keys_only, spaces, result, indent)
+      local output = table_serializer.serialize_regular_keys(
+        serializer_fixtures.tables.numeric_keys_only, spaces, result, indent)
 
       assert.truthy(output:match('%[42%]'))
       assert.truthy(output:match('%[1%]'))
