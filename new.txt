@@ -1,7 +1,0 @@
-lua: scripts/lib/template/renderer.lua:52: attempt to concatenate local 'text' (a table value)
-stack traceback:
-	scripts/lib/template/renderer.lua:52: in function 'evaluate_template'
-	scripts/lib/template/renderer.lua:60: in function 'render_template'
-	scripts/coverage.new.lua:130: in function 'check_coverage'
-	scripts/coverage.new.lua:137: in main chunk
-	[C]: ?
