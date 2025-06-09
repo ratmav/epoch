@@ -9,7 +9,7 @@ NVIM_FLAGS := NVIM_INSTALL_MODE=1
 # Lua path for script execution
 SCRIPT_LUA_PATH := LUA_PATH="$(PWD)/scripts/lib/?.lua;$(PWD)/scripts/lib/?/init.lua;$(PWD)/lua/?.lua;$(PWD)/lua/?/init.lua;$$LUA_PATH"
 
-.PHONY: test clean data laconic coverage wisp lint help
+.PHONY: test data laconic coverage wisp lint help
 
 # Default target shows help
 .DEFAULT_GOAL := help
@@ -65,20 +65,6 @@ test-old:
 		-c "quit"
 
 
-# Clean generated files and timesheet data
-clean:
-	find . -name "*.bak" -delete
-	@echo "WARNING: This will also delete ALL timesheet data."
-	@read -p "Continue? [y/N] " confirm; \
-	if [ "$$confirm" = "y" ] || [ "$$confirm" = "Y" ]; then \
-		nvim --headless \
-			-c "lua package.path='$(PWD)/lua/?.lua;'..package.path" \
-			-c "require('epoch.storage').delete_all_timesheets()" \
-			-c "print('All timesheet data deleted')" \
-			-c "quit"; \
-	else \
-		echo "Timesheet data NOT deleted"; \
-	fi
 
 # Show help information
 help:
@@ -90,4 +76,3 @@ help:
 	@echo "  make wisp            - Clean whitespace (trailing, empty lines)"
 	@echo "  make lint            - Lint Lua code with luacheck"
 	@echo "  make data            - Create sample timesheet data for manual testing"
-	@echo "  make clean           - Clean temporary files and timesheet data"
