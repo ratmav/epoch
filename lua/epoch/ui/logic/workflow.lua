@@ -3,6 +3,7 @@
 
 local interval_ops = require('epoch.ui.interval')
 local timesheet_logic = require('epoch.ui.logic.timesheet')
+local timesheet_module = require('epoch.ui.timesheet')
 
 local workflow_logic = {}
 
@@ -48,14 +49,6 @@ function workflow_logic.add_interval(client, project, task, timesheet)
   return true, nil, updated_timesheet
 end
 
--- Create on_save callback for timesheet window
-local function create_timesheet_save_callback()
-  return function(buffer_content)
-    local timesheet_module = require('epoch.ui.timesheet')
-    return timesheet_module.validate_and_save_from_buffer(buffer_content)
-  end
-end
-
 -- Create timesheet window with configuration
 function workflow_logic.create_timesheet_window(content, timesheet_path, window)
   return window.create({
@@ -67,13 +60,12 @@ function workflow_logic.create_timesheet_window(content, timesheet_path, window)
     modifiable = true,
     buffer_name = timesheet_path,
     content = content,
-    on_save = create_timesheet_save_callback()
+    on_save = timesheet_module.validate_and_save_from_buffer
   })
 end
 
 -- Open timesheet window
 function workflow_logic.open_timesheet(storage, window)
-  local timesheet_logic = require('epoch.ui.logic.timesheet')
   local timesheet_path = storage.get_timesheet_path()
   timesheet_logic.ensure_timesheet_exists(timesheet_path, storage)
   local content = timesheet_logic.load_timesheet_content(timesheet_path)

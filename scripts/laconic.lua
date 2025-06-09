@@ -96,30 +96,14 @@ local function extract_functions(filepath)
         if not (trimmed:match("^%-%-") or trimmed == "") then
 
         -- Check for function definition patterns
-        local func_name = nil
-        local is_function_line = false
-
-        -- Pattern 1: function module.name(...)
-        func_name = line:match("^%s*function%s+([%w_.]+)%s*%(")
-        if func_name then
-            is_function_line = true
+        local function extract_function_name(code_line)
+            return code_line:match("^%s*function%s+([%w_.]+)%s*%(") or
+                   code_line:match("^%s*local%s+function%s+([%w_]+)%s*%(") or
+                   code_line:match("^%s*([%w_.]+)%s*=%s*function%s*%(")
         end
 
-        -- Pattern 2: local function name(...)
-        if not func_name then
-            func_name = line:match("^%s*local%s+function%s+([%w_]+)%s*%(")
-            if func_name then
-                is_function_line = true
-            end
-        end
-
-        -- Pattern 3: name = function(...)
-        if not func_name then
-            func_name = line:match("^%s*([%w_.]+)%s*=%s*function%s*%(")
-            if func_name then
-                is_function_line = true
-            end
-        end
+        local func_name = extract_function_name(line)
+        local is_function_line = func_name ~= nil
 
         if is_function_line and func_name then
             local function_start = i
@@ -134,35 +118,24 @@ local function extract_functions(filepath)
                 -- Skip comments
                 if not trimmed_current:match("^%-%-") then
                     -- Count block-starting keywords
-                    for word in trimmed_current:gmatch("%f[%w_]function%f[%W]") do
-                        depth = depth + 1
+                    local _, function_count = trimmed_current:gsub("%f[%w_]function%f[%W]", "")
+                    local _, if_count = trimmed_current:gsub("%f[%w_]if%f[%W]", "")
+                    local _, for_count = trimmed_current:gsub("%f[%w_]for%f[%W]", "")
+                    local _, while_count = trimmed_current:gsub("%f[%w_]while%f[%W]", "")
+                    local _, repeat_count = trimmed_current:gsub("%f[%w_]repeat%f[%W]", "")
+                    
+                    local do_count = 0
+                    if not trimmed_current:match("function.*do") then
+                        _, do_count = trimmed_current:gsub("%f[%w_]do%f[%W]", "")
                     end
-                    for word in trimmed_current:gmatch("%f[%w_]if%f[%W]") do
-                        depth = depth + 1
-                    end
-                    for word in trimmed_current:gmatch("%f[%w_]for%f[%W]") do
-                        depth = depth + 1
-                    end
-                    for word in trimmed_current:gmatch("%f[%w_]while%f[%W]") do
-                        depth = depth + 1
-                    end
-                    for word in trimmed_current:gmatch("%f[%w_]repeat%f[%W]") do
-                        depth = depth + 1
-                    end
-                    for word in trimmed_current:gmatch("%f[%w_]do%f[%W]") do
-                        -- Only count 'do' if it's not part of a function parameter list
-                        if not trimmed_current:match("function.*do") then
-                            depth = depth + 1
-                        end
-                    end
+                    
+                    depth = depth + function_count + if_count + for_count + while_count + repeat_count + do_count
 
                     -- Count block-ending keywords
-                    for word in trimmed_current:gmatch("%f[%w_]end%f[%W]") do
-                        depth = depth - 1
-                    end
-                    for word in trimmed_current:gmatch("%f[%w_]until%f[%W]") do
-                        depth = depth - 1
-                    end
+                    local _, end_count = trimmed_current:gsub("%f[%w_]end%f[%W]", "")
+                    local _, until_count = trimmed_current:gsub("%f[%w_]until%f[%W]", "")
+                    
+                    depth = depth - end_count - until_count
                 end
 
                 j = j + 1
@@ -309,11 +282,6 @@ local function check_compliance(path)
 
     -- Exit with appropriate code
     return fully_compliant and 0 or 1
-end
-
--- Helper function for formatted printing
-function printf(fmt, ...)
-    print(string.format(fmt, ...))
 end
 
 -- Check if path argument is provided
