@@ -10,7 +10,8 @@ describe("storage serializer array_serializer", function()
       local result = "{\n"
       local indent = 0
 
-      local output = array_serializer.serialize_array_elements(serializer_fixtures.array_serialization.simple, spaces, result, indent)
+      local test_data = serializer_fixtures.array_serialization.simple
+      local output = array_serializer.serialize_array_elements(test_data, spaces, result, indent)
 
       assert.truthy(output:match('"first"'))
       assert.truthy(output:match('"second"'))
@@ -23,7 +24,8 @@ describe("storage serializer array_serializer", function()
       local result = "{\n"
       local indent = 0
 
-      local output = array_serializer.serialize_array_elements(serializer_fixtures.array_serialization.empty, spaces, result, indent)
+      local test_data = serializer_fixtures.array_serialization.empty
+      local output = array_serializer.serialize_array_elements(test_data, spaces, result, indent)
 
       assert.equals("{\n", output)
     end)
@@ -33,7 +35,8 @@ describe("storage serializer array_serializer", function()
       local result = "{\n"
       local indent = 0
 
-      local output = array_serializer.serialize_array_elements(serializer_fixtures.array_serialization.mixed, spaces, result, indent)
+      local test_data = serializer_fixtures.array_serialization.mixed
+      local output = array_serializer.serialize_array_elements(test_data, spaces, result, indent)
 
       assert.truthy(output:match('"string"'))
       assert.truthy(output:match('123'))

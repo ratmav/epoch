@@ -123,18 +123,18 @@ local function extract_functions(filepath)
                     local _, for_count = trimmed_current:gsub("%f[%w_]for%f[%W]", "")
                     local _, while_count = trimmed_current:gsub("%f[%w_]while%f[%W]", "")
                     local _, repeat_count = trimmed_current:gsub("%f[%w_]repeat%f[%W]", "")
-                    
+
                     local do_count = 0
                     if not trimmed_current:match("function.*do") then
                         _, do_count = trimmed_current:gsub("%f[%w_]do%f[%W]", "")
                     end
-                    
+
                     depth = depth + function_count + if_count + for_count + while_count + repeat_count + do_count
 
                     -- Count block-ending keywords
                     local _, end_count = trimmed_current:gsub("%f[%w_]end%f[%W]", "")
                     local _, until_count = trimmed_current:gsub("%f[%w_]until%f[%W]", "")
-                    
+
                     depth = depth - end_count - until_count
                 end
 
