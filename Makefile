@@ -55,7 +55,7 @@ wisp: check-luarocks
 
 # Lint Lua code with luacheck
 lint:
-	@luacheck . --no-color -qq
+	@luacheck . --no-color -q --codes
 
 # Run all tests using the old plenary test_harness (may hang)
 test-old:
