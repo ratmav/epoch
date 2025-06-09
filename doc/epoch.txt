@@ -4,7 +4,7 @@
 EPOCH                                                                    *epoch*
 
 a simple time tracking plugin for neovim. epoch helps you track your time on
-projects with minimal overhead, storing data in YAML files and providing basic
+projects with minimal overhead, storing data in lua files and providing basic
 reporting.
 
 ================================================================================
@@ -37,17 +37,17 @@ basic workflow:
 3. use `:EpochReport` to see your weekly report
 
 the floating windows can be closed with `q` or `<Esc>`.
-timesheet windows are editable, so you can directly modify the YAML file.
+timesheet windows are editable, so you can directly modify the lua file.
 changes to the timesheet are automatically saved when you close the window.
 you can also press `w` to save changes without closing the window.
 
 ================================================================================
 DATA STORAGE                                                   *epoch-storage*
 
-epoch stores your timesheets as YAML files in:
+epoch stores your timesheets as lua files in:
 - `stdpath('data') .. '/epoch/'` (typically `~/.local/share/nvim/epoch/`)
 
-each day has its own YAML file named with the format `YYYY-MM-DD.yaml`.
+each day has its own lua file named with the format `YYYY-MM-DD.lua`.
 
 ================================================================================
 LICENSE                                                       *epoch-license*
