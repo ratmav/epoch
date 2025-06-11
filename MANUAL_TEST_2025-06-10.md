@@ -1,0 +1,527 @@
+# Manual Test 2025-06-10
+
+## Test Group 1: Plugin Installation & Commands
+
+### Test 1.1: Plugin Load
+
+#### Run
+- [x] Start Neovim
+- [x] Run `:lua print(vim.fn.exists(':EpochEdit'))`
+
+#### Result
+**Expected:** Returns `2` (command exists)
+**Result:** PASS
+
+### Test 1.2: Available Commands
+
+#### Run
+- [x] Type `:Epoch` and press Tab for completion
+
+#### Result
+**Expected:** Shows all four commands: `EpochEdit`, `EpochInterval`, `EpochReport`, `EpochClear`
+**Actual:** PASS
+
+---
+
+## Test Group 2: Basic Time Tracking
+
+### Test 2.1: First Time Interval Creation
+
+#### Run
+- [x] Run `:EpochInterval`
+- [x] Enter client: `test-client`
+- [x] Enter project: `test-project`
+- [x] Enter task: `test-task`
+
+#### Result
+**Expected:**
+- Prompts appear in sequence
+- No error messages
+- Confirmation that interval started
+
+**Actual:** PASS
+
+### Test 2.2: View Created Timesheet
+
+#### Run
+- [x] Run `:EpochEdit`
+
+#### Result
+**Expected:**
+- Floating window opens (40% width, 70% height)
+- Shows today's date in YYYY-MM-DD format
+- Contains one interval with current time as start
+- Stop field is empty string `""`
+- Lua syntax highlighting active
+
+**Actual:** PASS
+
+### Test 2.3: Manual Timesheet Editing
+
+#### Run
+- [x] In the edit window, change the task to `updated-task`
+- [x] Run `:EpochEdit` again (this closes and saves)
+
+#### Result
+**Expected:**
+- No validation errors
+- File saves successfully
+- Window closes
+- Success notification appears
+
+**Actual:** PASS
+
+### Test 2.4: Reopen to Verify Changes
+
+#### Run
+- [x] Run `:EpochEdit` again
+
+#### Result
+**Expected:**
+- Floating window opens
+- Shows the updated task name `updated-task`
+- Changes were persisted correctly
+
+**Actual:** PASS
+
+---
+
+## Test Group 3: Multiple Intervals
+
+### Test 3.1: Auto-Close Previous Interval
+
+#### Run
+- [x] Run `:EpochInterval`
+- [x] Enter client: `client-two`
+- [x] Enter project: `project-two`
+- [x] Enter task: `task-two`
+- [x] Run `:EpochEdit`
+
+#### Result
+**Expected:**
+- First interval now has stop time filled in
+- Second interval starts at the stop time of first interval
+- Second interval has empty stop time
+
+**Actual:** PASS
+
+### Test 3.2: Manual Time Entry
+
+#### Run
+- [x] In edit window, manually set first interval:
+  - start: `09:00 AM`
+  - stop: `10:30 AM`
+- [x] Set second interval:
+  - start: `10:30 AM`
+  - stop: `12:00 PM`
+- [x] Close/save with `:EpochEdit`
+
+#### Result
+**Expected:**
+- No validation errors
+- Daily total calculated as `03:00`
+
+**Actual:** PASS
+
+---
+
+## Test Group 4: Time Format Validation
+
+### Test 4.1: Valid Time Formats
+
+#### Setup
+- [x] Run `:EpochClear` to start with clean timesheet data
+
+#### Run
+- [x] Create single interval: run `:EpochInterval` with client: `test-client`, project: `test-project`, task: `test-task`
+- [x] Run `:EpochEdit` to open timesheet
+- [x] Test each valid format by changing the interval's start time:
+  - Change start to `12:00 AM` (midnight), close/save with `:EpochEdit`
+  - Reopen, change start to `01:30 AM`, close/save
+  - Reopen, change start to `12:00 PM`, close/save
+  - Reopen, change start to `11:59 PM`, close/save
+
+#### Result
+**Expected:** All formats accepted without error
+
+**Actual:** PASS
+
+### Test 4.2: Invalid Time Formats
+
+#### Setup
+- [x] Run `:EpochClear` to start with clean timesheet data
+
+#### Run
+- [x] Create single interval: run `:EpochInterval` with client: `test-client`, project: `test-project`, task: `test-task`
+- [x] Run `:EpochEdit` to open timesheet
+- [x] Try each invalid format by changing the interval's start time:
+  - Change start to `9:30` (missing AM/PM), try to close/save with `:EpochEdit`
+  - If successful, change start to `09:30` (missing AM/PM), try to close/save
+  - If successful, change start to `13:30 PM` (invalid hour), try to close/save
+  - If successful, change start to `09:60 AM` (invalid minutes), try to close/save
+
+#### Result
+**Expected:** Validation errors appear, timesheet doesn't save, window stays open
+**Actual:** PASS
+
+#### Teardown
+- [x] Fix the time format to valid value (e.g., `09:00 AM`) and close/save with `:EpochEdit`
+
+---
+
+## Test Group 5: Interval Validation
+
+### Test 5.1: Missing Required Fields
+
+#### Setup
+- [x] Run `:EpochClear` to start with clean timesheet data
+
+#### Run
+- [x] Create single interval: run `:EpochInterval` with client: `test-client`, project: `test-project`, task: `test-task`
+- [x] Run `:EpochEdit` to open timesheet
+- [x] Change `client = "test-client"` to `client = ""`
+- [x] Try to close/save with `:EpochEdit`
+
+#### Result
+**Expected:** Validation error about required fields
+**Actual:** PASS
+
+#### Teardown
+- [x] Fix client field back to `client = "test-client"` and close/save with `:EpochEdit`
+
+### Test 5.2: Invalid Notes Format
+
+#### Setup
+- [x] Run `:EpochClear` to start with clean timesheet data
+
+#### Run
+- [x] Create single interval: run `:EpochInterval` with client: `test-client`, project: `test-project`, task: `test-task`
+- [x] Run `:EpochEdit` to open timesheet
+- [x] Change notes from `{}` to `"string"`
+- [x] Try to close/save with `:EpochEdit`
+
+#### Result
+**Expected:** Validation error about notes format
+**Actual:** PASS
+
+#### Teardown
+- [ ] Fix notes back to `{}` and close/save with `:EpochEdit`
+
+### Test 5.3: Notes Array Validation
+
+#### Setup
+- [x] Run `:EpochClear` to start with clean timesheet data
+
+#### Run
+- [x] Create single interval: run `:EpochInterval` with client: `test-client`, project: `test-project`, task: `test-task`
+- [x] Run `:EpochEdit` to open timesheet
+- [x] Set notes to `{"valid note", "another note"}`
+- [x] Close/save with `:EpochEdit`
+
+#### Result
+**Expected:** No errors, saves successfully
+**Actual:** PASS
+
+---
+
+## Test Group 6: Overlap Detection
+
+### Test 6.1: Overlapping Intervals
+
+#### Setup
+- [x] Run `:EpochClear` to start with clean timesheet data
+- [x] Create first interval: run `:EpochInterval` with client: `client-one`, project: `project-one`, task: `task-one`
+- [x] Create second interval: run `:EpochInterval` with client: `client-two`, project: `project-two`, task: `task-two`
+
+#### Run
+- [x] Run `:EpochEdit` to open timesheet
+- [x] Manually edit intervals to create overlap:
+  - First interval: start `09:00 AM`, stop `11:00 AM`
+  - Second interval: start `10:30 AM`, stop `12:00 PM`
+- [x] Try to close/save with `:EpochEdit`
+
+#### Result
+**Expected**: Validation error about overlapping intervals
+**Actual**: PASS
+
+#### Teardown
+- [ ] Fix second interval to start `11:00 AM` to remove overlap and close/save with `:EpochEdit`
+
+### Test 6.2: Adjacent Intervals (Valid)
+
+#### Setup
+- [ ] Run `:EpochClear` to start with clean timesheet data
+- [ ] Create first interval: run `:EpochInterval` with client: `client-one`, project: `project-one`, task: `task-one`
+- [ ] Create second interval: run `:EpochInterval` with client: `client-two`, project: `project-two`, task: `task-two`
+
+#### Run
+- [ ] Run `:EpochEdit` to open timesheet
+- [ ] Manually edit intervals to be adjacent:
+  - First interval: start `09:00 AM`, stop `10:30 AM`
+  - Second interval: start `10:30 AM`, stop `12:00 PM`
+- [ ] Close/save with `:EpochEdit`
+
+#### Result
+**Expected:** No errors, saves successfully
+**Actual:**
+
+---
+
+## Test Group 7: Reporting
+
+### Test 7.1: Basic Report Generation
+
+#### Setup
+- [ ] Run `:EpochClear` to start with clean timesheet data
+- [ ] Create first interval: run `:EpochInterval` with client: `client-one`, project: `project-one`, task: `task-one`
+- [ ] Create second interval: run `:EpochInterval` with client: `client-two`, project: `project-two`, task: `task-two`
+
+#### Run
+- [ ] Run `:EpochReport`
+
+#### Result
+**Expected:**
+- Floating window opens (50% width, 60% height)
+- Shows current week data
+- Sections: "By Day", "By Client", "Overall"
+- Displays daily and client totals
+
+**Actual:**
+
+### Test 7.2: Empty Report
+
+#### Setup
+- [ ] Run `:EpochClear` to start with clean timesheet data
+
+#### Run
+- [ ] Run `:EpochReport`
+
+#### Result
+**Expected:**
+- Report shows appropriate "no data" messages
+- No errors or crashes
+
+**Actual:**
+
+---
+
+## Test Group 8: Data Persistence
+
+### Test 8.1: File Storage Location
+
+#### Setup
+- [ ] Run `:EpochClear` to start with clean timesheet data
+
+#### Run
+- [ ] Create an interval: run `:EpochInterval` with client: `test-client`, project: `test-project`, task: `test-task`
+- [ ] Run `:lua print(vim.fn.stdpath('data') .. '/epoch')` to see data directory
+- [ ] Check file exists in that directory: `YYYY-MM-DD.lua`
+
+#### Result
+**Expected:** File exists and contains valid Lua table
+**Actual:**
+
+### Test 8.2: Data Reload
+
+#### Setup
+- [ ] Run `:EpochClear` to start with clean timesheet data
+- [ ] Create an interval: run `:EpochInterval` with client: `test-client`, project: `test-project`, task: `test-task`
+
+#### Run
+- [ ] Close Neovim
+- [ ] Restart Neovim
+- [ ] Run `:EpochEdit`
+
+#### Result
+**Expected:** Previous data loads correctly
+**Actual:**
+
+---
+
+## Test Group 9: Edge Cases
+
+### Test 9.1: Unclosed Interval Impact
+
+#### Setup
+- [ ] Run `:EpochClear` to start with clean timesheet data
+- [ ] Create interval: run `:EpochInterval` with client: `test-client`, project: `test-project`, task: `test-task`
+
+#### Run
+- [ ] Run `:EpochEdit` to open timesheet
+- [ ] Set interval stop time to `""`
+- [ ] Close/save with `:EpochEdit`
+- [ ] Run `:EpochReport`
+
+#### Result
+**Expected:** Unclosed interval doesn't contribute to daily total
+**Actual:**
+
+### Test 9.2: Multiple Days
+
+#### Setup
+- [ ] Run `:EpochClear` to start with clean timesheet data
+
+#### Run
+- [ ] Create timesheet for today: run `:EpochInterval` with client: `today-client`, project: `today-project`, task: `today-task`
+- [ ] Manually create file for yesterday with different date in data directory
+- [ ] Run `:EpochReport`
+
+#### Result
+**Expected:** Report shows data from multiple days in current week
+**Actual:**
+
+### Test 9.3: Invalid Lua Syntax
+
+#### Setup
+- [ ] Run `:EpochClear` to start with clean timesheet data
+- [ ] Create interval: run `:EpochInterval` with client: `test-client`, project: `test-project`, task: `test-task`
+
+#### Run
+- [ ] Run `:EpochEdit` to open timesheet
+- [ ] Manually corrupt timesheet with invalid Lua syntax (e.g., remove closing brace)
+- [ ] Try to close/save with `:EpochEdit`
+
+#### Result
+**Expected:** Clear error message about syntax error
+**Actual:**
+
+#### Teardown
+- [ ] Fix the Lua syntax and close/save with `:EpochEdit`
+
+### Test 9.4: Rapid Interval Creation (Sub-Minute Succession)
+
+#### Setup
+- [ ] Run `:EpochClear` to start with clean timesheet data
+
+#### Run
+- [ ] Run `:EpochInterval` and create first interval (client1, project1, task1)
+- [ ] Immediately run `:EpochInterval` again (within same minute)
+- [ ] Create second interval (client2, project2, task2)
+- [ ] Immediately run `:EpochInterval` again (within same minute)
+- [ ] Create third interval (client3, project3, task3)
+- [ ] Run `:EpochEdit` to examine the intervals
+
+#### Result
+**Expected:**
+- No overlapping intervals exist
+- Each interval has sequential start times (shifted forward by 1 minute)
+- Previous intervals properly closed with stop times
+- Intervals appear in chronological order
+- No validation errors about overlaps
+
+**Actual:**
+
+---
+
+## Test Group 10: Cleanup Operations
+
+### Test 10.1: Clear All Data
+
+#### Setup
+Existing timesheet data
+
+#### Run
+- [ ] Run `:EpochClear`
+- [ ] Confirm deletion
+
+#### Result
+**Expected:**
+- Confirmation prompt appears
+- All timesheet files deleted
+- Fresh start possible
+
+**Actual:**
+
+### Test 10.2: Cancel Clear Operation
+
+#### Setup
+Existing timesheet data
+
+#### Run
+- [ ] Run `:EpochClear`
+- [ ] Cancel/decline deletion
+
+#### Result
+**Expected:** No files deleted, operation cancelled
+**Actual:**
+
+---
+
+## Test Group 11: UI Behavior
+
+### Test 11.1: Window Sizing
+
+#### Setup
+- [ ] Run `:EpochClear` to start with clean timesheet data
+- [ ] Create interval: run `:EpochInterval` with client: `test-client`, project: `test-project`, task: `test-task`
+
+#### Run
+- [ ] Test edit window sizing: run `:EpochEdit` (should be 40% width, 70% height)
+- [ ] Close edit window with `:EpochEdit`
+- [ ] Test report window sizing: run `:EpochReport` (should be 50% width, 60% height)
+
+#### Result
+**Expected:** Windows appear at correct sizes
+**Actual:**
+
+### Test 11.2: Syntax Highlighting
+
+#### Setup
+- [ ] Run `:EpochClear` to start with clean timesheet data
+- [ ] Create interval: run `:EpochInterval` with client: `test-client`, project: `test-project`, task: `test-task`
+
+#### Run
+- [ ] Open edit window: run `:EpochEdit`
+- [ ] Verify Lua syntax highlighting
+
+#### Result
+**Expected:** Lua syntax highlighting active in edit window
+**Actual:**
+
+### Test 11.3: Multiple Window Management
+
+#### Setup
+- [ ] Run `:EpochClear` to start with clean timesheet data
+- [ ] Create interval: run `:EpochInterval` with client: `test-client`, project: `test-project`, task: `test-task`
+
+#### Run
+- [ ] Open `:EpochEdit`
+- [ ] Without closing, run `:EpochReport`
+
+#### Result
+**Expected:** Report opens, edit window behavior defined
+**Actual:**
+
+### Test 11.4: Floating Window Scrolling with Large Content
+
+#### Setup
+- [ ] Run `:EpochClear` to start with clean timesheet data
+- [ ] Create multiple intervals (10+ entries): run `:EpochInterval` repeatedly with different client/project/task combinations
+
+#### Run
+- [ ] Run `:EpochEdit`
+- [ ] Verify window size remains at 40% width, 70% height
+- [ ] Test scrolling with `j`/`k` (down/up)
+- [ ] Test scrolling with `h`/`l` (left/right for long lines)
+- [ ] Test `gg` (go to top) and `G` (go to bottom)
+- [ ] Test `Ctrl-u`/`Ctrl-d` (page up/down)
+
+#### Result
+**Expected:**
+- Window size unchanged regardless of content length
+- All vi navigation bindings work normally
+- Content scrolls within fixed window boundaries
+- Can access all content via scrolling
+
+**Actual:**
+
+---
+
+## Summary
+
+- **Total Test Groups:** 11
+- **Total Test Cases:** 25
+- **Focus:** Each test validates a single aspect of functionality
+- **Coverage:** All core features, edge cases, and error conditions
+
+Each test should be performed independently to isolate functionality and identify specific issues.
