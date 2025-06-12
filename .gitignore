@@ -3,3 +3,6 @@
 
 # Ignore test data directory
 test_data/
+
+# Ignore generated manual test files
+manual_test_*.md
