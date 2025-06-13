@@ -85,6 +85,52 @@
 
 **Actual:**
 
+### Test 2.5: EpochEdit With Valid Date
+
+#### Setup
+- [ ] Run `:EpochClear` to start clean
+
+#### Run
+- [ ] Run `:EpochEdit 2024-12-25`
+
+#### Result
+**Expected:**
+- Opens timesheet for December 25, 2024
+- Creates empty timesheet if none exists for that date
+- Window title shows "epoch - timesheet"
+- Buffer name includes the date path
+
+**Actual:**
+
+### Test 2.6: EpochEdit With Invalid Date Format
+
+#### Run
+- [ ] Run `:EpochEdit invalid-date`
+- [ ] Run `:EpochEdit 12/25/2024`
+- [ ] Run `:EpochEdit 2024-13-01`
+
+#### Result
+**Expected:** Graceful error handling or uses fallback behavior
+**Actual:**
+
+### Test 2.7: Multiple Date Timesheets
+
+#### Setup
+- [ ] Run `:EpochClear` to start clean
+
+#### Run
+- [ ] Run `:EpochEdit 2024-01-01` and add some content, save
+- [ ] Run `:EpochEdit 2024-01-02` and add different content, save
+- [ ] Run `:EpochEdit 2024-01-01` again
+
+#### Result
+**Expected:**
+- Each date opens separate timesheet
+- Content persists correctly for each date
+- No cross-contamination between dates
+
+**Actual:**
+
 ---
 
 ## Test Group 3: Multiple Intervals

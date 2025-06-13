@@ -20,6 +20,15 @@ describe('commands', function()
       assert.is_true(command_exists)
     end)
 
+    it('should create EpochEdit command with optional date parameter', function()
+      commands.register()
+
+      -- Check that the command accepts arguments
+      local command_info = vim.api.nvim_get_commands({})['EpochEdit']
+      assert.is_not_nil(command_info)
+      assert.equals('?', command_info.nargs)
+    end)
+
     it('should create EpochInterval command', function()
       commands.register()
 

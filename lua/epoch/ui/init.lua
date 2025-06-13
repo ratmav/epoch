@@ -14,11 +14,11 @@ function ui.setup()
 end
 
 -- Toggle timesheet window
-function ui.toggle_timesheet()
+function ui.toggle_timesheet(date)
   if window.is_open("timesheet") then
     window.close("timesheet")
   else
-    logic.handle_timesheet_open(storage, window, ui)
+    logic.handle_timesheet_open(storage, window, ui, date)
   end
 end
 

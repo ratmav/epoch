@@ -4,8 +4,6 @@
 LUA_DIR := ./lua
 TEST_DIR := ./tests
 
-NVIM_FLAGS := NVIM_INSTALL_MODE=1
-
 # Lua path for script execution
 SCRIPT_LUA_PATH := LUA_PATH="$(PWD)/scripts/lib/?.lua;$(PWD)/scripts/lib/?/init.lua;$(PWD)/lua/?.lua;$(PWD)/lua/?/init.lua;$$LUA_PATH"
 
@@ -22,12 +20,12 @@ test:
 ifeq ($(TYPE),manual)
 	@eval "$$(luarocks path)" && $(SCRIPT_LUA_PATH) lua scripts/manual_test.lua
 else ifdef SPEC
-	$(NVIM_FLAGS) nvim --headless \
+	nvim --headless \
 		-c "lua package.path='$(PWD)/lua/?.lua;'..package.path" \
 		-c "lua require('plenary.test_harness').test_directory('$(TEST_DIR)/$(SPEC)_spec.lua', {minimal_init = '$(TEST_DIR)/minimal_init.lua'})" \
 		-c "quit"
 else
-	$(NVIM_FLAGS) nvim --headless \
+	nvim --headless \
 		-c "lua package.path='$(PWD)/lua/?.lua;'..package.path" \
 		-c "lua require('plenary.test_harness').test_directory('$(TEST_DIR)', {minimal_init = '$(TEST_DIR)/minimal_init.lua', sequential = true})" \
 		-c "quit"

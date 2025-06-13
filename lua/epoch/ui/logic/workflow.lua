@@ -65,21 +65,27 @@ function workflow_logic.create_timesheet_window(content, timesheet_path, window)
 end
 
 -- Open timesheet window
-function workflow_logic.open_timesheet(storage, window)
-  local timesheet_path = storage.get_timesheet_path()
-  timesheet_logic.ensure_timesheet_exists(timesheet_path, storage)
+function workflow_logic.open_timesheet(storage, window, date)
+  local timesheet_path = storage.get_timesheet_path(date)
+  timesheet_logic.ensure_timesheet_exists(timesheet_path, storage, date)
   local content = timesheet_logic.load_timesheet_content(timesheet_path)
   return workflow_logic.create_timesheet_window(content, timesheet_path, window)
 end
 
 -- Handle timesheet opening logic
-function workflow_logic.handle_timesheet_open(storage, window, ui)
-  local path = storage.get_timesheet_path()
+function workflow_logic.handle_timesheet_open(storage, window, ui, date)
+  local path = storage.get_timesheet_path(date)
 
   if vim.fn.filereadable(path) == 0 then
-    ui.add_interval_and_edit()
+    if date then
+      -- For specific dates, create empty timesheet instead of prompting for interval
+      workflow_logic.open_timesheet(storage, window, date)
+    else
+      -- For today, prompt for interval if no timesheet exists
+      ui.add_interval_and_edit()
+    end
   else
-    workflow_logic.open_timesheet(storage, window)
+    workflow_logic.open_timesheet(storage, window, date)
   end
 end
 

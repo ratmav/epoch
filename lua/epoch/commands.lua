@@ -6,12 +6,24 @@ local commands = {}
 local ui = require('epoch.ui')
 local storage = require('epoch.storage')
 local confirmations = require('epoch.ui.confirmations')
+local date_calculation = require('epoch.report.week_utils.date_calculation')
 
 -- Register edit command
 local function register_edit_command()
-  vim.api.nvim_create_user_command('EpochEdit', function()
-    ui.toggle_timesheet()
-  end, {})
+  vim.api.nvim_create_user_command('EpochEdit', function(opts)
+    local date = opts.args and opts.args ~= "" and opts.args or nil
+
+    -- Validate date if provided - get_week_number returns nil for invalid dates
+    if date and not date_calculation.get_week_number(date) then
+      vim.notify("epoch: invalid date format. Use YYYY-MM-DD (e.g., 2024-12-25)", vim.log.levels.ERROR)
+      return
+    end
+
+    ui.toggle_timesheet(date)
+  end, {
+    nargs = '?',
+    desc = 'Edit timesheet for today or specified date (YYYY-MM-DD)'
+  })
 end
 
 -- Register interval command
