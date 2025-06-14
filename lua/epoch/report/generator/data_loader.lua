@@ -2,6 +2,7 @@
 -- Timesheet data loading and date extraction
 
 local storage = require('epoch.storage')
+local paths = require('epoch.storage.paths')
 
 local data_loader = {}
 
@@ -12,8 +13,8 @@ function data_loader.get_all_timesheet_dates()
 
   for _, file_path in ipairs(files) do
     -- Extract date from filename (YYYY-MM-DD.lua)
-    local date = vim.fn.fnamemodify(file_path, ":t:r")
-    if date:match("^%d%d%d%d%-%d%d%-%d%d$") then
+    local date = paths.extract_date_from_filename(file_path)
+    if date then
       table.insert(dates, date)
     end
   end

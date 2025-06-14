@@ -24,6 +24,11 @@ COMMANDS                                                       *epoch-commands*
 :EpochReport     toggle a weekly report window. shows time totals by day
                  and by client for the current week.
 
+                                                              *:EpochList*
+:EpochList       show all timesheets in quickfix list. each entry shows
+                 the date and daily total. use quickfix navigation to
+                 jump between timesheet files.
+
                                                               *:EpochClear*
 :EpochClear      delete all timesheet files with confirmation.
 
@@ -35,6 +40,7 @@ basic workflow:
 2. `:EpochInterval` - switch tasks (auto-closes previous interval)
 3. `:EpochEdit` - open timesheet for manual editing
 4. `:EpochReport` - review weekly totals
+5. `:EpochList` - view all timesheets in quickfix list
 
 floating windows close with `q` or `<Esc>`. timesheet windows auto-save on
 close or manually with `:w`.

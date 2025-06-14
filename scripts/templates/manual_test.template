@@ -18,7 +18,7 @@
 - [ ] Type `:Epoch` and press Tab for completion
 
 #### Result
-**Expected:** Shows all four commands: `EpochEdit`, `EpochInterval`, `EpochReport`, `EpochClear`
+**Expected:** Shows all five commands: `EpochEdit`, `EpochInterval`, `EpochReport`, `EpochList`, `EpochClear`
 
 **Actual:**
 
@@ -381,6 +381,71 @@
 
 #### Result
 **Expected:** Previous data loads correctly
+**Actual:**
+
+### Test 8.3: Empty Timesheet List
+
+#### Setup
+- [ ] Run `:EpochClear` to start with clean timesheet data
+
+#### Run
+- [ ] Run `:EpochList`
+
+#### Result
+**Expected:** Message "epoch: no timesheet files found"
+**Actual:**
+
+### Test 8.4: Single Timesheet List
+
+#### Setup
+- [ ] Run `:EpochClear` to start with clean timesheet data
+- [ ] Create an interval: run `:EpochInterval` with client: `test-client`, project: `test-project`, task: `test-task`
+
+#### Run
+- [ ] Run `:EpochList`
+
+#### Result
+**Expected:**
+- Message "epoch: available timesheets"
+- Prints today's date (e.g., 2025-06-14)
+
+**Actual:**
+
+### Test 8.5: Multiple Timesheet List
+
+#### Setup
+- [ ] Run `:EpochClear` to start with clean timesheet data
+- [ ] Create timesheet for today: run `:EpochInterval` with client: `today-client`, project: `today-project`, task: `today-task`
+- [ ] Run `:EpochEdit 2024-01-01` and add some completed intervals, save
+- [ ] Run `:EpochEdit 2024-01-02` and add different completed intervals, save
+
+#### Run
+- [ ] Run `:EpochList`
+
+#### Result
+**Expected:**
+- Message "epoch: available timesheets"
+- Prints three dates in chronological order: 2024-01-01, 2024-01-02, today
+
+**Actual:**
+
+### Test 8.6: List Then Edit Workflow
+
+#### Setup
+- [ ] Run `:EpochClear` to start with clean timesheet data
+- [ ] Create timesheet for today: run `:EpochInterval` with client: `today-client`, project: `today-project`, task: `today-task`
+- [ ] Run `:EpochEdit 2024-01-01` and add some content, save
+
+#### Run
+- [ ] Run `:EpochList` to see available dates
+- [ ] Run `:EpochEdit 2024-01-01` to open the specific timesheet
+
+#### Result
+**Expected:**
+- List shows both today and 2024-01-01
+- EpochEdit opens 2024-01-01 timesheet in floating window
+- File contains the content added earlier
+
 **Actual:**
 
 ---

@@ -1,6 +1,7 @@
 :EpochClear	epoch.txt	/*:EpochClear*
 :EpochEdit	epoch.txt	/*:EpochEdit*
 :EpochInterval	epoch.txt	/*:EpochInterval*
+:EpochList	epoch.txt	/*:EpochList*
 :EpochReport	epoch.txt	/*:EpochReport*
 epoch	epoch.txt	/*epoch*
 epoch-commands	epoch.txt	/*epoch-commands*

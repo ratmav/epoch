@@ -38,4 +38,11 @@ function paths.ensure_data_dir()
   vim.fn.mkdir(dir, "p")
 end
 
+-- Extract date from timesheet filename
+function paths.extract_date_from_filename(filepath)
+  local constants = require('epoch.constants')
+  local basename = vim.fn.fnamemodify(filepath, ":t:r")
+  return basename:match(constants.TIMESHEET_DATE_PATTERN_WITH_CAPTURE)
+end
+
 return paths

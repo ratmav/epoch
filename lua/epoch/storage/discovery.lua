@@ -3,6 +3,7 @@
 
 local discovery = {}
 local paths = require('epoch.storage.paths')
+local constants = require('epoch.constants')
 
 -- Validate data directory exists
 local function validate_data_directory()
@@ -24,7 +25,7 @@ local function filter_timesheet_files(files)
   local timesheet_files = {}
   for _, file in ipairs(files) do
     local filename = vim.fn.fnamemodify(file, ":t")
-    if filename:match("^%d%d%d%d%-%d%d%-%d%d%.lua$") then
+    if filename:match(constants.TIMESHEET_FILENAME_PATTERN) then
       table.insert(timesheet_files, file)
     end
   end

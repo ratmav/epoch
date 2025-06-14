@@ -40,6 +40,15 @@ local function register_report_command()
   end, {})
 end
 
+-- Register list command
+local function register_list_command()
+  vim.api.nvim_create_user_command('EpochList', function()
+    require('epoch.list').show_timesheet_list()
+  end, {
+    desc = 'Show all timesheets in quickfix list'
+  })
+end
+
 -- Register clear command
 local function register_clear_command()
   vim.api.nvim_create_user_command('EpochClear', function()
@@ -58,6 +67,7 @@ function commands.register()
   register_edit_command()
   register_interval_command()
   register_report_command()
+  register_list_command()
   register_clear_command()
 end
 
