@@ -1,7 +1,5 @@
 # TODO
 
-1. new `epoch` feature: `:EpochList`
-    - shows list of all timesheets in quickfix
 2. github action
     - run these `make` targets as their own jobs in a single pipeline, they should all pass, and we want this to run on any pr to `main` branch
         - `coverage`

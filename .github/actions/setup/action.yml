@@ -1,0 +1,28 @@
+name: setup
+description: setup lua, luarocks, neovim, and dependencies
+runs:
+  using: composite
+  steps:
+    - name: setup lua
+      uses: leafo/gh-actions-lua@v10
+      with:
+        luaVersion: "5.1"
+    
+    - name: install luarocks
+      shell: bash
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y luarocks
+    
+    - name: install neovim
+      shell: bash
+      run: |
+        curl -LO https://github.com/neovim/neovim/releases/download/v0.11.2/nvim-linux-x86_64.tar.gz
+        sudo tar -C /opt -xzf nvim-linux-x86_64.tar.gz
+        sudo ln -s /opt/nvim-linux-x86_64/bin/nvim /usr/local/bin/nvim
+    
+    - name: install plenary.nvim
+      shell: bash
+      run: |
+        mkdir -p ~/.local/share/nvim/site/pack/test/start
+        git clone https://github.com/nvim-lua/plenary.nvim ~/.local/share/nvim/site/pack/test/start/plenary.nvim
