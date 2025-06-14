@@ -110,7 +110,7 @@
 - [ ] Run `:EpochEdit 2024-13-01`
 
 #### Result
-**Expected:** Graceful error handling or uses fallback behavior
+**Expected:** User is notified of invalid date format
 **Actual:**
 
 ### Test 2.7: Multiple Date Timesheets
