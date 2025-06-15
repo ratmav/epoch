@@ -1,11 +1,11 @@
 # TODO
 
-1. epoch v0.10
+0. `dotfiles`
+    - start using epoch v0.1.0
+        - get that branch merged
+        - maybe squash master too
+1. project management
     - install github cli
-    - squash all commits on main into 1 "initial commit."
-    - protect main
-    - tag as v0.1.0
-2. project management
     - need board to work with multiple repos
         - epoch
         - dotfiles
@@ -13,6 +13,7 @@
         - ???
     - project name?
     - kanban board
+    - remove TODO.md from `epoch` repo
 3. new `epoch` feature TICKET: `:EpochComplete`
     - If the last interval on the current timesheet is open, close with current timestamp.
     - If the last interval on the current timesheet is closed, notify user.
