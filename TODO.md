@@ -1,9 +1,5 @@
 # TODO
 
-0. `dotfiles`
-    - start using epoch v0.1.0
-        - get that branch merged
-        - maybe squash master too
 1. project management
     - install github cli
     - need board to work with multiple repos
