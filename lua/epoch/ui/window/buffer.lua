@@ -4,19 +4,30 @@
 
 local buffer = {}
 
+-- Get or create buffer with given name
+local function get_or_create_buffer(buffer_name)
+  if not buffer_name then
+    return vim.api.nvim_create_buf(false, false)
+  end
+
+  local existing_buf = vim.fn.bufnr(buffer_name)
+  if existing_buf ~= -1 and vim.api.nvim_buf_is_valid(existing_buf) then
+    return existing_buf
+  end
+
+  local buf = vim.api.nvim_create_buf(false, false)
+  vim.api.nvim_buf_set_name(buf, buffer_name)
+  return buf
+end
+
 -- Create and configure a buffer
 function buffer.create(config)
-  local buf = vim.api.nvim_create_buf(false, false)
+  local buf = get_or_create_buffer(config.buffer_name)
 
   -- Set buffer options
   vim.api.nvim_buf_set_option(buf, 'bufhidden', 'hide')
   vim.api.nvim_buf_set_option(buf, 'swapfile', false)
   vim.api.nvim_buf_set_option(buf, 'filetype', config.filetype or "text")
-
-  -- Set buffer name if provided
-  if config.buffer_name then
-    vim.api.nvim_buf_set_name(buf, config.buffer_name)
-  end
 
   return buf
 end
