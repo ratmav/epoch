@@ -60,7 +60,7 @@ vim.cmd([[
 
 -- set up a minimal data directory for tests
 vim.opt.runtimepath:append(plenary_root)
-vim.opt.runtimepath:append(plugin_root)
+vim.opt.runtimepath:prepend(plugin_root)  -- prepend to override any installed version
 
 
 -- log the plenary path for debugging

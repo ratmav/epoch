@@ -16,6 +16,23 @@ make test coverage laconic lint  # all must pass
 make help                        # show targets
 ```
 
+### local development with [paq](https://github.com/savq/paq-nvim)
+
+for local development, configure paq to use your working copy instead of the remote:
+
+```lua
+-- in your paq config, replace:
+"ratmav/epoch";
+
+-- with:
+-- "ratmav/epoch";  -- comment out remote version
+
+-- then add at the end:
+vim.opt.runtimepath:append("/path/to/your/epoch")
+```
+
+restart neovim to pick up the local version.
+
 ## data format
 
 timesheets stored as lua files in `stdpath('data')/epoch/YYYY-MM-DD.lua`:
