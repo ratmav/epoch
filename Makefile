@@ -7,7 +7,7 @@ TEST_DIR := ./tests
 # Lua path for script execution
 SCRIPT_LUA_PATH := LUA_PATH="$(PWD)/scripts/lib/?.lua;$(PWD)/scripts/lib/?/init.lua;$(PWD)/lua/?.lua;$(PWD)/lua/?/init.lua;$$LUA_PATH"
 
-.PHONY: test laconic coverage wisp lint help
+.PHONY: test laconic coverage wisp lint check help
 
 # Default target shows help
 .DEFAULT_GOAL := help
@@ -52,7 +52,9 @@ wisp: check-luarocks
 lint:
 	@luacheck . --no-color -q --codes
 
-
+# Run complete development workflow (all must pass)
+check: test coverage laconic lint
+	@echo "All quality checks passed - ready to commit"
 
 # Show help information
 help:
@@ -64,3 +66,4 @@ help:
 	@echo "  make coverage         - Check test coverage"
 	@echo "  make wisp             - Clean whitespace (trailing, empty lines)"
 	@echo "  make lint             - Lint Lua code with luacheck"
+	@echo "  make check            - Run complete workflow (test -> coverage -> laconic -> lint)"

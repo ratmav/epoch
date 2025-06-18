@@ -12,8 +12,8 @@ lightweight time tracking for neovim. see `:help epoch` for docs.
 ## development
 
 ```bash
-make test coverage laconic lint  # all must pass
-make help                        # show targets
+make check  # run complete workflow: test -> coverage -> laconic -> lint
+make help   # show all targets
 ```
 
 ### local development with [paq](https://github.com/savq/paq-nvim)
