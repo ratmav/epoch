@@ -4,25 +4,52 @@
 
 ```mermaid
 graph TD
-    A[Start Development] --> B[make test]
-    B -->|✅ Pass| C[make coverage]
-    B -->|❌ Fail| B
-    C -->|✅ Pass| D[make laconic]
-    C -->|❌ Fail| E[Fix coverage issues]
-    E --> B
-    D -->|✅ Pass| F[make lint]
-    D -->|❌ Fail| G[Fix laconic violations]
-    G --> B
-    F -->|✅ Pass| H[Ready to commit]
-    F -->|❌ Fail| I[Fix lint issues]
-    I --> B
+    A[Start Development] --> B[make check]
+    B -->|✅ Pass| C[Ready to commit]
+    B -->|❌ Fail at test| D[make test]
+    B -->|❌ Fail at coverage| E[make coverage]
+    B -->|❌ Fail at laconic| F[make laconic]
+    B -->|❌ Fail at lint| G[make lint]
     
-    style H fill:#90EE90
+    D -->|❌ Fail| K[Fix test failures]
+    D -->|✅ Pass| B
+    K --> D
+    E -->|❌ Fail| H[Fix coverage issues]
+    E -->|✅ Pass| B
+    H --> E
+    F -->|❌ Fail| I[Fix laconic violations]
+    F -->|✅ Pass| B
+    I --> F
+    G -->|❌ Fail| J[Fix lint issues]
+    G -->|✅ Pass| B
+    J --> G
+    
+    style C fill:#90EE90
     style B fill:#E6F3FF
-    style C fill:#E6F3FF
-    style D fill:#E6F3FF
-    style F fill:#E6F3FF
+    style D fill:#FFE6E6
+    style E fill:#FFE6E6
+    style F fill:#FFE6E6
+    style G fill:#FFE6E6
 ```
+
+**The Quality Engine:**
+
+This workflow operates like a precision engine with interlocking gears - each quality gate is a gear that must spin smoothly for the engine to run:
+
+- **Main crankshaft**: `make check` - drives development forward when all gears mesh
+- **Test gear**: Ensures functionality works (must pass to spin)
+- **Coverage gear**: Ensures everything is tested (must reach 100% to spin)  
+- **Laconic gear**: Ensures code stays maintainable (functions <15 lines to spin)
+- **Lint gear**: Ensures code style consistency (zero warnings to spin)
+
+When one gear jams (a quality gate fails), the entire engine stops. The workflow becomes:
+
+1. **Diagnose which gear is stuck** (read the failure output from `make check`)
+2. **Service that specific gear** (fix issues, run individual `make` commands)
+3. **Spin until smooth** (iterate until that gear returns exit code 0)
+4. **Restart the engine** (run `make check` to engage all gears)
+
+All gears must mesh perfectly for the engine to produce its output: **code ready to commit**.
 
 **Strict Requirements:**
 1. `make test` must pass
