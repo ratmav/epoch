@@ -6,35 +6,35 @@ local table_formatter = require('epoch.report.formatter.table')
 
 local overall = {}
 
--- Format overall week summary section
-function overall.format_overall_weeks_section(weeks, total_minutes)
-  local lines = {}
+function overall.create_week_label(week)
+  return week.date_range and
+    string.format("Week %s", week.date_range.first) or
+    string.format("Week %s", week.week)
+end
 
-  table.insert(lines, "## Overall By Week")
-  table.insert(lines, "")
-
-  -- Prepare rows for week summary
+function overall.build_week_rows(weeks)
   local rows = {}
   for _, week in ipairs(weeks) do
-    local week_label = week.date_range and
-      string.format("Week %s", week.date_range.first) or
-      string.format("Week %s", week.week)
+    local week_label = overall.create_week_label(week)
     local formatted_time = time_utils.format_duration(week.total_minutes)
     table.insert(rows, {week_label, formatted_time})
   end
+  return rows
+end
 
-  -- Use table formatter
-  local table_lines = table_formatter.format_two_column_table(
-    {"Week", "Hours"},
-    rows,
-    "TOTAL",
-    time_utils.format_duration(total_minutes)
-  )
-
+function overall.append_table_lines(lines, table_lines)
   for _, line in ipairs(table_lines) do
     table.insert(lines, line)
   end
+end
 
+-- Format overall week summary section
+function overall.format_overall_weeks_section(weeks, total_minutes)
+  local lines = {"## Overall By Week", ""}
+  local rows = overall.build_week_rows(weeks)
+  local table_lines = table_formatter.format_two_column_table(
+    {"Week", "Hours"}, rows, "TOTAL", time_utils.format_duration(total_minutes))
+  overall.append_table_lines(lines, table_lines)
   return lines
 end
 

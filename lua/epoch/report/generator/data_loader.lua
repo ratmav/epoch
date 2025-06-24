@@ -6,23 +6,27 @@ local paths = require('epoch.storage.paths')
 
 local data_loader = {}
 
--- Load all available timesheet dates
-function data_loader.get_all_timesheet_dates()
-  local files = storage.get_all_timesheet_files()
+local function extract_dates_from_files(files)
   local dates = {}
-
   for _, file_path in ipairs(files) do
-    -- Extract date from filename (YYYY-MM-DD.lua)
     local date = paths.extract_date_from_filename(file_path)
     if date then
       table.insert(dates, date)
     end
   end
-
-  -- Sort dates chronologically
-  table.sort(dates)
-
   return dates
+end
+
+local function sort_dates_chronologically(dates)
+  table.sort(dates)
+  return dates
+end
+
+-- Load all available timesheet dates
+function data_loader.get_all_timesheet_dates()
+  local files = storage.get_all_timesheet_files()
+  local dates = extract_dates_from_files(files)
+  return sort_dates_chronologically(dates)
 end
 
 -- Load all timesheets for given dates

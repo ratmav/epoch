@@ -10,6 +10,7 @@ local timesheet_fixtures = require('tests.fixtures.timesheet_fixtures')
 local time_fixtures = require('tests.fixtures.time_fixtures')
 local ui_fixtures = require('tests.fixtures.ui_fixtures')
 local report_fixtures = require('tests.fixtures.report_fixtures')
+local laconic_fixtures = require('tests.fixtures.laconic')
 
 -- Registry of all fixtures
 local registry = {
@@ -17,7 +18,8 @@ local registry = {
   timesheets = timesheet_fixtures,
   time = time_fixtures,
   ui = ui_fixtures,
-  reports = report_fixtures
+  reports = report_fixtures,
+  laconic = laconic_fixtures
 }
 
 -- Get a deep copy of any fixture

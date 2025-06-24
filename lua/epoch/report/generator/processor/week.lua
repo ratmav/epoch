@@ -7,26 +7,31 @@ local summary_utils = require('epoch.report.generator.summary_utils')
 
 local week = {}
 
+local function create_week_entry(week_num)
+  return {
+    dates = {},
+    timesheets = {},
+    date_range = week_utils.get_week_date_range(week_num)
+  }
+end
+
+local function add_timesheet_to_week(timesheets_by_week, week_num, timesheet)
+  if not timesheets_by_week[week_num] then
+    timesheets_by_week[week_num] = create_week_entry(week_num)
+  end
+  table.insert(timesheets_by_week[week_num].dates, timesheet.date)
+  table.insert(timesheets_by_week[week_num].timesheets, timesheet)
+end
+
 -- Group timesheets by week
 function week.group_timesheets_by_week(timesheets)
   local timesheets_by_week = {}
-
   for _, timesheet in ipairs(timesheets) do
     local week_num = week_utils.get_week_number(timesheet.date)
     if week_num then
-      if not timesheets_by_week[week_num] then
-        timesheets_by_week[week_num] = {
-          dates = {},
-          timesheets = {},
-          date_range = week_utils.get_week_date_range(week_num)
-        }
-      end
-
-      table.insert(timesheets_by_week[week_num].dates, timesheet.date)
-      table.insert(timesheets_by_week[week_num].timesheets, timesheet)
+      add_timesheet_to_week(timesheets_by_week, week_num, timesheet)
     end
   end
-
   return timesheets_by_week
 end
 

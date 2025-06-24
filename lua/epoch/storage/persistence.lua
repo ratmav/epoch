@@ -23,26 +23,35 @@ local function load_timesheet_file(file_path)
   return chunk()
 end
 
--- Save a timesheet to disk
-function persistence.save_timesheet(timesheet)
+local function validate_timesheet(timesheet)
   if not timesheet or not timesheet.date then
     return false, "invalid timesheet data"
+  end
+  return true, nil
+end
+
+local function write_file_content(file_path, content)
+  local file = io.open(file_path, 'w')
+  if not file then
+    error("could not open file for writing: " .. file_path)
+  end
+  file:write(content)
+  file:close()
+end
+
+-- Save a timesheet to disk
+function persistence.save_timesheet(timesheet)
+  local valid, err = validate_timesheet(timesheet)
+  if not valid then
+    return false, err
   end
 
   paths.ensure_data_dir()
   local file_path = paths.get_timesheet_path(timesheet.date)
   local content = serializer.serialize_timesheet(timesheet)
 
-  local success, err = pcall(function()
-    local file = io.open(file_path, 'w')
-    if not file then
-      error("could not open file for writing: " .. file_path)
-    end
-    file:write(content)
-    file:close()
-  end)
-
-  return success, err
+  local success, write_err = pcall(write_file_content, file_path, content)
+  return success, write_err
 end
 
 -- Load a timesheet from disk

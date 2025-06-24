@@ -1,24 +1,20 @@
--- epoch/commands.lua
--- command handling module for epoch time tracking
--- coverage: no tests
+-- epoch/commands/register.lua
+-- vim command registration
 
-local commands = {}
 local ui = require('epoch.ui')
 local storage = require('epoch.storage')
 local confirmations = require('epoch.ui.confirmations')
-local date_calculation = require('epoch.report.week_utils.date_calculation')
+local validation = require('epoch.commands.validation')
 
--- Register edit command
-local function register_edit_command()
+local register = {}
+
+function register.create_edit_command()
   vim.api.nvim_create_user_command('EpochEdit', function(opts)
     local date = opts.args and opts.args ~= "" and opts.args or nil
-
-    -- Validate date if provided - get_week_number returns nil for invalid dates
-    if date and not date_calculation.get_week_number(date) then
+    if date and not validation.validate_date_format(date) then
       vim.notify("epoch: invalid date format. Use YYYY-MM-DD (e.g., 2024-12-25)", vim.log.levels.ERROR)
       return
     end
-
     ui.toggle_timesheet(date)
   end, {
     nargs = '?',
@@ -26,22 +22,19 @@ local function register_edit_command()
   })
 end
 
--- Register interval command
-local function register_interval_command()
+function register.create_interval_command()
   vim.api.nvim_create_user_command('EpochInterval', function()
     ui.add_interval()
   end, {})
 end
 
--- Register report command
-local function register_report_command()
+function register.create_report_command()
   vim.api.nvim_create_user_command('EpochReport', function()
     require('epoch.report').toggle_report()
   end, {})
 end
 
--- Register list command
-local function register_list_command()
+function register.create_list_command()
   vim.api.nvim_create_user_command('EpochList', function()
     require('epoch.list').show_timesheet_list()
   end, {
@@ -49,8 +42,7 @@ local function register_list_command()
   })
 end
 
--- Register clear command
-local function register_clear_command()
+function register.create_clear_command()
   vim.api.nvim_create_user_command('EpochClear', function()
     confirmations.confirm_action(
       "Are you sure you want to delete ALL timesheet files? (y/N): ",
@@ -62,13 +54,12 @@ local function register_clear_command()
   end, {})
 end
 
--- Register all commands
-function commands.register()
-  register_edit_command()
-  register_interval_command()
-  register_report_command()
-  register_list_command()
-  register_clear_command()
+function register.register()
+  register.create_edit_command()
+  register.create_interval_command()
+  register.create_report_command()
+  register.create_list_command()
+  register.create_clear_command()
 end
 
-return commands
+return register

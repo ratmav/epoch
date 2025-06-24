@@ -50,7 +50,8 @@ package.path = string.format(
 
 -- Add plugin_root/tests to the package path for test modules and fixtures
 package.path = package.path .. ';' .. plugin_root .. '/tests/?.lua;' ..
-               plugin_root .. '/tests/?/init.lua;' .. plugin_root .. '/tests/helpers/?.lua'
+               plugin_root .. '/tests/?/init.lua;' .. plugin_root .. '/tests/helpers/?.lua;' ..
+               plugin_root .. '/?.lua;' .. plugin_root .. '/?/init.lua'
 
 -- minimal neovim configuration
 vim.cmd([[

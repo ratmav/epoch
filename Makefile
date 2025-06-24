@@ -38,7 +38,7 @@ check-luarocks:
 
 # Check laconic compliance (file/function length)
 laconic: check-luarocks
-	@eval "$$(luarocks path)" && $(SCRIPT_LUA_PATH) lua scripts/laconic.lua lua/epoch
+	@eval "$$(luarocks path)" && $(SCRIPT_LUA_PATH) lua scripts/laconic.lua lua
 
 # Check test coverage
 coverage: check-luarocks
