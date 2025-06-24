@@ -41,5 +41,27 @@ describe("ui logic workflow", function()
       assert.equals("project", updated_timesheet.intervals[1].project)
       assert.equals("task", updated_timesheet.intervals[1].task)
     end)
+
+    it("should close previous open interval when adding new interval", function()
+      local timesheet = fixtures.get('timesheets.valid.with_unclosed_intervals')
+      local success, error_msg, updated_timesheet = workflow_logic.add_interval(
+        "client2", "project2", "task2", timesheet
+      )
+
+      assert.is_true(success)
+      assert.is_nil(error_msg)
+      assert.is_table(updated_timesheet)
+      assert.equals(2, #updated_timesheet.intervals)
+
+      -- First interval should now be closed (stop time should not be empty)
+      assert.is_not_equal("", updated_timesheet.intervals[1].stop)
+      assert.is_string(updated_timesheet.intervals[1].stop)
+
+      -- Second interval should be open (newly created)
+      assert.equals("", updated_timesheet.intervals[2].stop)
+      assert.equals("client2", updated_timesheet.intervals[2].client)
+      assert.equals("project2", updated_timesheet.intervals[2].project)
+      assert.equals("task2", updated_timesheet.intervals[2].task)
+    end)
   end)
 end)
