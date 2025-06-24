@@ -3,23 +3,28 @@
 
 local summary_utils = {}
 
--- Sort summary data by client/project/task
-function summary_utils.sort_summary(summary_dict)
+local function dict_to_array(summary_dict)
   local summary_array = {}
   for _, entry in pairs(summary_dict) do
     table.insert(summary_array, entry)
   end
+  return summary_array
+end
 
-  table.sort(summary_array, function(a, b)
-    if a.client ~= b.client then
-      return a.client < b.client
-    elseif a.project ~= b.project then
-      return a.project < b.project
-    else
-      return a.task < b.task
-    end
-  end)
+local function compare_entries(a, b)
+  if a.client ~= b.client then
+    return a.client < b.client
+  elseif a.project ~= b.project then
+    return a.project < b.project
+  else
+    return a.task < b.task
+  end
+end
 
+-- Sort summary data by client/project/task
+function summary_utils.sort_summary(summary_dict)
+  local summary_array = dict_to_array(summary_dict)
+  table.sort(summary_array, compare_entries)
   return summary_array
 end
 
