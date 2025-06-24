@@ -1,6 +1,6 @@
 -- tests/time_utils/parsing_spec.lua
 
-local parsing = require('epoch.time_utils.parsing')
+local parsing = require('epoch.time.parsing')
 
 describe("time_utils parsing", function()
   describe("time_to_seconds", function()

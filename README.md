@@ -47,6 +47,7 @@ timesheets stored as lua files in `stdpath('data')/epoch/YYYY-MM-DD.lua`:
       task = "frontend-planning",
       start = "09:00 AM",
       stop = "10:30 AM",
+      hours = 1.5,
       notes = {}
     }
   },

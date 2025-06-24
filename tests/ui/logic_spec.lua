@@ -3,15 +3,15 @@
 
 describe("ui logic", function()
   local ui_logic = require('epoch.ui.logic')
-  local timesheet_logic = require('epoch.ui.logic.timesheet')
+  local timesheet_workflow = require('epoch.workflow.timesheet')
   local workflow_logic = require('epoch.ui.logic.workflow')
-  local interval_ops = require('epoch.ui.interval')
+  local interval_calculation = require('epoch.interval.calculation')
 
   describe("timesheet logic", function()
     describe("validate_content", function()
       it("should validate correctly formatted timesheet content", function()
         local content = fixtures.get('ui.buffer_content.valid_timesheet')
-        local timesheet, err = timesheet_logic.validate_content(content)
+        local timesheet, err = timesheet_workflow.validate_content(content)
 
         assert.is_nil(err)
         assert.is_table(timesheet)
@@ -21,7 +21,7 @@ describe("ui logic", function()
 
       it("should reject malformed Lua syntax", function()
         local content = fixtures.get('ui.buffer_content.invalid_syntax')
-        local timesheet, err = timesheet_logic.validate_content(content)
+        local timesheet, err = timesheet_workflow.validate_content(content)
 
         assert.is_nil(timesheet)
         assert.matches("lua syntax error", err)
@@ -29,15 +29,15 @@ describe("ui logic", function()
 
       it("should reject content that isn't a table", function()
         local content = [[return "not a table"]]
-        local timesheet, err = timesheet_logic.validate_content(content)
+        local timesheet, err = timesheet_workflow.validate_content(content)
 
         assert.is_nil(timesheet)
-        assert.equals("invalid timesheet format (not a table)", err)
+        assert.equals("timesheet must be a table", err)
       end)
 
       it("should reject invalid timesheet structure", function()
         local content = fixtures.get('ui.buffer_content.missing_field')
-        local timesheet, err = timesheet_logic.validate_content(content)
+        local timesheet, err = timesheet_workflow.validate_content(content)
 
         assert.is_nil(timesheet)
         assert.is_string(err)
@@ -50,7 +50,8 @@ describe("ui logic", function()
         local timesheet = fixtures.get('timesheets.valid.with_intervals')
         timesheet.daily_total = "00:00"
 
-        local updated = timesheet_logic.update_daily_total(timesheet, interval_ops.calculate_daily_total)
+        local timesheet_calculation = require('epoch.timesheet.calculation')
+        local updated = timesheet_calculation.update_daily_total(timesheet, interval_calculation.calculate_daily_total)
 
         assert.equals("00:00", timesheet.daily_total)
         assert.not_equals("00:00", updated.daily_total)
@@ -104,12 +105,13 @@ describe("ui logic", function()
   describe("main logic module", function()
     it("should re-export timesheet validation", function()
       assert.is_function(ui_logic.validate_timesheet_content)
-      assert.equals(timesheet_logic.validate_content, ui_logic.validate_timesheet_content)
+      assert.equals(timesheet_workflow.validate_content, ui_logic.validate_timesheet_content)
     end)
 
     it("should re-export daily total update", function()
+      local timesheet_calculation = require('epoch.timesheet.calculation')
       assert.is_function(ui_logic.update_daily_total)
-      assert.equals(timesheet_logic.update_daily_total, ui_logic.update_daily_total)
+      assert.equals(timesheet_calculation.update_daily_total, ui_logic.update_daily_total)
     end)
 
     it("should re-export workflow add interval", function()

@@ -1,6 +1,6 @@
 -- tests/time_utils/validation_spec.lua
 
-local validation = require('epoch.time_utils.validation')
+local validation = require('epoch.time.validation')
 
 describe("time_utils validation", function()
   describe("is_valid_time_format", function()

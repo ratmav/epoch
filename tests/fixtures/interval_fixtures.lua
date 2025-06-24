@@ -10,6 +10,7 @@ return {
       task = "frontend-planning",
       start = "09:00 AM",
       stop = "10:30 AM",
+      hours = 1.5,
       notes = {}
     },
 
@@ -19,6 +20,7 @@ return {
       task = "backend-planning",
       start = "10:45 AM",
       stop = "12:15 PM",
+      hours = 1.5,
       notes = {}
     },
 
@@ -28,6 +30,7 @@ return {
       task = "email",
       start = "08:30 AM",
       stop = "09:15 AM",
+      hours = 0.75,
       notes = {}
     },
 
@@ -37,6 +40,7 @@ return {
       task = "documentation",
       start = "01:00 PM",
       stop = "03:00 PM",
+      hours = 2.0,
       notes = {"Added API documentation", "Reviewed with team"}
     }
   },

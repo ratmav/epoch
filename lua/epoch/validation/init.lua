@@ -4,7 +4,7 @@
 
 local validation = {}
 local interval_validator = require('epoch.validation.fields.interval')
-local timesheet_validator = require('epoch.validation.fields.timesheet')
+local timesheet_validation = require('epoch.validation.timesheet')
 local context = require('epoch.validation.fields.context')
 local overlap = require('epoch.validation.overlap')
 local time_utils = require('epoch.validation.time_utils')
@@ -16,19 +16,7 @@ end
 
 -- Public API: Validate timesheet structure
 function validation.validate_timesheet(timesheet)
-  -- First validate structure and fields
-  local valid, err = timesheet_validator.validate(timesheet)
-  if not valid then
-    return false, err
-  end
-
-  -- Then check for overlapping intervals
-  local has_overlap, overlap_err = overlap.check_overlapping_intervals(timesheet.intervals)
-  if has_overlap then
-    return false, overlap_err
-  end
-
-  return true
+  return timesheet_validation.validate(timesheet)
 end
 
 -- Public API: Get human-readable context for an interval

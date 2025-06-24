@@ -2,7 +2,7 @@
 -- tests for the time_utils module
 
 describe("time_utils", function()
-  local time_utils = require('epoch.time_utils')
+  local time_utils = require('epoch.time')
   local fixtures = require('fixtures.init')
 
   describe("is_valid_time_format", function()

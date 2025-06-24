@@ -1,8 +1,11 @@
 -- epoch/ui/logic/workflow.lua
 -- Complete workflows combining multiple operations (pure logic)
 
-local interval_ops = require('epoch.ui.interval')
-local timesheet_logic = require('epoch.ui.logic.timesheet')
+local interval_timing = require('epoch.interval.timing')
+local interval_creation = require('epoch.interval.creation')
+local interval_calculation = require('epoch.interval.calculation')
+local timesheet_workflow = require('epoch.workflow.timesheet')
+local timesheet_calculation = require('epoch.timesheet.calculation')
 local timesheet_module = require('epoch.ui.timesheet')
 
 local workflow_logic = {}
@@ -26,16 +29,16 @@ local function create_and_add_interval(client, project, task, timesheet)
   local current_time = os.time()
   local updated_timesheet = vim.deepcopy(timesheet)
 
-  local adjusted_start, previous_stop = interval_ops.resolve_timing(updated_timesheet, current_time)
+  local adjusted_start, previous_stop = interval_timing.resolve_timing(updated_timesheet, current_time)
 
   if previous_stop then
-    interval_ops.close_current(updated_timesheet, previous_stop)
+    interval_creation.close_current(updated_timesheet, previous_stop)
   end
 
-  local new_interval = interval_ops.create(client, project, task, adjusted_start)
+  local new_interval = interval_creation.create(client, project, task, adjusted_start)
   table.insert(updated_timesheet.intervals, new_interval)
 
-  return timesheet_logic.update_daily_total(updated_timesheet, interval_ops.calculate_daily_total)
+  return timesheet_calculation.update_daily_total(updated_timesheet, interval_calculation.calculate_daily_total)
 end
 
 -- Complete workflow for adding an interval with all business logic
@@ -67,8 +70,8 @@ end
 -- Open timesheet window
 function workflow_logic.open_timesheet(storage, window, date)
   local timesheet_path = storage.get_timesheet_path(date)
-  timesheet_logic.ensure_timesheet_exists(timesheet_path, storage, date)
-  local content = timesheet_logic.load_timesheet_content(timesheet_path)
+  timesheet_workflow.ensure_timesheet_exists(timesheet_path, date)
+  local content = table.concat(vim.fn.readfile(timesheet_path), '\n')
   return workflow_logic.create_timesheet_window(content, timesheet_path, window)
 end
 

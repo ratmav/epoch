@@ -1,7 +1,8 @@
 -- epoch/ui/interval/creation.lua
 -- Basic interval creation and manipulation
 
-local time_utils = require('epoch.time_utils')
+local time_utils = require('epoch.time')
+local calculation = require('epoch.interval.calculation')
 
 local creation = {}
 
@@ -34,6 +35,9 @@ local function close_interval_with_time(interval, stop_time)
   if interval.notes == nil then
     interval.notes = {}
   end
+
+  -- Calculate and add hours field as decimal float
+  interval.hours = calculation.calculate_interval_hours(interval)
 end
 
 -- Close the most recent unclosed interval in a timesheet

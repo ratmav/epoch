@@ -3,14 +3,16 @@
 
 describe("ui modules", function()
   -- Load modules
-  local timesheet_ops = require('epoch.ui.timesheet')
-  local interval_ops = require('epoch.ui.interval')
+  local interval_creation = require('epoch.interval.creation')
+  local interval_calculation = require('epoch.interval.calculation')
+  local timesheet_workflow = require('epoch.workflow.timesheet')
+  local timesheet_calculation = require('epoch.timesheet.calculation')
 
 
   describe("timesheet validation", function()
     it("should validate correctly formatted timesheet content", function()
       local content = fixtures.get('ui.buffer_content.valid_timesheet')
-      local timesheet, err = timesheet_ops.validate_content(content)
+      local timesheet, err = timesheet_workflow.validate_content(content)
 
       assert.is_nil(err)
       assert.is_table(timesheet)
@@ -20,7 +22,7 @@ describe("ui modules", function()
 
     it("should reject malformed Lua syntax", function()
       local content = fixtures.get('ui.buffer_content.invalid_syntax')
-      local timesheet, err = timesheet_ops.validate_content(content)
+      local timesheet, err = timesheet_workflow.validate_content(content)
 
       assert.is_nil(timesheet)
       assert.matches("lua syntax error", err)
@@ -28,15 +30,15 @@ describe("ui modules", function()
 
     it("should reject content that isn't a table", function()
       local content = [[return "not a table"]]
-      local timesheet, err = timesheet_ops.validate_content(content)
+      local timesheet, err = timesheet_workflow.validate_content(content)
 
       assert.is_nil(timesheet)
-      assert.equals("invalid timesheet format (not a table)", err)
+      assert.equals("timesheet must be a table", err)
     end)
 
     it("should reject invalid timesheet structure", function()
       local content = fixtures.get('ui.buffer_content.missing_field')
-      local timesheet, err = timesheet_ops.validate_content(content)
+      local timesheet, err = timesheet_workflow.validate_content(content)
 
       assert.is_nil(timesheet)
       assert.is_string(err)
@@ -50,7 +52,7 @@ describe("ui modules", function()
       local time_fixtures = require('fixtures.time_fixtures')
       local fixed_time = time_fixtures.timestamps.base_time
 
-      local interval = interval_ops.create("acme-corp", "website-redesign", "frontend-planning", fixed_time)
+      local interval = interval_creation.create("acme-corp", "website-redesign", "frontend-planning", fixed_time)
 
       assert.equals("acme-corp", interval.client)
       assert.equals("website-redesign", interval.project)
@@ -62,7 +64,7 @@ describe("ui modules", function()
     it("should use provided time when specified", function()
       local custom_time = 1620100000 -- Different timestamp
 
-      local interval = interval_ops.create("acme-corp", "website-redesign", "frontend-planning", custom_time)
+      local interval = interval_creation.create("acme-corp", "website-redesign", "frontend-planning", custom_time)
 
       assert.equals("acme-corp", interval.client)
       assert.equals("website-redesign", interval.project)
@@ -73,7 +75,7 @@ describe("ui modules", function()
     end)
 
     it("should initialize with empty notes array", function()
-      local interval = interval_ops.create("acme-corp", "website-redesign", "frontend-planning")
+      local interval = interval_creation.create("acme-corp", "website-redesign", "frontend-planning")
 
       assert.is_table(interval.notes)
       assert.equals(0, #interval.notes)
@@ -85,7 +87,7 @@ describe("ui modules", function()
       local timesheet = fixtures.get('timesheets.valid.with_unclosed_intervals')
 
       -- Close the interval
-      local result = interval_ops.close_current(timesheet, "11:00 AM")
+      local result = interval_creation.close_current(timesheet, "11:00 AM")
 
       assert.is_true(result)
       assert.equals("11:00 AM", timesheet.intervals[1].stop)
@@ -97,7 +99,7 @@ describe("ui modules", function()
       local timesheet = fixtures.get('timesheets.invalid.with_unclosed_interval_no_notes')
 
       -- Close the interval
-      local result = interval_ops.close_current(timesheet, "11:00 AM")
+      local result = interval_creation.close_current(timesheet, "11:00 AM")
 
       assert.is_true(result)
       assert.equals("11:00 AM", timesheet.intervals[1].stop)
@@ -113,7 +115,7 @@ describe("ui modules", function()
       local original_stop = timesheet.intervals[1].stop
 
       -- Try to close it again
-      local result = interval_ops.close_current(timesheet, "12:00 PM")
+      local result = interval_creation.close_current(timesheet, "12:00 PM")
 
       assert.is_false(result)
       assert.equals(original_stop, timesheet.intervals[1].stop)
@@ -124,7 +126,7 @@ describe("ui modules", function()
       local timesheet = fixtures.get('timesheets.valid.empty')
 
       -- Try to close nonexistent interval
-      local result = interval_ops.close_current(timesheet)
+      local result = interval_creation.close_current(timesheet)
 
       assert.is_false(result)
     end)
@@ -139,7 +141,7 @@ describe("ui modules", function()
       local interval = fixtures.get('intervals.valid.frontend')
 
       -- Add it to the timesheet
-      local updated = interval_ops.add_to_timesheet(timesheet, interval)
+      local updated = timesheet_workflow.add_to_timesheet(timesheet, interval)
 
       assert.equals(1, #updated.intervals)
       assert.same(interval, updated.intervals[1])
@@ -156,17 +158,17 @@ describe("ui modules", function()
       local stop_time = "10:30 AM"
 
       -- Mock close_current_interval to use our fixed stop time
-      local original_close = interval_ops.close_current
-      interval_ops.close_current = function(ts)
+      local original_close = interval_creation.close_current
+      interval_creation.close_current = function(ts)
         ts.intervals[1].stop = stop_time
         return true
       end
 
       -- Add interval to timesheet
-      local updated = interval_ops.add_to_timesheet(timesheet, new_interval)
+      local updated = timesheet_workflow.add_to_timesheet(timesheet, new_interval)
 
       -- Restore original function
-      interval_ops.close_current = original_close
+      interval_creation.close_current = original_close
 
       assert.equals(2, #updated.intervals)
 
@@ -186,7 +188,7 @@ describe("ui modules", function()
       -- Calculate without relying on fixture's pre-calculated total
       timesheet.daily_total = "00:00" -- Reset to ensure we're calculating fresh
 
-      local total = interval_ops.calculate_daily_total(timesheet)
+      local total = interval_calculation.calculate_daily_total(timesheet)
 
       -- The exact value depends on the intervals in the fixture
       -- but it should be a properly formatted time string
@@ -198,7 +200,7 @@ describe("ui modules", function()
       -- Use empty timesheet from fixture
       local timesheet = fixtures.get('timesheets.valid.empty')
 
-      local total = interval_ops.calculate_daily_total(timesheet)
+      local total = interval_calculation.calculate_daily_total(timesheet)
 
       assert.equals("00:00", total)
     end)
@@ -207,7 +209,7 @@ describe("ui modules", function()
       -- Use our fixture with only unclosed intervals
       local timesheet = fixtures.get('timesheets.valid.with_unclosed_intervals')
 
-      local total = interval_ops.calculate_daily_total(timesheet)
+      local total = interval_calculation.calculate_daily_total(timesheet)
 
       -- Unclosed intervals should not contribute to the total time
       assert.equals("00:00", total)
@@ -220,7 +222,7 @@ describe("ui modules", function()
       local timesheet = fixtures.get('timesheets.valid.with_intervals')
       timesheet.daily_total = "00:00" -- Reset to ensure we're updating
 
-      local updated = timesheet_ops.update_daily_total(timesheet, interval_ops.calculate_daily_total)
+      local updated = timesheet_calculation.update_daily_total(timesheet, interval_calculation.calculate_daily_total)
 
       -- Original should be unchanged
       assert.equals("00:00", timesheet.daily_total)

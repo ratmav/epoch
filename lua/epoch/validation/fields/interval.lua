@@ -1,7 +1,7 @@
 -- epoch/validation/fields/interval.lua
 -- Individual interval validation
 
-local time_utils = require('epoch.time_utils')
+local time_utils = require('epoch.time')
 
 local interval = {}
 

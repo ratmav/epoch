@@ -1,7 +1,7 @@
 -- epoch/report/formatter/overall.lua
 -- Overall summary section formatting
 
-local time_utils = require('epoch.time_utils')
+local time_utils = require('epoch.time')
 local table_formatter = require('epoch.report.formatter.table')
 
 local overall = {}

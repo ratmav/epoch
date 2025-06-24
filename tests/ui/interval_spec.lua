@@ -1,7 +1,8 @@
 -- ui/interval_spec.lua
 -- Tests for ui interval module
 
-local interval = require('epoch.ui.interval')
+local interval_creation = require('epoch.interval.creation')
+local timesheet_workflow = require('epoch.workflow.timesheet')
 local factory = require('epoch.factory')
 
 describe('ui interval', function()
@@ -13,7 +14,7 @@ describe('ui interval', function()
         stop = "10:00"
       })
 
-      local result = interval.add_to_timesheet(timesheet, new_interval)
+      local result = timesheet_workflow.add_to_timesheet(timesheet, new_interval)
 
       assert.equals(1, #result.intervals)
       assert.equals("09:00", result.intervals[1].start)
@@ -33,7 +34,7 @@ describe('ui interval', function()
         stop = "11:00"
       })
 
-      local result = interval.add_to_timesheet(timesheet, new_interval)
+      local result = timesheet_workflow.add_to_timesheet(timesheet, new_interval)
 
       assert.equals(2, #result.intervals)
       -- First interval should now be closed
@@ -48,7 +49,7 @@ describe('ui interval', function()
       local original_count = #timesheet.intervals
       local new_interval = factory.build_interval()
 
-      interval.add_to_timesheet(timesheet, new_interval)
+      timesheet_workflow.add_to_timesheet(timesheet, new_interval)
 
       -- Original timesheet should be unchanged
       assert.equals(original_count, #timesheet.intervals)
@@ -67,7 +68,7 @@ describe('ui interval', function()
         stop = "11:00"
       })
 
-      local result = interval.add_to_timesheet(timesheet, new_interval)
+      local result = timesheet_workflow.add_to_timesheet(timesheet, new_interval)
 
       assert.equals(2, #result.intervals)
       -- First interval should remain unchanged

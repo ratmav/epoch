@@ -1,7 +1,7 @@
--- epoch/time_utils/parsing.lua
+-- epoch/time/parsing.lua
 -- Time string parsing utilities
 
-local validation = require('epoch.time_utils.validation')
+local validation = require('epoch.time.validation')
 
 local parsing = {}
 
@@ -71,6 +71,15 @@ function parsing.parse_time(time_str)
   local hour_24 = convert_to_24_hour(hour, period)
 
   return create_timestamp(today.year, today.month, today.day, hour_24, min)
+end
+
+-- Convert time string to minutes since midnight for comparison
+function parsing.time_value(time_str)
+  local hour, min, period = parse_time_components(time_str)
+  if not hour then return nil end
+
+  local hour_24 = convert_to_24_hour(hour, period)
+  return hour_24 * 60 + min
 end
 
 return parsing

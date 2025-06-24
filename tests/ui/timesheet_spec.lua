@@ -30,7 +30,7 @@ describe("ui timesheet", function()
 
       assert.is_nil(result)
       assert.is_string(err)
-      assert.matches("invalid timesheet format", err)
+      assert.matches("timesheet must be a table", err)
     end)
 
     it("should reject invalid timesheet structure", function()

@@ -2,7 +2,7 @@
 -- Test the ui/interval/creation module
 
 describe("ui interval creation", function()
-  local creation = require('epoch.ui.interval.creation')
+  local creation = require('epoch.interval.creation')
   local fixtures = require('fixtures')
 
   describe("create", function()
@@ -51,6 +51,36 @@ describe("ui interval creation", function()
       local result = creation.close_current(timesheet, "11:00 AM")
 
       assert.is_false(result)
+    end)
+
+    it("should add hours field when closing interval", function()
+      local timesheet = fixtures.get("timesheets.valid.with_unclosed_intervals")
+      -- Fixture starts at 09:00 AM, closing at 11:00 AM = 2 hours
+
+      local result = creation.close_current(timesheet, "11:00 AM")
+
+      assert.is_true(result)
+      assert.equals("11:00 AM", timesheet.intervals[1].stop)
+      assert.equals(2.0, timesheet.intervals[1].hours)
+    end)
+
+    it("should not add hours field for invalid intervals", function()
+      local timesheet = {
+        date = "2023-01-01",
+        intervals = {{
+          client = "test",
+          project = "test",
+          task = "test",
+          start = "invalid-time",
+          stop = "",
+          notes = {}
+        }}
+      }
+
+      local result = creation.close_current(timesheet, "11:00 AM")
+
+      assert.is_true(result)
+      assert.is_nil(timesheet.intervals[1].hours)
     end)
   end)
 end)

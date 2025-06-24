@@ -6,7 +6,8 @@ local paths = require('epoch.storage.paths')
 local serializer = require('epoch.storage.serializer')
 
 -- Create default timesheet for date
-local function create_default_timesheet(date)
+function persistence.create_default_timesheet(date)
+  date = date or paths.get_today()
   return {
     date = date,
     intervals = {},
@@ -23,11 +24,19 @@ local function load_timesheet_file(file_path)
   return chunk()
 end
 
-local function validate_timesheet(timesheet)
-  if not timesheet or not timesheet.date then
-    return false, "invalid timesheet data"
+-- Deserialize Lua content string to timesheet data
+function persistence.deserialize_content(content)
+  local chunk, err = loadstring(content, "timesheet")
+  if not chunk then
+    return nil, "lua syntax error: " .. tostring(err)
   end
-  return true, nil
+
+  local ok, timesheet_data = pcall(chunk)
+  if not ok then
+    return nil, "execution error: " .. tostring(timesheet_data)
+  end
+
+  return timesheet_data, nil
 end
 
 local function write_file_content(file_path, content)
@@ -41,11 +50,6 @@ end
 
 -- Save a timesheet to disk
 function persistence.save_timesheet(timesheet)
-  local valid, err = validate_timesheet(timesheet)
-  if not valid then
-    return false, err
-  end
-
   paths.ensure_data_dir()
   local file_path = paths.get_timesheet_path(timesheet.date)
   local content = serializer.serialize_timesheet(timesheet)
@@ -60,15 +64,15 @@ function persistence.load_timesheet(date)
   local file_path = paths.get_timesheet_path(date)
 
   if vim.fn.filereadable(file_path) == 0 then
-    return create_default_timesheet(date)
+    return persistence.create_default_timesheet(date)
   end
 
   return load_timesheet_file(file_path)
 end
 
--- Create default timesheet for given date (public API)
-function persistence.create_default_timesheet(date)
-  return create_default_timesheet(date or paths.get_today())
+-- Load raw timesheet file content as string
+function persistence.load_timesheet_content(timesheet_path)
+  return table.concat(vim.fn.readfile(timesheet_path), '\n')
 end
 
 return persistence

@@ -52,6 +52,14 @@ function storage.load_timesheet(date)
   return persistence.load_timesheet(date)
 end
 
+function storage.deserialize_content(content)
+  return persistence.deserialize_content(content)
+end
+
+function storage.load_timesheet_content(timesheet_path)
+  return persistence.load_timesheet_content(timesheet_path)
+end
+
 function storage.get_all_timesheet_files()
   return discovery.get_all_timesheet_files()
 end

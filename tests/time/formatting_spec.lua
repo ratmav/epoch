@@ -1,6 +1,6 @@
 -- tests/time_utils/formatting_spec.lua
 
-local formatting = require('epoch.time_utils.formatting')
+local formatting = require('epoch.time.formatting')
 
 describe("time_utils formatting", function()
   describe("format_duration", function()

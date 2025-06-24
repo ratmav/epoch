@@ -525,9 +525,134 @@
 
 ---
 
-## Test Group 10: Cleanup Operations
+## Test Group 10: Hours Field Calculation
 
-### Test 10.1: Clear All Data
+### Test 10.1: Hours Field Added on Interval Close
+
+#### Setup
+- [ ] Run `:EpochClear` to start with clean timesheet data
+
+#### Run
+- [ ] Create first interval: run `:EpochInterval` with client: `test-client`, project: `test-project`, task: `test-task`
+- [ ] Create second interval immediately: run `:EpochInterval` with client: `client-two`, project: `project-two`, task: `task-two`
+- [ ] Run `:EpochEdit` to open timesheet
+
+#### Result
+**Expected:**
+- First interval has stop time filled in (auto-closed)
+- First interval has `hours` field with decimal value (e.g., `hours = 0.016666666666666666`)
+- Second interval has empty stop time and no hours field
+- Hours field appears between stop and notes in the serialization
+
+**Actual:**
+
+### Test 10.2: Manual Interval Close with Known Duration
+
+#### Setup
+- [ ] Run `:EpochClear` to start with clean timesheet data
+- [ ] Create interval: run `:EpochInterval` with client: `test-client`, project: `test-project`, task: `test-task`
+
+#### Run
+- [ ] Run `:EpochEdit` to open timesheet
+- [ ] Manually set start time to `09:00 AM`
+- [ ] Manually set stop time to `11:00 AM` (exactly 2 hours)
+- [ ] Close/save with `:EpochEdit`
+- [ ] Reopen with `:EpochEdit`
+
+#### Result
+**Expected:**
+- Interval now has `hours = 2.0` field
+- Field appears between stop and notes in file structure
+- No validation errors during save
+
+**Actual:**
+
+### Test 10.3: Fractional Hours Calculation
+
+#### Setup
+- [ ] Run `:EpochClear` to start with clean timesheet data
+- [ ] Create interval: run `:EpochInterval` with client: `test-client`, project: `test-project`, task: `test-task`
+
+#### Run
+- [ ] Run `:EpochEdit` to open timesheet
+- [ ] Set start time to `09:00 AM`
+- [ ] Set stop time to `10:30 AM` (1.5 hours)
+- [ ] Close/save with `:EpochEdit`
+- [ ] Reopen with `:EpochEdit`
+
+#### Result
+**Expected:**
+- Interval has `hours = 1.5` field
+- Calculation is precise decimal (not rounded)
+
+**Actual:**
+
+### Test 10.4: Invalid Intervals Don't Get Hours Field
+
+#### Setup
+- [ ] Run `:EpochClear` to start with clean timesheet data
+- [ ] Create interval: run `:EpochInterval` with client: `test-client`, project: `test-project`, task: `test-task`
+
+#### Run
+- [ ] Run `:EpochEdit` to open timesheet
+- [ ] Set start time to `invalid-time`
+- [ ] Set stop time to `10:30 AM`
+- [ ] Close/save with `:EpochEdit`
+- [ ] Reopen with `:EpochEdit`
+
+#### Result
+**Expected:**
+- Interval has no `hours` field (due to invalid start time)
+- No errors during save/load cycle
+
+**Actual:**
+
+### Test 10.5: Unclosed Intervals Don't Get Hours Field
+
+#### Setup
+- [ ] Run `:EpochClear` to start with clean timesheet data
+- [ ] Create interval: run `:EpochInterval` with client: `test-client`, project: `test-project`, task: `test-task`
+
+#### Run
+- [ ] Run `:EpochEdit` to open timesheet
+- [ ] Verify stop time is empty string `""`
+- [ ] Close/save with `:EpochEdit`
+- [ ] Reopen with `:EpochEdit`
+
+#### Result
+**Expected:**
+- Interval has no `hours` field (incomplete interval)
+- File structure unchanged except for any formatting
+
+**Actual:**
+
+### Test 10.6: Hours Field Persistence Across Sessions
+
+#### Setup
+- [ ] Run `:EpochClear` to start with clean timesheet data
+- [ ] Create interval: run `:EpochInterval` with client: `test-client`, project: `test-project`, task: `test-task`
+- [ ] Create second interval: run `:EpochInterval` with client: `client-two`, project: `project-two`, task: `task-two`
+
+#### Run
+- [ ] Run `:EpochEdit` and manually set first interval: start `09:00 AM`, stop `10:30 AM`
+- [ ] Close/save with `:EpochEdit`
+- [ ] Exit Neovim completely
+- [ ] Restart Neovim
+- [ ] Run `:EpochEdit`
+
+#### Result
+**Expected:**
+- First interval still has correct `hours = 1.5` field
+- Hours field persists correctly across restarts
+- File format and hours calculation unchanged
+
+**Actual:**
+
+---
+
+## Test Group 11: Cleanup Operations
+
+### Test 11.1: Clear All Data
 
 #### Setup
 Existing timesheet data
@@ -543,7 +668,7 @@ Existing timesheet data
 
 **Actual:**
 
-### Test 10.2: Cancel Clear Operation
+### Test 11.2: Cancel Clear Operation
 
 #### Setup
 - [ ] Run `:EpochClear` to start with clean timesheet data
@@ -561,9 +686,9 @@ Existing timesheet data
 
 ---
 
-## Test Group 11: UI Behavior
+## Test Group 12: UI Behavior
 
-### Test 11.1: Window Sizing
+### Test 12.1: Window Sizing
 
 #### Setup
 - [ ] Run `:EpochClear` to start with clean timesheet data
@@ -578,7 +703,7 @@ Existing timesheet data
 **Expected:** Windows appear at correct sizes
 **Actual:**
 
-### Test 11.2: Syntax Highlighting
+### Test 12.2: Syntax Highlighting
 
 #### Setup
 - [ ] Run `:EpochClear` to start with clean timesheet data
@@ -592,7 +717,7 @@ Existing timesheet data
 **Expected:** Lua syntax highlighting active in edit window
 **Actual:**
 
-### Test 11.3: Multiple Window Management
+### Test 12.3: Multiple Window Management
 
 #### Setup
 - [ ] Run `:EpochClear` to start with clean timesheet data
@@ -611,7 +736,7 @@ Existing timesheet data
 - timesheet is editable
 **Actual:**
 
-### Test 11.4: Floating Window Scrolling with Large Content
+### Test 12.4: Floating Window Scrolling with Large Content
 
 #### Setup
 - [ ] Run `:EpochClear` to start with clean timesheet data

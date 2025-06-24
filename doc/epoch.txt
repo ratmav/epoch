@@ -60,6 +60,7 @@ timesheets are lua tables stored as `YYYY-MM-DD.lua` files:
       task = "frontend-planning",
       start = "9:00 AM",
       stop = "10:30 AM",
+      hours = 1.5,
       notes = {}
     }
   },
@@ -73,6 +74,7 @@ required fields:
 - client, project, task: non-empty strings
 - start: 12-hour time format ("9:00 AM")
 - stop: 12-hour time or empty string (currently running)
+- hours: decimal hours (auto-calculated when interval is closed)
 - notes: array of strings
 
 daily_total calculated from completed intervals only.

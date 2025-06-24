@@ -1,7 +1,7 @@
 -- epoch/ui/interval/timing.lua
 -- Timing conflict resolution
 
-local time_utils = require('epoch.time_utils')
+local time_utils = require('epoch.time')
 
 local timing = {}
 

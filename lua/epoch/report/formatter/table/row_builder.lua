@@ -2,7 +2,7 @@
 -- Table row building utilities
 
 local row_builder = {}
-local time_utils = require('epoch.time_utils')
+local time_utils = require('epoch.time')
 
 -- Create table header row
 function row_builder.create_table_header(max_client_len, max_project_len, max_task_len)

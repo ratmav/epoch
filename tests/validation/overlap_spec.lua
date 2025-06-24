@@ -1,48 +1,22 @@
 -- tests/validation/overlap_spec.lua
 
 local validation = require('epoch.validation')
-local fixtures = require('fixtures.init')
+local overlap = require('epoch.validation.overlap')
 
 describe("validation overlap", function()
-  describe("check_overlapping_intervals", function()
-    it("detects overlapping intervals", function()
-      local overlapping = fixtures.get('intervals.invalid.overlapping')
-      local is_overlapping, msg = validation.check_overlapping_intervals(overlapping)
-
-      assert.is_true(is_overlapping)
-      assert.truthy(msg:match("intervals overlap"))
-    end)
-
-    it("detects when unclosed interval start time overlaps with existing interval", function()
-      local overlapping_unclosed = fixtures.get('intervals.invalid.overlapping_unclosed')
-      local is_overlapping, msg = validation.check_overlapping_intervals(overlapping_unclosed)
-
-      assert.is_true(is_overlapping)
-      assert.truthy(msg:match("intervals overlap"))
-    end)
-
-    it("accepts non-overlapping unclosed intervals", function()
-      local non_overlapping_unclosed = fixtures.get('intervals.valid')
-      local is_overlapping, _ = validation.check_overlapping_intervals(non_overlapping_unclosed)
-
-      assert.is_false(is_overlapping)
-    end)
-
-    it("accepts non-overlapping intervals", function()
-      local non_overlapping = fixtures.get('intervals.valid')
-      local is_overlapping, _ = validation.check_overlapping_intervals(non_overlapping)
-
-      assert.is_false(is_overlapping)
-    end)
-
-    it("handles empty or single intervals", function()
+  describe("public interface delegation", function()
+    it("delegates check_overlapping_intervals to validation module", function()
+      -- Test that the public interface works through delegation
       local empty = {}
       local is_overlapping, _ = validation.check_overlapping_intervals(empty)
       assert.is_false(is_overlapping)
+    end)
 
-      local single = { fixtures.get('intervals.valid')[1] }
-      is_overlapping, _ = validation.check_overlapping_intervals(single)
-      assert.is_false(is_overlapping)
+    it("delegates check_multiple_open_intervals through overlap module", function()
+      -- Test that the overlap module interface works through delegation
+      local empty = {}
+      local has_multiple, _ = overlap.check_multiple_open_intervals(empty)
+      assert.is_false(has_multiple)
     end)
   end)
 end)

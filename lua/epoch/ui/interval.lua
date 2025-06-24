@@ -2,9 +2,9 @@
 -- Interval operations - main module
 -- coverage: no tests
 
-local creation = require('epoch.ui.interval.creation')
-local calculation = require('epoch.ui.interval.calculation')
-local timing = require('epoch.ui.interval.timing')
+local creation = require('epoch.interval.creation')
+local calculation = require('epoch.interval.calculation')
+local timing = require('epoch.interval.timing')
 
 local interval = {}
 
@@ -24,6 +24,7 @@ end
 
 -- Re-export calculation functions
 interval.calculate_daily_total = calculation.calculate_daily_total
+interval.calculate_interval_hours = calculation.calculate_interval_hours
 
 -- Re-export timing functions
 interval.resolve_timing = timing.resolve_timing

@@ -1,8 +1,7 @@
--- epoch/ui/interval/calculation.lua
+-- epoch/interval/calculation.lua
 -- Duration calculation utilities
 
-local time_utils = require('epoch.time_utils')
-local validation = require('epoch.validation')
+local time_utils = require('epoch.time')
 
 local calculation = {}
 
@@ -25,11 +24,11 @@ local function calculate_interval_minutes(interval)
     return 0
   end
 
-  local start_value = validation.time_value(interval.start)
-  local stop_value = validation.time_value(interval.stop)
+  local start_value = time_utils.time_value(interval.start)
+  local stop_value = time_utils.time_value(interval.stop)
 
   if start_value and stop_value and stop_value > start_value then
-    return math.floor((stop_value - start_value) / 60)
+    return stop_value - start_value
   end
 
   return 0
@@ -50,6 +49,21 @@ function calculation.calculate_daily_total(timesheet)
   end
 
   return time_utils.format_duration(total_minutes)
+end
+
+-- Calculate hours for a single interval as decimal float
+-- Returns: float hours (e.g., 1.5 for 90 minutes) or nil if incomplete/invalid
+function calculation.calculate_interval_hours(interval)
+  if not is_complete_interval(interval) then
+    return nil
+  end
+
+  local minutes = calculate_interval_minutes(interval)
+  if minutes == 0 then
+    return nil
+  end
+
+  return minutes / 60.0
 end
 
 return calculation

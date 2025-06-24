@@ -2,7 +2,7 @@
 -- Test the ui/interval/timing module
 
 describe("ui interval timing", function()
-  local timing = require('epoch.ui.interval.timing')
+  local timing = require('epoch.interval.timing')
   local fixtures = require('fixtures')
 
   describe("resolve_timing", function()
@@ -29,7 +29,7 @@ describe("ui interval timing", function()
     it("should handle closed interval without conflict", function()
       local timesheet = fixtures.get("timesheets.valid.with_intervals")
       -- Use a future timestamp that's definitely after any closed intervals
-      local time_utils = require('epoch.time_utils')
+      local time_utils = require('epoch.time')
       local last_interval = timesheet.intervals[#timesheet.intervals]
       local last_stop_timestamp = time_utils.parse_time(last_interval.stop)
       local future_time = last_stop_timestamp + 3600  -- 1 hour after last interval

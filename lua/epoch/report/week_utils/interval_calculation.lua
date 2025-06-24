@@ -2,7 +2,7 @@
 -- Interval time calculation utilities
 
 local interval_calculation = {}
-local time_utils = require('epoch.time_utils')
+local time_utils = require('epoch.time')
 
 -- Validate interval has both start and stop times
 local function is_complete_interval(interval)

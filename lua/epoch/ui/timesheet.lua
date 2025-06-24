@@ -3,13 +3,9 @@
 
 local storage = require('epoch.storage')
 local window = require('epoch.ui.window')
-local timesheet_logic = require('epoch.ui.logic.timesheet')
+local timesheet_workflow = require('epoch.workflow.timesheet')
 
 local timesheet = {}
-
--- Re-export logic functions for backward compatibility
-timesheet.validate_content = timesheet_logic.validate_content
-timesheet.update_daily_total = timesheet_logic.update_daily_total
 
 -- Validate and save timesheet from buffer
 -- Get and validate buffer content
@@ -20,7 +16,7 @@ local function get_and_validate_content()
     return nil
   end
 
-  local timesheet_data, err = timesheet.validate_content(content)
+  local timesheet_data, err = timesheet_workflow.validate_content(content)
   if not timesheet_data then
     vim.notify("epoch: cannot save timesheet - " .. err, vim.log.levels.ERROR)
     return nil
@@ -49,5 +45,12 @@ function timesheet.validate_and_save_from_buffer()
 
   return save_timesheet_data(timesheet_data)
 end
+
+-- Expose functions for testing (temporary - will reorganize tests later)
+timesheet.validate_content = timesheet_workflow.validate_content
+
+-- Need to require timesheet calculation for update_daily_total
+local timesheet_calculation = require('epoch.timesheet.calculation')
+timesheet.update_daily_total = timesheet_calculation.update_daily_total
 
 return timesheet

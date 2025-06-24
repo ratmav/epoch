@@ -2,7 +2,7 @@
 -- Daily totals formatting
 
 local daily_formatter = {}
-local time_utils = require('epoch.time_utils')
+local time_utils = require('epoch.time')
 local table_formatter = require('epoch.report.formatter.table')
 
 function daily_formatter.handle_empty_data(result)
