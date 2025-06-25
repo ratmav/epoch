@@ -16,8 +16,8 @@ function overall.build_week_rows(weeks)
   local rows = {}
   for _, week in ipairs(weeks) do
     local week_label = overall.create_week_label(week)
-    local formatted_time = time_utils.format_duration(week.total_minutes)
-    table.insert(rows, {week_label, formatted_time})
+    local formatted_hours = string.format("%.3f", week.total_hours)
+    table.insert(rows, {week_label, formatted_hours})
   end
   return rows
 end
@@ -29,23 +29,23 @@ function overall.append_table_lines(lines, table_lines)
 end
 
 -- Format overall week summary section
-function overall.format_overall_weeks_section(weeks, total_minutes)
+function overall.format_overall_weeks_section(weeks, total_hours)
   local lines = {"## Overall By Week", ""}
   local rows = overall.build_week_rows(weeks)
   local table_lines = table_formatter.format_two_column_table(
-    {"Week", "Hours"}, rows, "TOTAL", time_utils.format_duration(total_minutes))
+    {"Week", "Hours"}, rows, "TOTAL", string.format("%.3f", total_hours))
   overall.append_table_lines(lines, table_lines)
   return lines
 end
 
 -- Format overall client summary section
-function overall.format_overall_clients_section(summary, total_minutes)
+function overall.format_overall_clients_section(summary, total_hours)
   local lines = {}
 
   table.insert(lines, "## Overall By Client")
   table.insert(lines, "")
 
-  local summary_lines = table_formatter.format_summary_table(summary, total_minutes)
+  local summary_lines = table_formatter.format_summary_table(summary, total_hours)
   for _, line in ipairs(summary_lines) do
     table.insert(lines, line)
   end

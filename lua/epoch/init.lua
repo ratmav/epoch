@@ -33,7 +33,7 @@ end
 
 -- toggle weekly report
 function epoch.show_report()
-  require('epoch.report').toggle_report()
+  ui.toggle_report()
 end
 
 -- clear all timesheets

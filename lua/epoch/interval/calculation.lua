@@ -63,7 +63,9 @@ function calculation.calculate_interval_hours(interval)
     return nil
   end
 
-  return minutes / 60.0
+  local hours = minutes / 60.0
+  -- Round to 3 decimal places for practical precision
+  return math.floor(hours * 1000 + 0.5) / 1000
 end
 
 return calculation

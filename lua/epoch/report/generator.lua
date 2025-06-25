@@ -16,7 +16,7 @@ local function create_empty_report(all_dates)
   return {
     timesheets = {},
     summary = {},
-    total_minutes = 0,
+    total_hours = 0,
     dates = all_dates,
     date_range = #all_dates > 0 and {first = all_dates[1], last = all_dates[#all_dates]} or nil,
     weeks = {}
@@ -50,13 +50,13 @@ end
 
 -- Build final report structure with all data
 local function build_final_report(timesheets, all_dates, weeks, all_summary)
-  local total_minutes = summary_utils.calculate_total_minutes(all_summary)
+  local total_hours = summary_utils.calculate_total_hours(all_summary)
   local summary_array = summary_utils.sort_summary(all_summary)
 
   return {
     timesheets = timesheets,
     summary = summary_array,
-    total_minutes = total_minutes,
+    total_hours = total_hours,
     dates = all_dates,
     date_range = #all_dates > 0 and {first = all_dates[1], last = all_dates[#all_dates]} or nil,
     weeks = weeks

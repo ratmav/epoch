@@ -53,14 +53,14 @@ end
 
 -- Build final week result object
 local function build_week_result(week_num, week_data, week_summary, daily_totals)
-  local week_total_minutes = summary_utils.calculate_total_minutes(week_summary)
+  local week_total_hours = summary_utils.calculate_total_hours(week_summary)
   local week_summary_array = summary_utils.sort_summary(week_summary)
 
   return {
     week = week_num,
     dates = week_data.dates,
     summary = week_summary_array,
-    total_minutes = week_total_minutes,
+    total_hours = week_total_hours,
     date_range = week_data.date_range,
     daily_totals = daily_totals
   }

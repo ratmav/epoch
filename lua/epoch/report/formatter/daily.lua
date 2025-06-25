@@ -23,9 +23,9 @@ end
 function daily_formatter.build_date_rows(daily_totals, sorted_dates)
   local rows = {}
   for _, date in ipairs(sorted_dates) do
-    local minutes = daily_totals[date] or 0
-    local formatted_time = time_utils.format_duration(minutes)
-    table.insert(rows, {date, formatted_time})
+    local hours = daily_totals[date] or 0
+    local formatted_hours = string.format("%.3f", hours)
+    table.insert(rows, {date, formatted_hours})
   end
   return rows
 end
@@ -37,7 +37,7 @@ function daily_formatter.append_table_to_result(result, table_lines)
 end
 
 -- Format daily totals for a week
-function daily_formatter.format_daily_section(daily_totals, dates, week_total_minutes)
+function daily_formatter.format_daily_section(daily_totals, dates, week_total_hours)
   local result = {}
   if not daily_totals or not dates or #dates == 0 then
     return daily_formatter.handle_empty_data(result)
@@ -47,7 +47,7 @@ function daily_formatter.format_daily_section(daily_totals, dates, week_total_mi
   local sorted_dates = daily_formatter.sort_dates_chronologically(daily_totals)
   local rows = daily_formatter.build_date_rows(daily_totals, sorted_dates)
   local table_lines = table_formatter.format_two_column_table(
-    {"Date", "Hours"}, rows, "TOTAL", time_utils.format_duration(week_total_minutes))
+    {"Date", "Hours"}, rows, "TOTAL", string.format("%.3f", week_total_hours))
   daily_formatter.append_table_to_result(result, table_lines)
   return result
 end

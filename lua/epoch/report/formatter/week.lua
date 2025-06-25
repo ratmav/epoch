@@ -20,7 +20,7 @@ function week_formatter.add_daily_section(lines, week_data)
     local daily_lines = daily_formatter.format_daily_section(
       week_data.daily_totals,
       week_data.dates,
-      week_data.total_minutes
+      week_data.total_hours
     )
     for _, line in ipairs(daily_lines) do
       table.insert(lines, line)
@@ -33,7 +33,7 @@ function week_formatter.add_summary_section(lines, week_data)
   table.insert(lines, "")
   local summary_lines = table_formatter.format_summary_table(
     week_data.summary,
-    week_data.total_minutes
+    week_data.total_hours
   )
   for _, line in ipairs(summary_lines) do
     table.insert(lines, line)

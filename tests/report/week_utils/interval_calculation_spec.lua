@@ -3,45 +3,74 @@
 local interval_calculation = require('epoch.report.week_utils.interval_calculation')
 
 describe("report week_utils interval_calculation", function()
-  describe("calculate_interval_minutes", function()
-    it("calculates minutes for complete intervals", function()
-      local interval = fixtures.get('reports.week_utils_data.complete_interval')
-      local date = fixtures.get('reports.week_utils_data.test_date')
+  describe("get_interval_hours", function()
+    it("gets hours from completed intervals with hours field", function()
+      local interval = {
+        client = "test",
+        project = "test", 
+        task = "test",
+        start = "9:00 AM",
+        stop = "10:30 AM",
+        hours = 1.5
+      }
 
-      local minutes = interval_calculation.calculate_interval_minutes(interval, date)
-      assert.equals(90, minutes)
+      local hours = interval_calculation.get_interval_hours(interval)
+      assert.equals(1.5, hours)
     end)
 
-    it("returns 0 for incomplete intervals", function()
-      local interval = fixtures.get('reports.week_utils_data.incomplete_interval')
-      local date = fixtures.get('reports.week_utils_data.test_date')
+    it("returns 0 for intervals without hours field", function()
+      local interval = {
+        client = "test",
+        project = "test",
+        task = "test",
+        start = "9:00 AM",
+        stop = "10:30 AM"
+      }
 
-      local minutes = interval_calculation.calculate_interval_minutes(interval, date)
-      assert.equals(0, minutes)
+      local hours = interval_calculation.get_interval_hours(interval)
+      assert.equals(0, hours)
     end)
 
-    it("returns 0 for intervals with empty stop time", function()
-      local interval = fixtures.get('reports.week_utils_data.empty_stop_interval')
-      local date = fixtures.get('reports.week_utils_data.test_date')
+    it("returns 0 for intervals with nil hours field", function()
+      local interval = {
+        client = "test",
+        project = "test",
+        task = "test",
+        start = "9:00 AM",
+        stop = "10:30 AM",
+        hours = nil
+      }
 
-      local minutes = interval_calculation.calculate_interval_minutes(interval, date)
-      assert.equals(0, minutes)
+      local hours = interval_calculation.get_interval_hours(interval)
+      assert.equals(0, hours)
     end)
 
-    it("returns 0 for intervals with invalid time formats", function()
-      local interval = fixtures.get('reports.week_utils_data.invalid_time_interval')
-      local date = fixtures.get('reports.week_utils_data.test_date')
+    it("handles intervals with zero hours", function()
+      local interval = {
+        client = "test",
+        project = "test",
+        task = "test",
+        start = "9:00 AM",
+        stop = "9:00 AM",
+        hours = 0
+      }
 
-      local minutes = interval_calculation.calculate_interval_minutes(interval, date)
-      assert.equals(0, minutes)
+      local hours = interval_calculation.get_interval_hours(interval)
+      assert.equals(0, hours)
     end)
 
-    it("handles negative durations by returning 0", function()
-      local interval = fixtures.get('reports.week_utils_data.negative_duration_interval')
-      local date = fixtures.get('reports.week_utils_data.test_date')
+    it("handles intervals with decimal hours", function()
+      local interval = {
+        client = "test",
+        project = "test",
+        task = "test",
+        start = "9:00 AM",
+        stop = "10:45 AM",
+        hours = 1.75
+      }
 
-      local minutes = interval_calculation.calculate_interval_minutes(interval, date)
-      assert.equals(0, minutes)
+      local hours = interval_calculation.get_interval_hours(interval)
+      assert.equals(1.75, hours)
     end)
   end)
 end)

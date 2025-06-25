@@ -16,9 +16,9 @@ function week_utils.get_week_date_range(week_str)
   return range_calculation.get_week_date_range(week_str)
 end
 
--- Calculate minutes between two time strings on the same day
-function week_utils.calculate_interval_minutes(interval, date)
-  return interval_calculation.calculate_interval_minutes(interval, date)
+-- Get hours from completed interval
+function week_utils.get_interval_hours(interval)
+  return interval_calculation.get_interval_hours(interval)
 end
 
 return week_utils

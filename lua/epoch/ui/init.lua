@@ -7,6 +7,7 @@ local window = require('epoch.ui.window')
 local input = require('epoch.ui.input')
 local timesheet_window = require('epoch.ui.timesheet_window')
 local timesheet_controller = require('epoch.ui.timesheet_controller')
+local report_controller = require('epoch.ui.report_controller')
 
 -- Set up the UI module
 function ui.setup()
@@ -32,6 +33,11 @@ end
 -- Add a new interval
 function ui.add_interval(callback)
   input.prompt_for_interval(callback)
+end
+
+-- Toggle report window
+function ui.toggle_report()
+  report_controller.handle_toggle()
 end
 
 return ui

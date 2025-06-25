@@ -28,13 +28,13 @@ function summary_utils.sort_summary(summary_dict)
   return summary_array
 end
 
--- Calculate total minutes from summary dictionary
-function summary_utils.calculate_total_minutes(summary_dict)
-  local total_minutes = 0
+-- Calculate total hours from summary dictionary
+function summary_utils.calculate_total_hours(summary_dict)
+  local total_hours = 0
   for _, entry in pairs(summary_dict) do
-    total_minutes = total_minutes + entry.minutes
+    total_hours = total_hours + entry.hours
   end
-  return total_minutes
+  return total_hours
 end
 
 return summary_utils

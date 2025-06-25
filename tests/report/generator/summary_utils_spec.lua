@@ -36,31 +36,31 @@ describe("report generator summary_utils", function()
       assert.equals("client", result[1].client)
       assert.equals("project", result[1].project)
       assert.equals("task", result[1].task)
-      assert.equals(480, result[1].minutes)
+      assert.equals(8.0, result[1].hours)
     end)
   end)
 
-  describe("calculate_total_minutes", function()
-    it("sums minutes from all entries", function()
-      local summary_dict = fixtures.get('reports.test_summaries.minutes_calculation')
+  describe("calculate_total_hours", function()
+    it("sums hours from all entries", function()
+      local summary_dict = fixtures.get('reports.test_summaries.hours_calculation')
 
-      local result = summary_utils.calculate_total_minutes(summary_dict)
+      local result = summary_utils.calculate_total_hours(summary_dict)
 
-      assert.equals(840, result)
+      assert.equals(14.0, result)
     end)
 
     it("returns 0 for empty summary", function()
-      local result = summary_utils.calculate_total_minutes({})
+      local result = summary_utils.calculate_total_hours({})
 
       assert.equals(0, result)
     end)
 
     it("handles single entry", function()
-      local summary_dict = fixtures.get('reports.test_summaries.single_minutes')
+      local summary_dict = fixtures.get('reports.test_summaries.single_hours')
 
-      local result = summary_utils.calculate_total_minutes(summary_dict)
+      local result = summary_utils.calculate_total_hours(summary_dict)
 
-      assert.equals(480, result)
+      assert.equals(8.0, result)
     end)
   end)
 end)

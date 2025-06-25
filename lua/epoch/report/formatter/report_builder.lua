@@ -28,13 +28,13 @@ end
 -- Add overall summary sections to report lines
 local function add_overall_summaries(lines, report_data)
   -- Overall by week
-  local week_summary_lines = overall.format_overall_weeks_section(report_data.weeks, report_data.total_minutes)
+  local week_summary_lines = overall.format_overall_weeks_section(report_data.weeks, report_data.total_hours)
   for _, line in ipairs(week_summary_lines) do
     table.insert(lines, line)
   end
 
   -- Overall by client
-  local client_summary_lines = overall.format_overall_clients_section(report_data.summary, report_data.total_minutes)
+  local client_summary_lines = overall.format_overall_clients_section(report_data.summary, report_data.total_hours)
   for _, line in ipairs(client_summary_lines) do
     table.insert(lines, line)
   end
@@ -58,7 +58,7 @@ function report_builder.format_empty_report(report_data)
   local lines = {}
   add_period_header(lines, report_data)
 
-  local empty_lines = overall.format_overall_clients_section(report_data.summary, report_data.total_minutes)
+  local empty_lines = overall.format_overall_clients_section(report_data.summary, report_data.total_hours)
   for _, line in ipairs(empty_lines) do
     table.insert(lines, line)
   end

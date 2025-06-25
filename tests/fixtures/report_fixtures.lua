@@ -317,25 +317,25 @@ report_fixtures.test_timesheets = {
 -- Test summary dictionaries for summary utils testing
 report_fixtures.test_summaries = {
   multi_entry_sort = {
-    ["zebra|project|task"] = {client = "zebra", project = "project", task = "task", minutes = 480},
-    ["alpha|project|task"] = {client = "alpha", project = "project", task = "task", minutes = 240},
-    ["alpha|zebra|task"] = {client = "alpha", project = "zebra", task = "task", minutes = 120},
-    ["alpha|alpha|zebra"] = {client = "alpha", project = "alpha", task = "zebra", minutes = 60},
-    ["alpha|alpha|alpha"] = {client = "alpha", project = "alpha", task = "alpha", minutes = 30}
+    ["zebra|project|task"] = {client = "zebra", project = "project", task = "task", hours = 8.0},
+    ["alpha|project|task"] = {client = "alpha", project = "project", task = "task", hours = 4.0},
+    ["alpha|zebra|task"] = {client = "alpha", project = "zebra", task = "task", hours = 2.0},
+    ["alpha|alpha|zebra"] = {client = "alpha", project = "alpha", task = "zebra", hours = 1.0},
+    ["alpha|alpha|alpha"] = {client = "alpha", project = "alpha", task = "alpha", hours = 0.5}
   },
 
   single_entry = {
-    ["client|project|task"] = {client = "client", project = "project", task = "task", minutes = 480}
+    ["client|project|task"] = {client = "client", project = "project", task = "task", hours = 8.0}
   },
 
-  minutes_calculation = {
-    ["entry1"] = {minutes = 480},
-    ["entry2"] = {minutes = 240},
-    ["entry3"] = {minutes = 120}
+  hours_calculation = {
+    ["entry1"] = {hours = 8.0},
+    ["entry2"] = {hours = 4.0},
+    ["entry3"] = {hours = 2.0}
   },
 
-  single_minutes = {
-    ["entry1"] = {minutes = 480}
+  single_hours = {
+    ["entry1"] = {hours = 8.0}
   }
 }
 
