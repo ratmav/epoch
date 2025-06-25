@@ -3,10 +3,10 @@
 -- coverage: no tests
 
 local ui = {}
-local storage = require('epoch.storage')
 local window = require('epoch.ui.window')
 local input = require('epoch.ui.input')
-local logic = require('epoch.ui.logic')
+local timesheet_window = require('epoch.ui.timesheet_window')
+local timesheet_controller = require('epoch.ui.timesheet_controller')
 
 -- Set up the UI module
 function ui.setup()
@@ -18,14 +18,14 @@ function ui.toggle_timesheet(date)
   if window.is_open("timesheet") then
     window.close("timesheet")
   else
-    logic.handle_timesheet_open(storage, window, ui, date)
+    timesheet_controller.handle_open(ui, date)
   end
 end
 
 -- Add a new interval and then open the timesheet window
 function ui.add_interval_and_edit()
   ui.add_interval(function()
-    logic.open_timesheet(storage, window)
+    timesheet_window.open()
   end)
 end
 

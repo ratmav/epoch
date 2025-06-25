@@ -3,7 +3,7 @@
 -- coverage: no tests
 
 local input = {}
-local workflow = require('epoch.ui.workflow')
+local interval_workflow = require('epoch.workflow.interval')
 local storage = require('epoch.storage')
 local window = require('epoch.ui.window')
 
@@ -15,7 +15,7 @@ end
 -- Handle interval creation and success actions
 local function handle_interval_creation(client, project, task, callback)
   local timesheet = storage.load_timesheet()
-  local success, err, updated_timesheet = workflow.add_interval(client, project, task, timesheet)
+  local success, err, updated_timesheet = interval_workflow.add_interval(client, project, task, timesheet)
 
   if not success then
     vim.notify("epoch: " .. err, vim.log.levels.ERROR)
