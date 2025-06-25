@@ -540,7 +540,7 @@
 #### Result
 **Expected:**
 - First interval has stop time filled in (auto-closed)
-- First interval has `hours` field with decimal value (e.g., `hours = 0.016666666666666666`)
+- First interval has `hours` field with decimal value (e.g., `hours = 0.017`)
 - Second interval has empty stop time and no hours field
 - Hours field appears between stop and notes in the serialization
 
@@ -561,7 +561,7 @@
 
 #### Result
 **Expected:**
-- Interval now has `hours = 2.0` field
+- Interval now has `hours = 2.000` field
 - Field appears between stop and notes in file structure
 - No validation errors during save
 
@@ -582,8 +582,8 @@
 
 #### Result
 **Expected:**
-- Interval has `hours = 1.5` field
-- Calculation is precise decimal (not rounded)
+- Interval has `hours = 1.500` field
+- Calculation is precise to 3 decimal places
 
 **Actual:**
 
@@ -642,7 +642,7 @@
 
 #### Result
 **Expected:**
-- First interval still has correct `hours = 1.5` field
+- First interval still has correct `hours = 1.500` field
 - Hours field persists correctly across restarts
 - File format and hours calculation unchanged
 
