@@ -99,6 +99,10 @@ All gears must mesh perfectly for the engine to produce its output: **code ready
 - when debugging, you never ever guess or hack around a problem, you detect the root cause and solve the root cause.
 
 - confirm all files and functions observe the single responsiblity principle
+- we prefer to write tests first (test-driven development), though there's leeway while figuring things out
+- we require the test filesystem structure mirrors the application filesystem structure exactly
+    - if we have `lua/models/report/summary.lua`, then we must have `tests/models/report/summary_spec.lua`
+    - if we have `lua/services/time.lua`, then we must have `tests/services/time_spec.lua`
 - we want 100% passing for all `make check` tests
     - we need to focus on our test coverage `make test` first
     - we need to make sure that a spec file is ***only*** testing the file with the matching name
