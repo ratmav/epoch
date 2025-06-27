@@ -1,6 +1,6 @@
 -- tests/services/time_spec.lua
 
-local time_service = require('services.time')
+local time_service = require('epoch.services.time')
 
 describe("services time", function()
   describe("is_valid_format", function()

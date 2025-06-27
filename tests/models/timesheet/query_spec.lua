@@ -1,6 +1,6 @@
 -- tests/models/timesheet/query_spec.lua
 
-local query = require('models.timesheet.query')
+local query = require('epoch.models.timesheet.query')
 
 describe("models timesheet query", function()
   describe("has_open_interval", function()
@@ -31,7 +31,7 @@ describe("models timesheet query", function()
 
   describe("get_completed_intervals", function()
     it("should return only completed intervals", function()
-      local timesheet = fixtures.get('timesheets.valid.mixed_intervals')
+      local timesheet = fixtures.get('timesheets.valid.with_intervals')
 
       local completed = query.get_completed_intervals(timesheet)
 

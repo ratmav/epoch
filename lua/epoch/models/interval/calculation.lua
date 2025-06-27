@@ -2,8 +2,8 @@
 -- Interval calculation operations
 
 local calculation = {}
-local validation = require('models.interval.validation')
-local time_service = require('services.time')
+local validation = require('epoch.models.interval.validation')
+local time_service = require('epoch.services.time')
 
 -- Check if interval has valid time formats
 local function has_valid_times(this_interval)

@@ -2,8 +2,8 @@
 -- Time formatting utilities
 
 local formatting = {}
-local conversion = require('services.time.conversion')
-local parsing = require('services.time.parsing')
+local conversion = require('epoch.services.time.conversion')
+local parsing = require('epoch.services.time.parsing')
 
 -- Format timestamp as 12-hour time string
 function formatting.format_current_time(timestamp)

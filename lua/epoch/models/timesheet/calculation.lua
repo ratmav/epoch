@@ -2,8 +2,8 @@
 -- Timesheet calculation operations
 
 local calculation = {}
-local interval_model = require('models.interval')
-local time_service = require('services.time')
+local interval_model = require('epoch.models.interval')
+local time_service = require('epoch.services.time')
 
 -- Calculate daily total from all completed intervals
 function calculation.calculate_daily_total(this_timesheet)

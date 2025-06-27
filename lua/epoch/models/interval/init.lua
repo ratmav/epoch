@@ -2,9 +2,9 @@
 -- Interval module delegation
 
 local interval = {}
-local creation = require('models.interval.creation')
-local validation = require('models.interval.validation')
-local calculation = require('models.interval.calculation')
+local creation = require('epoch.models.interval.creation')
+local validation = require('epoch.models.interval.validation')
+local calculation = require('epoch.models.interval.calculation')
 
 -- Delegate to creation module
 interval.create = creation.create

@@ -2,10 +2,10 @@
 -- Timesheet module delegation
 
 local timesheet = {}
-local creation = require('models.timesheet.creation')
-local calculation = require('models.timesheet.calculation')
-local query = require('models.timesheet.query')
-local validation = require('models.timesheet.validation')
+local creation = require('epoch.models.timesheet.creation')
+local calculation = require('epoch.models.timesheet.calculation')
+local query = require('epoch.models.timesheet.query')
+local validation = require('epoch.models.timesheet.validation')
 
 -- Delegate to creation module
 timesheet.create = creation.create
@@ -22,6 +22,7 @@ timesheet.calculate_daily_total = calculation.calculate_daily_total
 timesheet.has_open_interval = query.has_open_interval
 timesheet.get_completed_intervals = query.get_completed_intervals
 timesheet.get_by_date_range = query.get_by_date_range
+timesheet.group_by_week = query.group_by_week
 
 -- Delegate to validation module
 timesheet.validate = validation.validate

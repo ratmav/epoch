@@ -2,8 +2,8 @@
 -- Report aggregation and summary operations
 
 local aggregation = {}
-local timesheet_model = require('models.timesheet')
-local interval_model = require('models.interval')
+local timesheet_model = require('epoch.models.timesheet')
+local interval_model = require('epoch.models.interval')
 
 -- Create summary key for grouping intervals
 local function create_summary_key(this_interval)

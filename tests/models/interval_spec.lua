@@ -1,6 +1,6 @@
 -- tests/models/interval_spec.lua
 
-local interval_model = require('models.interval')
+local interval_model = require('epoch.models.interval')
 
 describe("models interval", function()
   describe("create", function()

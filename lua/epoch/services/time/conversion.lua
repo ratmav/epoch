@@ -2,7 +2,7 @@
 -- Time conversion utilities
 
 local conversion = {}
-local parsing = require('services.time.parsing')
+local parsing = require('epoch.services.time.parsing')
 
 -- Convert 12-hour to 24-hour format
 function conversion.convert_to_24_hour(hour, period)
@@ -28,7 +28,7 @@ end
 
 -- Check if time string is in valid 12-hour format
 function conversion.is_valid_format(time_str)
-  local hour, minute, period = parsing.parse_time_components(time_str)
+  local hour, minute = parsing.parse_time_components(time_str)
   if not hour then return false end
 
   return parsing.validate_time_ranges(hour, minute)

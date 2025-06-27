@@ -1,6 +1,6 @@
 -- tests/models/timesheet/calculation_spec.lua
 
-local calculation = require('models.timesheet.calculation')
+local calculation = require('epoch.models.timesheet.calculation')
 
 describe("models timesheet calculation", function()
   describe("calculate_daily_total", function()

@@ -2,7 +2,7 @@
 -- Timesheet validation operations
 
 local validation = {}
-local interval_model = require('models.interval')
+local interval_model = require('epoch.models.interval')
 
 -- Private: validate timesheet structure
 local function validate_structure(this_timesheet)

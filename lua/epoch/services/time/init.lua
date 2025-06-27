@@ -2,9 +2,8 @@
 -- Time service delegation
 
 local time = {}
-local parsing = require('services.time.parsing')
-local conversion = require('services.time.conversion')
-local formatting = require('services.time.formatting')
+local conversion = require('epoch.services.time.conversion')
+local formatting = require('epoch.services.time.formatting')
 
 -- Delegate to conversion module
 time.is_valid_format = conversion.is_valid_format

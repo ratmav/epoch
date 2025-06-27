@@ -2,7 +2,7 @@
 -- Interval validation operations
 
 local validation = {}
-local creation = require('models.interval.creation')
+local creation = require('epoch.models.interval.creation')
 
 -- Private: validate required string field
 local function validate_required_string(value, field_name)

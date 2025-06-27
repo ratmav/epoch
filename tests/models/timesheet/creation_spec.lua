@@ -1,6 +1,6 @@
 -- tests/models/timesheet/creation_spec.lua
 
-local creation = require('models.timesheet.creation')
+local creation = require('epoch.models.timesheet.creation')
 
 describe("models timesheet creation", function()
   describe("create", function()

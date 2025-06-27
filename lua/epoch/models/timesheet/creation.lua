@@ -2,8 +2,8 @@
 -- Timesheet creation and interval management
 
 local creation = {}
-local interval_model = require('models.interval')
-local time_service = require('services.time')
+local interval_model = require('epoch.models.interval')
+local time_service = require('epoch.services.time')
 
 -- Create a new timesheet for a date
 function creation.create(date)
@@ -19,11 +19,7 @@ end
 -- Private: close last interval (assumes it exists and is open)
 local function close_last_interval(this_timesheet, stop_time)
   local last_interval = this_timesheet.intervals[#this_timesheet.intervals]
-  local success = interval_model.close(last_interval, stop_time)
-  if success then
-    -- Update will be handled by add_interval caller
-  end
-  return success
+  return interval_model.close(last_interval, stop_time)
 end
 
 -- Close the most recent open interval in timesheet

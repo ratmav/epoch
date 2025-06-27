@@ -1,6 +1,6 @@
 -- tests/models/timesheet/validation_spec.lua
 
-local validation = require('models.timesheet.validation')
+local validation = require('epoch.models.timesheet.validation')
 
 describe("models timesheet validation", function()
   describe("validate", function()
@@ -41,7 +41,7 @@ describe("models timesheet validation", function()
     end)
 
     it("should reject timesheet with invalid intervals", function()
-      local timesheet = fixtures.get('timesheets.invalid.invalid_intervals')
+      local timesheet = fixtures.get('timesheets.invalid.invalid_interval')
 
       local is_valid, error_msg = validation.validate(timesheet)
 

@@ -1,6 +1,6 @@
 -- tests/controllers/report_spec.lua
 
-local report_controller = require('controllers.report')
+local report_controller = require('epoch.controllers.report')
 
 describe("controllers report", function()
   describe("create", function()

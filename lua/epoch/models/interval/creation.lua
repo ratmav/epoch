@@ -2,7 +2,7 @@
 -- Interval creation and lifecycle management
 
 local creation = {}
-local time_service = require('services.time')
+local time_service = require('epoch.services.time')
 
 -- Create a new interval with required fields
 function creation.create(client, project, task, start_time)
