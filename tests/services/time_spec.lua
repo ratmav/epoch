@@ -42,7 +42,7 @@ describe("services time", function()
   describe("format_current_time", function()
     it("should format current timestamp to 12-hour format", function()
       local formatted = time_service.format_current_time()
-      
+
       assert.is_not_nil(formatted)
       assert.is_true(time_service.is_valid_format(formatted))
     end)
@@ -51,7 +51,7 @@ describe("services time", function()
       -- January 1, 2025, 9:30 AM
       local timestamp = os.time({year = 2025, month = 1, day = 1, hour = 9, min = 30})
       local formatted = time_service.format_current_time(timestamp)
-      
+
       assert.equals("9:30 AM", formatted)
     end)
   end)
@@ -73,7 +73,7 @@ describe("services time", function()
     it("should parse time string with date to timestamp", function()
       local timestamp = time_service.parse_to_timestamp("9:30 AM", "2025-01-01")
       local expected = os.time({year = 2025, month = 1, day = 1, hour = 9, min = 30})
-      
+
       assert.equals(expected, timestamp)
     end)
 
@@ -82,12 +82,12 @@ describe("services time", function()
       local today = os.date("*t")
       local expected = os.time({
         year = today.year,
-        month = today.month, 
+        month = today.month,
         day = today.day,
         hour = 9,
         min = 30
       })
-      
+
       assert.equals(expected, timestamp)
     end)
 

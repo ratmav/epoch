@@ -91,6 +91,29 @@ All gears must mesh perfectly for the engine to produce its output: **code ready
     - less is more.
 - When it comes to naming conventions, specific names, etc. we need to be very consistent with the terminolgy used in the documentation directory.
 - Follow the "zeroing in" naming pattern where filenames and class names move from general to specific as you read left to right (e.g., domain_component_specific_entity.py).
+- **Minimize cognitive load through semantic vector distance:**
+    - Code should minimize semantic vector distance between domain expert language and implementation
+    - "Calculate the time in my timesheet" → `timesheet.calculate()` is much closer than `calculate_total_minutes(timesheet)`
+    - Function signatures should cluster tightly in vector space using consistent linguistic patterns
+    - Architecture should follow natural thought units that domain experts use, not arbitrary programming abstractions
+    - Lower cognitive load makes everyone more efficient - less mental translation between domain thinking and code
+    - The data model should form a directed acyclic graph (DAG) that mirrors how information flows in the domain
+    - **Start with natural language, stay close to it:**
+        - Before creating any new module/service, ask: "How would a domain expert naturally express this?"
+        - "Summarize my timesheets" → `timesheets.summary()`, not `summary_calculator.calculate(timesheets)`
+        - "Calculate my timesheet total" → `timesheet.calculate_total()`, not `calculator.total_minutes(timesheet)`
+        - Operations on domain objects should live on those objects, not in separate utility services
+        - If you're creating a "calculator" or "processor" or "handler", question whether it belongs on the domain object instead
+    - **Domain as a DAG (Directed Acyclic Graph):**
+        - Module hierarchies form a DAG where information flows from general to specific
+        - Each zoom level represents a natural conceptual boundary in the domain
+        - Dependencies point "down" the hierarchy (validation uses interval, not vice versa)
+        - Semantic meaning increases as you traverse deeper into the graph
+        - Child module names must cluster tightly around their parent in semantic vector space
+        - `models/timesheet/creation.lua` ✅ vs `models/timesheet/core.lua` ❌
+        - Test: can you see `models/parent/child.lua` and immediately know what it does without mental translation?
+        - Zoom-in only when laconic violations force you to, creating new DAG nodes
+        - Keep related concepts together until code size demands the split
 - abstractions emerge, i.e. wait for us to actually repeat ourselves or for patterns to present themselves in the code before we attempt to write abstractions to handle more general use cases. this will help us fend off speculative generality, which is just another form of premature optimization, which is the root of all evil.
 - for our tests, we strongly prefer fixtures and functional
     - we prefex to exercise the code against actual data
