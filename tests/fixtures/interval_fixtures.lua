@@ -166,6 +166,15 @@ return {
         stop = "",           -- Unclosed
         notes = {}
       }
+    },
+
+    negative_duration_interval = {
+      client = "acme-corp",
+      project = "website-redesign",
+      task = "frontend-planning",
+      start = "10:30 AM",
+      stop = "09:00 AM",  -- Stop before start (negative duration)
+      notes = {}
     }
   },
 

@@ -59,8 +59,10 @@ end
 function aggregation.calculate_summary(this_report)
   local summary_dict = {}
 
-  for _, this_timesheet in ipairs(this_report.timesheets) do
-    aggregate_intervals(summary_dict, this_timesheet)
+  if this_report.timesheets then
+    for _, this_timesheet in ipairs(this_report.timesheets) do
+      aggregate_intervals(summary_dict, this_timesheet)
+    end
   end
 
   this_report.summary = sort_summary(summary_dict)

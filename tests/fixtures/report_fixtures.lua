@@ -801,6 +801,7 @@ report_fixtures.empty = {
   summary = {},
   total_minutes = 0,
   dates = {},
+  timesheets = {},
   date_range = {first = "2025-01-01", last = "2025-01-01"}
 }
 

@@ -1,5 +1,6 @@
 -- services/time/init.lua
 -- Time service delegation
+-- coverage: no tests
 
 local time = {}
 local conversion = require('epoch.services.time.conversion')

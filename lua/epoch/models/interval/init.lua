@@ -1,5 +1,6 @@
 -- models/interval/init.lua
 -- Interval module delegation
+-- coverage: no tests
 
 local interval = {}
 local creation = require('epoch.models.interval.creation')

@@ -1,5 +1,6 @@
 -- models/timesheet/init.lua
 -- Timesheet module delegation
+-- coverage: no tests
 
 local timesheet = {}
 local creation = require('epoch.models.timesheet.creation')

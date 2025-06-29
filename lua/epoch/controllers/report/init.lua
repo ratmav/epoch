@@ -1,5 +1,6 @@
 -- controllers/report/init.lua
 -- Report controller delegation
+-- coverage: no tests
 
 local report = {}
 local generation = require('epoch.controllers.report.generation')

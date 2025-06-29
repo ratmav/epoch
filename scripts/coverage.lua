@@ -54,8 +54,9 @@ local function calculate_test_coverage(lua_files, test_files)
     local test_paths = {}
     for _, test_file in ipairs(test_files) do
         -- Convert test path to expected source path
-        -- tests/storage/paths_spec.lua -> storage/paths
-        local relative_test_path = test_file:match("tests/(.+)_spec%.lua$")
+        -- tests/epoch/storage/paths_spec.lua -> storage/paths
+        -- tests/storage/paths_spec.lua -> storage/paths (legacy)
+        local relative_test_path = test_file:match("tests/epoch/(.+)_spec%.lua$") or test_file:match("tests/(.+)_spec%.lua$")
         if relative_test_path then
             test_paths[relative_test_path] = true
         end
