@@ -1,6 +1,6 @@
 -- tests/storage/serializer/table_serializer_spec.lua
 
-local table_serializer = require('epoch.storage.serializer.table_serializer')
+local table_serializer = require('epoch.services.storage.serializer.table_serializer')
 local fixtures = require('fixtures.init')
 
 describe("storage serializer table_serializer", function()

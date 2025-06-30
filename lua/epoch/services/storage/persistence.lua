@@ -2,8 +2,8 @@
 -- Timesheet save and load operations
 
 local persistence = {}
-local paths = require('epoch.storage.paths')
-local serializer = require('epoch.storage.serializer')
+local paths = require('epoch.services.storage.paths')
+local serializer = require('epoch.services.storage.serializer')
 
 -- Create default timesheet for date
 local function create_default_timesheet(date)

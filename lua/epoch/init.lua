@@ -5,7 +5,7 @@
 local epoch = {}
 
 local ui = require('epoch.ui')
-local storage = require('epoch.storage')
+local storage = require('epoch.services.storage')
 local config = require('epoch.config')
 local commands = require('epoch.commands')
 

@@ -23,7 +23,7 @@ function config.setup(opts)
   vim.fn.mkdir(config.values.data_dir, 'p')
 
   -- set the data directory in storage module
-  require('epoch.storage').set_data_dir(config.values.data_dir)
+  require('epoch.services.storage').set_data_dir(config.values.data_dir)
 end
 
 -- get the config value for a specific key

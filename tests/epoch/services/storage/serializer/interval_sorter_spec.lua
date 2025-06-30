@@ -1,6 +1,6 @@
 -- tests/storage/serializer/interval_sorter_spec.lua
 
-local interval_sorter = require('epoch.storage.serializer.interval_sorter')
+local interval_sorter = require('epoch.services.storage.serializer.interval_sorter')
 
 describe("storage serializer interval_sorter", function()
   describe("sort_intervals", function()

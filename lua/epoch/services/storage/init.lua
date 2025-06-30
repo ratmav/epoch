@@ -3,11 +3,11 @@
 -- coverage: no tests
 
 local storage = {}
-local paths = require('epoch.storage.paths')
-local persistence = require('epoch.storage.persistence')
-local discovery = require('epoch.storage.discovery')
-local bulk_operations = require('epoch.storage.bulk_operations')
-local serializer = require('epoch.storage.serializer')
+local paths = require('epoch.services.storage.paths')
+local persistence = require('epoch.services.storage.persistence')
+local discovery = require('epoch.services.storage.discovery')
+local bulk_operations = require('epoch.services.storage.bulk_operations')
+local serializer = require('epoch.services.storage.serializer')
 
 -- Path management functions
 function storage.set_data_dir(path)

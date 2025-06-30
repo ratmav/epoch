@@ -2,7 +2,7 @@
 -- vim command registration
 
 local ui = require('epoch.ui')
-local storage = require('epoch.storage')
+local storage = require('epoch.services.storage')
 local confirmations = require('epoch.ui.confirmations')
 local validation = require('epoch.commands.validation')
 

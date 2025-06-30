@@ -1,49 +1,25 @@
 # MVC Refactor Target Structure
 
-## Target Test Fixtures Structure
-- `fixtures`
-  - `laconic`
-    - fixtures used in laconic tests
-  - `epoch`
-    - fixtures used in epoch tests
-
 ## Target MVC Structure
 
-### Models (Domain Objects)
-- `models/timesheet.lua` - Single timesheet operations
-  - `create()`, `add_interval()`, `close_current_interval()`
-  - `calculate_total_minutes()` - sum intervals in THIS timesheet
-  - `get_completed_intervals()` - query THIS timesheet's completed intervals
-  - `validate()`
-  - **Collection operations:**
-    - `get_by_date_range(timesheets_array, start, end)` - query across multiple timesheets
-    - `summary(timesheets_array)` - "summarize my timesheets"
-    - `group_by_week(timesheets_array)` - "group my timesheets by week"
-
-- `models/interval.lua` - Single interval operations
-  - `create()`, `close()`, `is_open()`, `is_complete()`
-  - `calculate_duration_minutes()` - for THIS interval
-
 ### Services (Utilities)
-- `services/time.lua` - Generic date/time utilities
-  - Time parsing/formatting (12-hour format)
-  - Week number calculations (`get_week_number()`)
-  - Date range utilities
-
-- `services/storage.lua` - File persistence
+- `services/storage/*.lua` - File persistence
   - Lua object serialization/deserialization
   - File I/O operations
 
-### Controllers (Workflow Orchestration)
-- `controllers/report.lua` - Report generation workflow
-  - Orchestrates timesheet collection operations + time service
-  - Builds report data structure for views
+#### General for Storage Service
+- use the existing `storage` as a guide, but not a definition or a requirement.
+- ideally, this will be a bunch of `mv` commands and repointing module requirements statements
+- test filesystem structure must match
 
-### Views (UI Presentation)
+### Views (formatting and presentation)
 - `views/timesheet.lua` - Timesheet editing UI
+    - this should be a modifiable buffer
 - `views/report.lua` - Report display UI
+    - this should be a read-only buffer
 
-## Migration Strategy
-1. Add collection operations to timesheet model
-2. Move report logic to controller
-3. Update existing tests to match new structure
+#### General for Views
+- use the existing `ui` as a guide, but not a definition or a requirement.
+- ideally, this will be a bunch of `mv` commands and repointing module requirements statements
+    - the `ui` module has a separation of concerns problem. you might be better off rewriting it. remember we want a timesheet view and a report view that use the appropriate models and controllers that we  have, NOT any old ui code.
+- test filesystem structure must match

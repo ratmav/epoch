@@ -1,9 +1,9 @@
 -- tests/storage/bulk_operations_spec.lua
 
-local bulk_operations = require('epoch.storage.bulk_operations')
-local discovery = require('epoch.storage.discovery')
-local paths = require('epoch.storage.paths')
-local persistence = require('epoch.storage.persistence')
+local bulk_operations = require('epoch.services.storage.bulk_operations')
+local discovery = require('epoch.services.storage.discovery')
+local paths = require('epoch.services.storage.paths')
+local persistence = require('epoch.services.storage.persistence')
 
 describe("storage bulk_operations", function()
   -- Set up a test data directory for isolation

@@ -2,7 +2,7 @@
 -- Bulk timesheet operations
 
 local bulk_operations = {}
-local discovery = require('epoch.storage.discovery')
+local discovery = require('epoch.services.storage.discovery')
 
 -- Delete all timesheet files
 function bulk_operations.delete_all_timesheets()

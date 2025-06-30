@@ -1,6 +1,6 @@
 -- tests/storage/serializer/array_detection_spec.lua
 
-local array_detection = require('epoch.storage.serializer.array_detection')
+local array_detection = require('epoch.services.storage.serializer.array_detection')
 local fixtures = require('fixtures.init')
 
 describe("storage serializer array_detection", function()

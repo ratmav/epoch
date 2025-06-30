@@ -2,12 +2,12 @@
 -- Table serialization logic for timesheet data
 
 local serializer = {}
-local interval_sorter = require('epoch.storage.serializer.interval_sorter')
-local array_detection = require('epoch.storage.serializer.array_detection')
-local value_formatter = require('epoch.storage.serializer.value_formatter')
-local array_serializer = require('epoch.storage.serializer.array_serializer')
-local interval_serializer = require('epoch.storage.serializer.interval_serializer')
-local table_serializer = require('epoch.storage.serializer.table_serializer')
+local interval_sorter = require('epoch.services.storage.serializer.interval_sorter')
+local array_detection = require('epoch.services.storage.serializer.array_detection')
+local value_formatter = require('epoch.services.storage.serializer.value_formatter')
+local array_serializer = require('epoch.services.storage.serializer.array_serializer')
+local interval_serializer = require('epoch.services.storage.serializer.interval_serializer')
+local table_serializer = require('epoch.services.storage.serializer.table_serializer')
 
 -- Forward declaration for recursive calls
 local serialize_table

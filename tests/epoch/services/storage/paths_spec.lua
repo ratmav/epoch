@@ -1,6 +1,6 @@
 -- tests/storage/paths_spec.lua
 
-local paths = require('epoch.storage.paths')
+local paths = require('epoch.services.storage.paths')
 
 describe("storage paths", function()
   -- Set up a test data directory for isolation

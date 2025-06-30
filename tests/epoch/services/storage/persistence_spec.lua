@@ -1,7 +1,7 @@
 -- tests/storage/persistence_spec.lua
 
-local persistence = require('epoch.storage.persistence')
-local paths = require('epoch.storage.paths')
+local persistence = require('epoch.services.storage.persistence')
+local paths = require('epoch.services.storage.paths')
 local fixtures = require('fixtures.init')
 
 describe("storage persistence", function()

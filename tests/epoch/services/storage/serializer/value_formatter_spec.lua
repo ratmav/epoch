@@ -1,6 +1,6 @@
 -- tests/storage/serializer/value_formatter_spec.lua
 
-local value_formatter = require('epoch.storage.serializer.value_formatter')
+local value_formatter = require('epoch.services.storage.serializer.value_formatter')
 local fixtures = require('fixtures.init')
 
 describe("storage serializer value_formatter", function()

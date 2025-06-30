@@ -2,7 +2,7 @@
 -- tests for the storage module
 
 describe("storage", function()
-  local storage = require('epoch.storage')
+  local storage = require('epoch.services.storage')
 
   describe("create_default_timesheet", function()
     it("creates a timesheet with default values", function()

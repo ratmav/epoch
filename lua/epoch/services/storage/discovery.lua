@@ -2,7 +2,7 @@
 -- Timesheet file discovery operations
 
 local discovery = {}
-local paths = require('epoch.storage.paths')
+local paths = require('epoch.services.storage.paths')
 local constants = require('epoch.constants')
 
 -- Validate data directory exists

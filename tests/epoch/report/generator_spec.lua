@@ -1,7 +1,7 @@
 -- tests/report/generator_spec.lua
 
 local generator = require('epoch.report.generator')
-local storage = require('epoch.storage')
+local storage = require('epoch.services.storage')
 
 describe("report generator", function()
   -- Set up a test data directory for isolation

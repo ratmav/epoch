@@ -3,8 +3,8 @@
 -- coverage: no tests
 
 local list = {}
-local storage = require('epoch.storage')
-local paths = require('epoch.storage.paths')
+local storage = require('epoch.services.storage')
+local paths = require('epoch.services.storage.paths')
 
 -- Extract dates from timesheet files
 local function get_timesheet_dates(timesheet_files)

@@ -2,7 +2,7 @@
 -- Tests for epoch configuration module
 
 local config = require('epoch.config')
-local storage = require('epoch.storage')
+local storage = require('epoch.services.storage')
 
 describe('config', function()
   before_each(function()

@@ -2,7 +2,7 @@
 -- Interval-specific serialization utilities
 
 local interval_serializer = {}
-local value_formatter = require('epoch.storage.serializer.value_formatter')
+local value_formatter = require('epoch.services.storage.serializer.value_formatter')
 
 -- Key order for intervals to ensure consistent serialization
 local interval_key_order = {"client", "project", "task", "start", "stop", "notes"}

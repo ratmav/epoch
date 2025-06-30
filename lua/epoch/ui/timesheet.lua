@@ -1,7 +1,7 @@
 -- epoch/ui/timesheet.lua
 -- Timesheet UI operations (save/load from buffer)
 
-local storage = require('epoch.storage')
+local storage = require('epoch.services.storage')
 local window = require('epoch.ui.window')
 local timesheet_logic = require('epoch.ui.logic.timesheet')
 

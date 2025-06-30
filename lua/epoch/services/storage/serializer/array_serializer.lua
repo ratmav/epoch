@@ -2,7 +2,7 @@
 -- Array serialization utilities
 
 local array_serializer = {}
-local value_formatter = require('epoch.storage.serializer.value_formatter')
+local value_formatter = require('epoch.services.storage.serializer.value_formatter')
 
 -- Serialize array elements
 function array_serializer.serialize_array_elements(tbl, spaces, result, indent)

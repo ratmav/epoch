@@ -11,7 +11,7 @@ local time_fixtures = require('tests.fixtures.epoch.time_fixtures')
 local ui_fixtures = require('tests.fixtures.epoch.ui_fixtures')
 local report_fixtures = require('tests.fixtures.epoch.report_fixtures')
 local laconic_fixtures = require('tests.fixtures.laconic')
-local storage_fixtures = require('tests.fixtures.epoch.storage.serializer_fixtures')
+local storage_fixtures = require('tests.fixtures.epoch.services.storage.serializer_fixtures')
 
 -- Registry of all fixtures
 local registry = {

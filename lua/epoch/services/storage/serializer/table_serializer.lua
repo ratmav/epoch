@@ -2,7 +2,7 @@
 -- Regular table serialization utilities
 
 local table_serializer = {}
-local value_formatter = require('epoch.storage.serializer.value_formatter')
+local value_formatter = require('epoch.services.storage.serializer.value_formatter')
 
 -- Get sorted keys from table
 local function get_sorted_keys(tbl)

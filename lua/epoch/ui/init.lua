@@ -3,7 +3,7 @@
 -- coverage: no tests
 
 local ui = {}
-local storage = require('epoch.storage')
+local storage = require('epoch.services.storage')
 local window = require('epoch.ui.window')
 local input = require('epoch.ui.input')
 local logic = require('epoch.ui.logic')

@@ -4,7 +4,7 @@
 
 local input = {}
 local workflow = require('epoch.ui.workflow')
-local storage = require('epoch.storage')
+local storage = require('epoch.services.storage')
 local window = require('epoch.ui.window')
 
 -- Validate user input is not empty

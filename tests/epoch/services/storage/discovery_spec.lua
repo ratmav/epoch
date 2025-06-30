@@ -1,8 +1,8 @@
 -- tests/storage/discovery_spec.lua
 
-local discovery = require('epoch.storage.discovery')
-local paths = require('epoch.storage.paths')
-local persistence = require('epoch.storage.persistence')
+local discovery = require('epoch.services.storage.discovery')
+local paths = require('epoch.services.storage.paths')
+local persistence = require('epoch.services.storage.persistence')
 
 describe("storage discovery", function()
   -- Set up a test data directory for isolation

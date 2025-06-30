@@ -1,8 +1,8 @@
 -- tests/storage/serializer/interval_serializer_spec.lua
 
 -- Require main serializer to set up dependencies
-require('epoch.storage.serializer')
-local interval_serializer = require('epoch.storage.serializer.interval_serializer')
+require('epoch.services.storage.serializer')
+local interval_serializer = require('epoch.services.storage.serializer.interval_serializer')
 
 describe("storage serializer interval_serializer", function()
   describe("is_interval", function()

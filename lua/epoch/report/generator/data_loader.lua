@@ -1,8 +1,8 @@
 -- epoch/report/generator/data_loader.lua
 -- Timesheet data loading and date extraction
 
-local storage = require('epoch.storage')
-local paths = require('epoch.storage.paths')
+local storage = require('epoch.services.storage')
+local paths = require('epoch.services.storage.paths')
 
 local data_loader = {}
 
