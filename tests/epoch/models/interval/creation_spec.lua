@@ -25,7 +25,7 @@ describe("models interval creation", function()
   describe("close", function()
     it("should set stop time for open interval", function()
       local interval = fixtures.get('intervals.invalid.unclosed')
-      
+
       local success = creation.close(interval, "10:30 AM")
 
       assert.is_true(success)
@@ -35,7 +35,7 @@ describe("models interval creation", function()
     it("should not close already closed interval", function()
       local interval = fixtures.get('intervals.valid.frontend')
       local original_stop = interval.stop
-      
+
       local success = creation.close(interval, "10:30 AM")
 
       assert.is_false(success)

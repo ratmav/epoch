@@ -5,12 +5,13 @@ local fixtures = {}
 local resolver = require('tests.fixtures.resolver')
 
 -- Load all fixture modules
-local interval_fixtures = require('tests.fixtures.interval_fixtures')
-local timesheet_fixtures = require('tests.fixtures.timesheet_fixtures')
-local time_fixtures = require('tests.fixtures.time_fixtures')
-local ui_fixtures = require('tests.fixtures.ui_fixtures')
-local report_fixtures = require('tests.fixtures.report_fixtures')
+local interval_fixtures = require('tests.fixtures.epoch.interval_fixtures')
+local timesheet_fixtures = require('tests.fixtures.epoch.timesheet_fixtures')
+local time_fixtures = require('tests.fixtures.epoch.time_fixtures')
+local ui_fixtures = require('tests.fixtures.epoch.ui_fixtures')
+local report_fixtures = require('tests.fixtures.epoch.report_fixtures')
 local laconic_fixtures = require('tests.fixtures.laconic')
+local storage_fixtures = require('tests.fixtures.epoch.storage.serializer_fixtures')
 
 -- Registry of all fixtures
 local registry = {
@@ -19,7 +20,8 @@ local registry = {
   time = time_fixtures,
   ui = ui_fixtures,
   reports = report_fixtures,
-  laconic = laconic_fixtures
+  laconic = laconic_fixtures,
+  storage = storage_fixtures
 }
 
 -- Get a deep copy of any fixture

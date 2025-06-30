@@ -23,7 +23,7 @@ describe("models interval validation", function()
     it("should return false for interval with invalid stop time", function()
       local interval = {
         client = "test",
-        project = "test", 
+        project = "test",
         task = "test",
         start = "9:00 AM",
         stop = "invalid",

@@ -1,7 +1,7 @@
 -- tests/storage/serializer/array_serializer_spec.lua
 
 local array_serializer = require('epoch.storage.serializer.array_serializer')
-local serializer_fixtures = require('tests.storage.fixtures.serializer_fixtures')
+local fixtures = require('fixtures.init')
 
 describe("storage serializer array_serializer", function()
   describe("serialize_array_elements", function()
@@ -10,7 +10,7 @@ describe("storage serializer array_serializer", function()
       local result = "{\n"
       local indent = 0
 
-      local test_data = serializer_fixtures.array_serialization.simple
+      local test_data = fixtures.get('storage.array_serialization.simple')
       local output = array_serializer.serialize_array_elements(test_data, spaces, result, indent)
 
       assert.truthy(output:match('"first"'))
@@ -24,7 +24,7 @@ describe("storage serializer array_serializer", function()
       local result = "{\n"
       local indent = 0
 
-      local test_data = serializer_fixtures.array_serialization.empty
+      local test_data = fixtures.get('storage.array_serialization.empty')
       local output = array_serializer.serialize_array_elements(test_data, spaces, result, indent)
 
       assert.equals("{\n", output)
@@ -35,7 +35,7 @@ describe("storage serializer array_serializer", function()
       local result = "{\n"
       local indent = 0
 
-      local test_data = serializer_fixtures.array_serialization.mixed
+      local test_data = fixtures.get('storage.array_serialization.mixed')
       local output = array_serializer.serialize_array_elements(test_data, spaces, result, indent)
 
       assert.truthy(output:match('"string"'))

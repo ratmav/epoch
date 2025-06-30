@@ -13,7 +13,7 @@ local function navigate_registry(registry, path_parts)
   local current = registry
   for _, part in ipairs(path_parts) do
     current = current[part]
-    if not current then
+    if current == nil then
       return nil
     end
   end
@@ -25,7 +25,7 @@ function resolver.get_fixture(registry, fixture_path)
   local path_parts = parse_fixture_path(fixture_path)
   local fixture = navigate_registry(registry, path_parts)
 
-  if not fixture then
+  if fixture == nil then
     error("Fixture not found: " .. fixture_path)
   end
 

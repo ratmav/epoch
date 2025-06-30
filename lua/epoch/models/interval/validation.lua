@@ -45,6 +45,14 @@ local function validate_required_fields(this_interval)
   return true
 end
 
+-- Private: validate stop time format
+local function validate_stop_time(stop_time)
+  local parsing = require('epoch.services.time.parsing')
+  local hour, minute = parsing.parse_time_components(stop_time)
+  if not hour then return false end
+  return parsing.validate_time_ranges(hour, minute)
+end
+
 -- Check if interval has all required fields and is closed
 function validation.is_complete(this_interval)
   if not this_interval.client or
@@ -54,7 +62,11 @@ function validation.is_complete(this_interval)
     return false
   end
 
-  return not creation.is_open(this_interval)
+  if creation.is_open(this_interval) then
+    return false
+  end
+
+  return validate_stop_time(this_interval.stop)
 end
 
 -- Validate interval structure and content

@@ -47,8 +47,7 @@ describe("ui modules", function()
 
   describe("interval operations", function()
     it("should create a valid interval with current time", function()
-      local time_fixtures = require('fixtures.time_fixtures')
-      local fixed_time = time_fixtures.timestamps.base_time
+      local fixed_time = fixtures.get('time.timestamps.base_time')
 
       local interval = interval_ops.create("acme-corp", "website-redesign", "frontend-planning", fixed_time)
 

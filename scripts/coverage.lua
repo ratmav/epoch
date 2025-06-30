@@ -56,7 +56,7 @@ local function calculate_test_coverage(lua_files, test_files)
         -- Convert test path to expected source path
         -- tests/epoch/storage/paths_spec.lua -> storage/paths
         -- tests/storage/paths_spec.lua -> storage/paths (legacy)
-        local relative_test_path = test_file:match("tests/epoch/(.+)_spec%.lua$") or test_file:match("tests/(.+)_spec%.lua$")
+        local relative_test_path = test_file:match("tests/epoch/(.+)_spec%.lua$")
         if relative_test_path then
             test_paths[relative_test_path] = true
         end

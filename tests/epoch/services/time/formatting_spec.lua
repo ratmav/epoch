@@ -7,27 +7,27 @@ describe("services time formatting", function()
     it("should format timestamp to 12-hour time", function()
       -- Test with known timestamp: 2025-01-01 09:30:00
       local timestamp = os.time({year=2025, month=1, day=1, hour=9, min=30, sec=0})
-      
+
       local formatted = formatting.format_current_time(timestamp)
-      
+
       assert.equals("9:30 AM", formatted)
     end)
 
     it("should format PM times correctly", function()
       -- Test with known timestamp: 2025-01-01 15:45:00
       local timestamp = os.time({year=2025, month=1, day=1, hour=15, min=45, sec=0})
-      
+
       local formatted = formatting.format_current_time(timestamp)
-      
+
       assert.equals("3:45 PM", formatted)
     end)
 
     it("should format midnight correctly", function()
       -- Test with known timestamp: 2025-01-01 00:00:00
       local timestamp = os.time({year=2025, month=1, day=1, hour=0, min=0, sec=0})
-      
+
       local formatted = formatting.format_current_time(timestamp)
-      
+
       assert.equals("12:00 AM", formatted)
     end)
   end)
@@ -54,14 +54,14 @@ describe("services time formatting", function()
     it("should parse time with date to timestamp", function()
       local timestamp = formatting.parse_to_timestamp("9:30 AM", "2025-01-01")
       local expected = os.time({year=2025, month=1, day=1, hour=9, min=30, sec=0})
-      
+
       assert.equals(expected, timestamp)
     end)
 
     it("should handle PM times", function()
       local timestamp = formatting.parse_to_timestamp("3:45 PM", "2025-01-01")
       local expected = os.time({year=2025, month=1, day=1, hour=15, min=45, sec=0})
-      
+
       assert.equals(expected, timestamp)
     end)
 
